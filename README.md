@@ -12,15 +12,15 @@ Crear un programa en Python3 que haga uso de Python/Tkinter y MariaDB/MySQL (en 
 
 ## Requerimientos del Proyecto
 
-El propósito del proyecto es hacer uso del código fuente hecho en Tkinter de Python2 y adaptarlo a Python3 usando conceptos de Base de Datos, modificando el código fuente del juego, donde:
+- El propósito del proyecto es hacer uso del código fuente hecho en Tkinter de Python2 y adaptarlo a Python3 usando conceptos de Base de Datos, modificando el código fuente del juego, donde:
 
-- El sistema debe incluir una ventana splash screen de bienvenida al iniciar el programa.
+    - El sistema debe incluir una ventana splash screen de bienvenida al iniciar el programa.
 
-- El sistema debe incluir una ventana de login. Sólo puede ingresar un usuario registrado en el sistema. Debe existir un usuario administrador previamente registrado en el sistema. Si el usuario administrador se autentica en el juego, éste debe disponer de una pantalla adicional para poder crear, eliminar y editar los datos de autenticación de usuarios (jugadores).
+    - El sistema debe incluir una ventana de login. Sólo puede ingresar un usuario registrado en el sistema. Debe existir un usuario administrador previamente registrado en el sistema. Si el usuario administrador se autentica en el juego, éste debe disponer de una pantalla adicional para poder crear, eliminar y editar los datos de autenticación de usuarios (jugadores).
 
-- Una vez autenticado, el sistema debe mostrar una ventana de inicio donde el jugador puede retomar su último juego pausado, o puede iniciar un nuevo juego usando uno de los Boards disponibles (debe leer el sitio del juego para comprender algunos conceptos mencionados en los enunciados de este proyecto).
+    - Una vez autenticado, el sistema debe mostrar una ventana de inicio donde el jugador puede retomar su último juego pausado, o puede iniciar un nuevo juego usando uno de los Boards disponibles (debe leer el sitio del juego para comprender algunos conceptos mencionados en los enunciados de este proyecto).
 
-- El sistema debe incluir una tabla en pantalla llamada tabla o tablero de score con los 10 mejores tiempos de los juegos exitosos del jugador autenticado, indicando sobre cuál Board, con cuál tiempo (formato HH:MM:SS) y sobre cuál fecha (formato YYYY/MM/DD HH:mm:SS) obtuvo dicho resultado. El equipo de desarrolladores decidirá dónde incrustar/llamar/mostrar dicho componente.
+    - El sistema debe incluir una tabla en pantalla llamada tabla o tablero de score con los 10 mejores tiempos de los juegos exitosos del jugador autenticado, indicando sobre cuál Board, con cuál tiempo (formato HH:MM:SS) y sobre cuál fecha (formato YYYY/MM/DD HH:mm:SS) obtuvo dicho resultado. El equipo de desarrolladores decidirá dónde incrustar/llamar/mostrar dicho componente.
 
 - El código original hace uso de ciertos tableros mediante archivos físicos con extensión “.sudoku”, los cuales deben migrarse y leerse desde la base de datos exclusivamente. 
 

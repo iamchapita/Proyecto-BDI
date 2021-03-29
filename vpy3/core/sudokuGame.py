@@ -1,5 +1,4 @@
 from core.sudokuBoard import SudokuBoard
-#from sudokuBoard import SudokuBoard
 
 class SudokuGame(object):
 
@@ -9,6 +8,7 @@ class SudokuGame(object):
 
     def start(self):
         self.gameOver = False
+        self.pause = False
         self.puzzle = []
 
         for i in range(9):
@@ -17,6 +17,7 @@ class SudokuGame(object):
                 self.puzzle[i].append(self.startPuzzle[i][j])
     
     def checkWin(self):
+        
         for row in range(9):
             if (not self.__checkRow(row)):
                 return False

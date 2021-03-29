@@ -6,7 +6,7 @@ from core.sudokuUI import SudokuUI
 BOARDS = ['debug', 'n00b', 'l33t', 'error']
 MARGIN = 20
 SIDE = 50
-WIDTH =  MARGIN * 2 + SIDE * 9 
+WIDTH =  MARGIN * 2 + SIDE * 9 + 60
 HEIGHT = MARGIN * 2 + SIDE * 9 + 100
 
 
@@ -18,5 +18,5 @@ if __name__ == '__main__':
         game.start()
         root = Tk()
         SudokuUI(root, game)
-        root.geometry("%dx%d" % (WIDTH, HEIGHT + 40))
+        root.geometry("%dx%d" % (WIDTH, HEIGHT))
         root.mainloop()

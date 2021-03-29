@@ -110,10 +110,12 @@ class SudokuUI(Frame):
             
         self.canvas.delete("cursor")
         if self.row >= 0 and self.col >= 0:
+            #print(self.row, self.col)
             x0 = MARGIN + self.col * SIDE + 1 - 20 # ! Se restaron 20
             y0 = MARGIN + self.row * SIDE + 1
             x1 = MARGIN + (self.col + 1) * SIDE - 1 - 20 #! Se restaron 20
             y1 = MARGIN + (self.row + 1) * SIDE - 1
+            #print("coordenadas: ",x0,x1,y0,y1)
             self.canvas.create_rectangle(
                 x0, y0, x1, y1,
                 outline="red", tags="cursor"
@@ -146,22 +148,42 @@ class SudokuUI(Frame):
         x, y = event.x + 20, event.y # ! Se restaron 20 al evento x
         if (MARGIN  < x < WIDTH - MARGIN and MARGIN < y < HEIGHT - MARGIN - 120):
             self.canvas.focus_set()
-            row, col = (y - MARGIN) // SIDE, (x - MARGIN) // SIDE 
+            row, col = (y - MARGIN) // SIDE, (x - MARGIN) // SIDE
+            print(row, col)
             if (row, col) == (self.row, self.col):
                 self.row, self.col = -1, -1
-            elif self.game.puzzle[row][col] == 0:
-                self.row, self.col = row, col
-        else:
-            self.row, self.col = -1, -1
+                print("posición2",row, col)
+                #pass
 
+            # ! Se comprueba si la posición del arreglo es igual a 0, esto significa que es una posición donde
+            # ! el usuario debe introducir un valor, o sea, que es "seleccionable".
+            # ! Si se cambia el chequeo de posiciones donde se puede escribir por un arreglo de booleanos 
+            # ! donde True pertenezca a una posición donde se puede escribir, entonces se puede implementar
+            # ! la acción de sobreescribir un cuadro que ya fue escrito por el usuario.
+            # ?Si se usa un else pinta todos los cuadros incluidos los que estan definidos
+            # ?por el archivo 
+            elif self.game.puzzle[row][col] == 0:
+                print("posición3",row, col)
+                self.row, self.col = row, col
+                #pass
+        """
+        Setea a -1 (no se pinta el recuadro de selección) los valores de fila y columna
+        else:
+            self.row, self.col = -1, -1 
+        """
+        
         self.__drawCursor()
     
     def __keyPressed(self, event):
 
         if (self.game.gameOver):
             return
-        if self.row >= 0 and self.col >= 0 and event.char in "1234567890":
-            self.game.puzzle[self.row][self.col] = int(event.char)
+            
+        if (self.row >= 0 and self.col >= 0 and event.char in "1234567890"):
+            try:
+                self.game.puzzle[self.row][self.col] = int(event.char)
+            except:
+                pass
             self.col, self.row = -1, -1
             self.__drawPuzzle()
             self.__drawCursor()

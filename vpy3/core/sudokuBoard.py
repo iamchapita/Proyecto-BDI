@@ -39,13 +39,3 @@ class SudokuBoard(object):
             raise SudokuBoard("Cada tablero de sudoku debe tener 9 lineas largo")
 
         return board
-
-
-
-""" with open('vpy3/n00b.sudoku', 'r') as boardFile:
-
-    obj = SudokuBoard(boardFile)
-    
-    for i in range(9):
-        print(obj.board[i])
-"""

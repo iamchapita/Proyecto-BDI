@@ -1,7 +1,6 @@
 from tkinter import *
 
-
-MARGIN = 70 # !Se le sumaron 20 y se restaron 20 en los parámetros necesarios (NO HAY OTRA FORMA DE HACERLO)
+MARGIN = 70 # ! Se le sumaron 20 y se restaron 20 en los parámetros necesarios (NO HAY OTRA FORMA DE HACERLO)
 SIDE = 50
 WIDTH = MARGIN * 2 + SIDE * 9
 HEIGHT = MARGIN * 2 + SIDE * 9 + 120 # !Se le sumaron 120 para ampliar de forma vertical la ventana
@@ -24,10 +23,10 @@ class SudokuUI(Frame):
         self.canvas = Canvas(parent, width=WIDTH, height= HEIGHT)
         self.canvas.configure(background = "white")
         self.canvas.pack(fill=BOTH, side=TOP)
-        """ clearButton = Button(parent, text="Limpiar Tablero", command=self.__clearAnswers)
+        clearButton = Button(parent, text="Limpiar Tablero", command=self.__clearAnswers)
         clearButton.pack(fill=BOTH, side=BOTTOM)
         pauseButton = Button(parent, text="Pausa", command=self.__pauseGame)
-        pauseButton.pack(fill=BOTH, side=BOTTOM) """
+        pauseButton.pack(fill=BOTH, side=BOTTOM)
         self.__drawGrid()
         self.__drawPuzzle()
         self.canvas.bind("<Button-1>", self.__cellClicked)
@@ -73,6 +72,7 @@ class SudokuUI(Frame):
         buttonShow.pack(fill = BOTH, side = BOTTOM)
     
     """
+    
     def __drawGrid(self):
 
         for i in range(10):

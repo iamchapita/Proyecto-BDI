@@ -10,26 +10,24 @@ class SudokuSplashScreenUI(ttk.Frame):
             parent = Tk()
             parent.title("Bienvenido")
             parent.resizable(FALSE, FALSE)
+            self.logo = PhotoImage(file = "core/images/SudokuLogo.png")
+            parent.iconphoto(True,self.logo)
 
+
+        self.logoImage = PhotoImage(file = "core/images/WelcomeScreen.png")
         super().__init__(parent)
         self.pack()
         self.__initUI()
         self.master.mainloop()
 
     def __initUI(self):
-        self.margin = 70 
-        self.side = 50
-        self.width = self.margin * 2 + self.side * 9
-        self.height = self.margin * 2 + self.side * 9 + 120 
-        #self.center = ScreenCenter()
-        #self.center.center(self)
-        #self.configure(background = "white")
-        self.pack(fill=BOTH)
-        self.canvas = Canvas(self, width=self.width, height= self.height)
-        self.canvas.configure(background = "white")
-        self.canvas.pack(fill=BOTH, side=TOP)
+        
+        canvasObject = Canvas(self,height=self.logoImage.height(), width=self.logoImage.width())
+        l_logo = Label(self,image=self.logoImage)
+        l_logo.place(x=0, y=0, relwidth=1, relheight=1)
+        canvasObject.grid(row=0,column=0)
 
-        ttk.Button(self, text = "Entrar", command = self.goToLoginPage).pack()
+        ttk.Button(self, text = "Entrar", command = self.goToLoginPage).grid(pady=40)
 
     def goToLoginPage(self):
         self.destroy()

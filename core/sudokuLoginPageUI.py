@@ -13,30 +13,27 @@ class SudokuLoginPageUI(ttk.Frame):
             parent.resizable(FALSE, FALSE)
 
         super().__init__(parent)
-        self.pack()
+        self.pack(fill=BOTH)
         self.__initUI()
         self.master.mainloop()
 
     def __initUI(self):
-        self.margin = 70 
-        self.side = 50
-        self.width = self.margin * 2 + self.side * 9
-        self.height = self.margin * 2 + self.side * 9 + 120 
-        #self.center = ScreenCenter()
-        #self.center.center(parent)
-        #self.parent.configure(background = "white")
-        self.pack(fill=BOTH)
-        self.canvas = Canvas(self, width = self.width, height = self.height)
-        #self.canvas.configure(background="white")
-        self.canvas.pack(fill=BOTH, side=TOP)
+
         # Investigar como usar un GRID para ubicar objetos
         # en las ventanas
         # Se usa coordenadas para ubicar objetos en la ventana
-        ttk.Label(self, text="Nombre de Usuario").place(x=200, y=20)
-        ttk.Entry(self).place(x=200, y=50)
-        ttk.Label(self, text="Contraseña").place(x=200, y=70)
-        ttk.Entry(self).place(x=200, y=90)
-        ttk.Button(self, text="Iniciar Sesión", command = self.__onClick).place(x=200, y=120)
+        
+        self.logoImage = PhotoImage(file = "core/images/SudokuLogo.png")
+        canvasObject = Canvas(self,height=700, width=400)
+        l_logo = Label(self,image=self.logoImage)
+        l_logo.place(x=-45, y=150, relwidth=1, relheight=1)
+        canvasObject.pack()
+
+        ttk.Label(self, text="Nombre de Usuario",font=("Calibri","20")).place(x=80, y=150)
+        ttk.Entry(self).place(x=120, y=190)
+        ttk.Label(self, text="Contraseña",font=("Calibri","20")).place(x=120, y=250)
+        ttk.Entry(self).place(x=120, y=290)
+        ttk.Button(self, text="Iniciar Sesión", command = self.__onClick).place(x=155, y=330)
 
     def __onClick(self):
         self.destroy()

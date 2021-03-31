@@ -1,3 +1,0 @@
-
-class SudokuPauseMenu:
-    pass

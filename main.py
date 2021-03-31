@@ -14,17 +14,6 @@ width =  margin * 2 + side * 9 + 60
 height = margin * 2 + side * 9 + 100
 
 if __name__ == '__main__':
-
-    # with open('%s.sudoku' % board_name, 'r') as boards_file:
+    
     with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
-        #game = SudokuGame(boardFile)
-        #game.start()
-        root = Tk()
-        #SudokuBoardUI(root, game)
-        #obj = SudokuLoginPage(root)
-        #obj = SudokuMainWindow(root)
-        obj = SudokuSplashScreenUI(root)
-        #obj = SudokuAdmnistratorUI(root)
-        
-        root.geometry("%dx%d" % (width, height))
-        root.mainloop()
+        obj = SudokuSplashScreenUI()

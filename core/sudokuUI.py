@@ -5,7 +5,7 @@ SIDE = 50
 WIDTH = MARGIN * 2 + SIDE * 9
 HEIGHT = MARGIN * 2 + SIDE * 9 + 120 # !Se le sumaron 120 para ampliar de forma vertical la ventana
 
-class SudokuBoardUI(Frame):
+class SudokuUI(Frame):
     
     def __init__(self, parent, game):
         Frame.__init__(self, parent)
@@ -35,7 +35,44 @@ class SudokuBoardUI(Frame):
     def __pauseGame(self):
 
         self.game.pause = True
+    """
+    def __continueGame(self):
 
+        x0 = y0 = MARGIN + SIDE * 2
+        x1 = y1 = MARGIN + SIDE * 7
+        oval = self.canvas.create_oval(
+            x0, y0, x1, y1,
+            tags="continue", fill="green", outline="green"
+        )
+        
+        x = y = MARGIN + 4 * SIDE + SIDE / 2
+        text = self.canvas.create_text(
+            x, y,
+            text="Continuar", tags="continue",
+            fill="white", font=("Arial", 24)
+        )
+
+    def __showHide(self, buttonHide, buttonShow):
+
+        x0 = y0 = MARGIN + SIDE * 2
+        x1 = y1 = MARGIN + SIDE * 7
+        oval = self.canvas.create_oval(
+            x0, y0, x1, y1,
+            tags="pause", fill="red", outline="red"
+        )
+        
+        x = y = MARGIN + 4 * SIDE + SIDE / 2
+        text = self.canvas.create_text(
+            x, y,
+            text="Juego Pausado", tags="pause",
+            fill="white", font=("Arial", 24)
+        )
+
+        buttonHide.pack_forget()
+        buttonShow.pack(fill = BOTH, side = BOTTOM)
+    
+    """
+    
     def __drawGrid(self):
 
         for i in range(10):

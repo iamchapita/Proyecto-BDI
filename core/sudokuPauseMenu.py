@@ -1,2 +1,3 @@
 
 class SudokuPauseMenu:
+    pass

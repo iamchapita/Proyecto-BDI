@@ -1,5 +1,4 @@
 from core.sudokuError import SudokuError
-#from sudokuError import SudokuError
 
 class SudokuBoard(object):
 

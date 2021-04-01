@@ -2,12 +2,9 @@ from tkinter import *
 
 class ScreenCenter:
 
-    def center(self, parent):                
-        width = parent.winfo_reqwidth()
-        height =parent.winfo_reqheight()
-        print("Width", parent.winfo_screenwidth(), "Height", parent.winfo_screenheight())
-        positionRight = int(parent.winfo_screenwidth()/2 - width) #+ 50)
-        positionDown = int(parent.winfo_screenheight()/2 - height)
+    def center(self, parent, width, height):
+
+        positionRight = int((parent.winfo_screenwidth()/2) - (width/2))
+        positionDown = int((parent.winfo_screenheight()/2) - (height/2))
         print(positionRight, positionDown)
-        # Positions the window in the center of the page.
         parent.geometry("+{}+{}".format(positionRight, positionDown))

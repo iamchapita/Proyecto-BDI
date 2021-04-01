@@ -112,10 +112,10 @@ class SudokuBoardUI(Frame):
         if (MARGIN  < x < WIDTH - MARGIN and MARGIN < y < HEIGHT - MARGIN - 120):
             self.canvas.focus_set()
             row, col = (y - MARGIN) // SIDE, (x - MARGIN) // SIDE
-            print(row, col)
+            #print(row, col)
             if (row, col) == (self.row, self.col):
                 self.row, self.col = -1, -1
-                print("posición2",row, col)
+                #print("posición2",row, col)
                 #pass
 
             # ! Se comprueba si la posición del arreglo es igual a 0, esto significa que es una posición donde
@@ -126,7 +126,7 @@ class SudokuBoardUI(Frame):
             # ?Si se usa un else pinta todos los cuadros incluidos los que estan definidos
             # ?por el archivo 
             elif self.game.puzzle[row][col] == 0:
-                print("posición3",row, col)
+                #print("posición3",row, col)
                 self.row, self.col = row, col
                 #pass
         """

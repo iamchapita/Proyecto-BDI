@@ -33,10 +33,10 @@ class SudokuMainWindowUI(Frame):
         labelLogo.place(x=0, y=0, relwidth=1, relheight=1)
         canvas.grid(row=0, column=0)
         
-        canvas.create_window(210, 200, window=Button(self, text="Nuevo Juego", command=self.__newGame))
-        canvas.create_window(210, 250, window=Button(self, text="Continuar Juego", command=self.__continueGame))
-        canvas.create_window(210, 300, window=Button(self, text="Mejores Puntajes", command=self.__bestScores))
-        canvas.create_window(210, 350, window=Button(self, text="Salir", command=self.__logOff))
+        canvas.create_window(205, 250, window=Button(self, text="Nuevo Juego", width=15, height=2, command=self.__newGame))
+        canvas.create_window(205, 300, window=Button(self, text="Continuar Juego", width=15, height=2, command=self.__continueGame))
+        canvas.create_window(205, 350, window=Button(self, text="Mejores Puntajes", width=15, height=2, command=self.__bestScores))
+        canvas.create_window(205, 400, window=Button(self, text="Salir", width=15, height=2, command=self.__logOff))
 
     def __newGame(self):
         with open('core/sudoku/n00b.sudoku', 'r') as boardFile:

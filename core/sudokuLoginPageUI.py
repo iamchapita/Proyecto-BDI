@@ -1,5 +1,5 @@
 from tkinter import *
-from PIL import Image
+#from PIL import Image
 from core.sudokuMainWindowUI import SudokuMainWindowUI
 from core.screenCenter import *
 
@@ -21,23 +21,32 @@ class SudokuLoginPageUI(Frame):
         self.width = 400
         self.height = 600
         self.logo = PhotoImage(file="core/images/SudokuLogo.png", master=self.parent)
+        self.backgroundImage = PhotoImage(file="core/images/LoginScreen.png", master=self.parent)
         self.parent.title("Inicio de Sesión")
         self.parent.resizable(False, False)
         self.parent.geometry("%dx%d"%(self.width, self.height))
         self.parent.iconphoto(True, self.logo)
+        
         center = ScreenCenter()
         center.center(self.parent, self.width, self.height)
-        canvas = Canvas(self, width=self.width, height=self.height)
-        canvas.pack(fill=BOTH, expand = True)
-        canvas.create_image(200, 300, image=self.logo)
+
+        canvas = Canvas(self, width=self.backgroundImage.width(), height=self.backgroundImage.height())
+        labelLogo = Label(self,image=self.backgroundImage)
+        labelLogo.place(x=0, y=0, relwidth=1, relheight=1)
+        canvas.grid(row=0, column=0)
+
+        canvas.create_image(200, 465, image=self.logo)
+
         # NO HAY TRANSPARENCIAS PARA EL BACKGROUND DEL LABEL :) ODIO Tkinter, Amo pyQt5
-        canvas.create_window(200, 50, window=Label(self,text="Inicio de Sesión",font=("Calibri","20")))
-        canvas.create_window(200, 150, window=Label(self, text="Nombre de Usuario",font=("Calibri","20")))
+        # viva pyQt5!
+        
+        #canvas.create_window(200, 50, window=Label(self,text="Inicio de Sesión",font=("Calibri","20")))
+        #canvas.create_window(200, 150, window=Label(self, text="Nombre de Usuario",font=("Calibri","20")))
         canvas.create_window(200, 190, window=Entry(self))
-        canvas.create_window(200, 250, window=Label(self, text="Contraseña", font=("Calibri", "20")))
-        canvas.create_window(200, 290, window=Entry(self).place(x=120, y=290))
-        canvas.create_window(200, 430, window=Button(self, text="Iniciar Sesión", command = self.__onClick))
+        #canvas.create_window(200, 250, window=Label(self, text="Contraseña", font=("Calibri", "20")))
+        canvas.create_window(200, 300, window=Entry(self))
+        canvas.create_window(200, 335, window=Button(self, text="Iniciar Sesión", command = self.__onClick))
 
     def __onClick(self):
-        self.destroy()
-        SudokuMainWindowUI(self.master)
+        self.parent.destroy()
+        SudokuMainWindowUI()

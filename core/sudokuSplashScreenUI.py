@@ -25,7 +25,7 @@ class SudokuSplashScreenUI(Frame):
         labelLogo = Label(self,image=self.backgroundImage)
         labelLogo.place(x=0, y=0, relwidth=1, relheight=1)
         canvas.grid(row=0, column=0)
-        self.after(1000, self.goToLoginPage)
+        self.after(1500, self.goToLoginPage)
 
     def goToLoginPage(self):
         self.parent.destroy()

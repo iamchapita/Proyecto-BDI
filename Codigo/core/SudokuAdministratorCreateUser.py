@@ -11,12 +11,12 @@ class SudokuAdministratorCreateUser(Frame):
         super().__init__(self.create)
         self.pack()
         self.__initUI()
-        img = PhotoImage(file="images/pause.png", master=self.create)
+        img = PhotoImage(file="core/images/pause.png", master=self.create)
         Button(self.create, image=img, command=self.goBack, bg="#413c3d").place(x=250, y=480)
         self.master.mainloop()
 
     def __initUI(self):
-        self.icon = PhotoImage(file="images/SudokuLogo.png", master=self.create)
+        self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.create)
         self.create.iconphoto(True, self.icon)
         self.width = 400
         self.height = 600

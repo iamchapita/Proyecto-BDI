@@ -3,7 +3,7 @@ from SudokuAdministratorCreateUser import *
 from SudokuAdministratorDeleteUser import *
 from SudokuAdministratorEditUser import *
 from SudokuAdministratorBinnacle import *
-#from core.screenCenter import ScreenCenter
+from screenCenter import ScreenCenter
 
 class SudokuAdmnistratorUI(Frame):
 
@@ -15,6 +15,8 @@ class SudokuAdmnistratorUI(Frame):
         self.master.mainloop()
 
     def __initUI(self):
+        self.width = 400
+        self.height = 600
         self.parent.title('Opciones Administrador')
 
         #Tamaño de la ventana
@@ -26,8 +28,8 @@ class SudokuAdmnistratorUI(Frame):
         
         TitleStyles = tkFont.Font(family="Lucida Grande", size=18)
         
-        # self.center = ScreenCenter()
-        # self.center.center(parent)
+        self.center = ScreenCenter()
+        self.center.center(self.parent, self.width, self.height)
 
         Button(self.parent, text = 'Crear usuario', bg="#6ea8d9", font=TitleStyles, command= self.goCreateUser).place(x=100, y=110, height = 50, width = 210)
         Button(self.parent, text = 'Editar usuario', bg="#6ea8d9", font=TitleStyles, command= self.goEditUser).place(x=100, y=190, height = 50, width = 210)

@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import tkinter.font as tkFont
+from screenCenter import ScreenCenter
 
 class SudokuAdministratorEditUser(Frame):
 
@@ -15,6 +16,11 @@ class SudokuAdministratorEditUser(Frame):
         self.master.mainloop()
 
     def __initUI(self):
+        self.width = 400
+        self.height = 600
+
+        self.center = ScreenCenter()
+        self.center.center(self.edit, self.width, self.height)
 
         self.edit.title('Crear Usuarios')
 

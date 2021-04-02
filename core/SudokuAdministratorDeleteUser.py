@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import tkinter.font as tkFont
+from screenCenter import ScreenCenter
 
 class SudokuAdministratorDeleteUser(Frame):
 
@@ -15,6 +16,11 @@ class SudokuAdministratorDeleteUser(Frame):
         self.master.mainloop()
 
     def __initUI(self):
+        self.width = 400
+        self.height = 600
+
+        self.center = ScreenCenter()
+        self.center.center(self.delete, self.width, self.height)
 
         self.delete.title('Crear Usuarios')
 

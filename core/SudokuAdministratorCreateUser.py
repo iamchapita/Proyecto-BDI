@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import tkinter.font as tkFont
+from screenCenter import ScreenCenter
 
 class SudokuAdministratorCreateUser(Frame):
 
@@ -15,6 +16,11 @@ class SudokuAdministratorCreateUser(Frame):
         self.master.mainloop()
 
     def __initUI(self):
+        self.width = 400
+        self.height = 600
+
+        self.center = ScreenCenter()
+        self.center.center(self.create, self.width, self.height)
 
         self.create.title('Crear Usuarios')
 
@@ -49,6 +55,11 @@ class SudokuAdministratorCreateUser(Frame):
         
         Button(self.create, text = 'Crear', command= self.__save, bg="#6ea8d9").place(x=155, y=310, height = 50, width = 110)
         # Button(self.create, text = 'Regresar Menú', command= self.goBack, bg="#6ea8d9").place(x=200, y=480, height = 30, width = 110)
+        # self.backgroundImage = PhotoImage(file="images/WelcomeScreen.png", master=self.create)
+        # canvas = Canvas(self, width=self.backgroundImage.width(), height=self.backgroundImage.height())
+        # labelLogo = Label(self,image=self.backgroundImage)
+        # labelLogo.place(x=0, y=0, relwidth=1, relheight=1)
+        # canvas.grid(row=0, column=0)
 
     def __save(self):
         print(self.userText.get())

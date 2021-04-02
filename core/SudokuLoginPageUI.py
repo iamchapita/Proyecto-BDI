@@ -1,5 +1,6 @@
 from tkinter import *
 from core.SudokuMainWindowUI import SudokuMainWindowUI
+from core.SudokuAdministratorUI import * 
 from core.ScreenCenter import *
 
 class SudokuLoginPageUI(Frame):
@@ -28,12 +29,20 @@ class SudokuLoginPageUI(Frame):
         labelLogo = Label(self,image=self.backgroundImage)
         labelLogo.place(x=0, y=0, relwidth=1, relheight=1)
         canvas.grid(row=0, column=0)
-        # NO HAY TRANSPARENCIAS PARA EL BACKGROUND DEL LABEL :) ODIO Tkinter, Amo pyQt5
-        # viva pyQt5!
-        canvas.create_window(200, 120, window=Entry(self))
-        canvas.create_window(200, 250, window=Entry(self))
-        canvas.create_window(200, 300, window=Button(self, text="Iniciar Sesión", bg="#6ea8d9",width=15, height=2, command = self.__onClick))
+        usernameText = StringVar()
+        usernameEntry = Entry(self, textvariable = usernameText)
+        passwordText = StringVar()
+        passwordEntry = Entry(self, textvariable = passwordText, show = "*")
+        canvas.create_window(200, 120, window=usernameEntry)
+        canvas.create_window(200, 250, window=passwordEntry)
+        loginButton = Button(self, text="Iniciar Sesión", bg="#6ea8d9",width=15, height=2, command = lambda: self.__loginFn(usernameText, passwordText))
+        canvas.create_window(200, 300, window=loginButton)
 
-    def __onClick(self):
-        self.parent.destroy()
-        SudokuMainWindowUI()
+    def __loginFn(self, username = "", password = ""):
+
+        if(len(username.get()) == 0):
+            self.parent.destroy()
+            SudokuMainWindowUI()
+        else:
+            self.parent.destroy()
+            SudokuAdministratorUI()

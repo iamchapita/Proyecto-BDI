@@ -32,7 +32,7 @@ class SudokuLoginPageUI(Frame):
         # viva pyQt5!
         canvas.create_window(200, 120, window=Entry(self))
         canvas.create_window(200, 250, window=Entry(self))
-        canvas.create_window(200, 300, window=Button(self, text="Iniciar Sesión", width=15, height=2, command = self.__onClick))
+        canvas.create_window(200, 300, window=Button(self, text="Iniciar Sesión", bg="#6ea8d9",width=15, height=2, command = self.__onClick))
 
     def __onClick(self):
         self.parent.destroy()

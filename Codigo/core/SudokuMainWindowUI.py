@@ -35,9 +35,9 @@ class SudokuMainWindowUI(Frame):
         canvas.grid(row=0, column=0)
         
         canvas.create_window(205, 250, window=Button(self, text="Nuevo Juego", bg="#6ea8d9",width=15, height=2, command=self.__newGame))
-        canvas.create_window(205, 300, window=Button(self, text="Continuar Juego", bg="#6ea8d9",width=15, height=2, command=self.__continueGame))
-        canvas.create_window(205, 350, window=Button(self, text="Mejores Puntajes", bg="#6ea8d9",width=15, height=2, command=self.__bestScores))
-        canvas.create_window(205, 400, window=Button(self, text="Salir", width=15, bg="#6ea8d9",height=2, command=self.__logOff))
+        canvas.create_window(205, 310, window=Button(self, text="Continuar Juego", bg="#6ea8d9",width=15, height=2, command=self.__continueGame))
+        canvas.create_window(205, 370, window=Button(self, text="Mejores Puntajes", bg="#6ea8d9",width=15, height=2, command=self.__bestScores))
+        canvas.create_window(205, 430, window=Button(self, text="Salir", width=15, bg="#6ea8d9",height=2, command=self.__logOff))
 
     def __newGame(self):
         with open('core/sudoku/n00b.sudoku', 'r') as boardFile:

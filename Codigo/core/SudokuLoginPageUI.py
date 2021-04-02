@@ -34,9 +34,9 @@ class SudokuLoginPageUI(Frame):
         passwordText = StringVar()
         passwordEntry = Entry(self, textvariable = passwordText, show = "*")
         canvas.create_window(200, 120, window=usernameEntry)
-        canvas.create_window(200, 250, window=passwordEntry)
+        canvas.create_window(200, 210, window=passwordEntry)
         loginButton = Button(self, text="Iniciar Sesión", bg="#6ea8d9",width=15, height=2, command = lambda: self.__loginFn(usernameText, passwordText))
-        canvas.create_window(200, 300, window=loginButton)
+        canvas.create_window(200, 260, window=loginButton)
 
     def __loginFn(self, username = "", password = ""):
 

@@ -1,11 +1,11 @@
 from tkinter import *
-from SudokuAdministratorCreateUser import *
-from SudokuAdministratorDeleteUser import *
-from SudokuAdministratorEditUser import *
-from SudokuAdministratorBinnacle import *
-from screenCenter import ScreenCenter
+from core.SudokuAdministratorCreateUser import *
+from core.SudokuAdministratorDeleteUser import *
+from core.SudokuAdministratorEditUser import *
+from core.SudokuAdministratorBinnacle import *
+from core.ScreenCenter import ScreenCenter
 
-class SudokuAdmnistratorUI(Frame):
+class SudokuAdministratorUI(Frame):
 
     def __init__(self):
         self.parent = Tk()
@@ -16,7 +16,7 @@ class SudokuAdmnistratorUI(Frame):
 
     def __initUI(self):
         # Se debe utilizar la ruta core/images/SudokuLogo.png al implementarlo en el main
-        self.icon = PhotoImage(file="images/SudokuLogo.png", master=self.parent)
+        self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.parent)
         self.width = 400
         self.height = 600
         self.parent.title('Opciones Administrador')
@@ -57,5 +57,3 @@ class SudokuAdmnistratorUI(Frame):
 
     def quit(self):
         self.parent.destroy()
-
-obj = SudokuAdmnistratorUI()

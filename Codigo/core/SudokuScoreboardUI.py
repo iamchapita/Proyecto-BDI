@@ -37,7 +37,7 @@ class SudokuScoreboardUI(Frame):
         self.dataView.column("#2", width=250)
         self.dataView.column("#3", width=300)
 
-        os.chdir("./Scripts de Base de Datos")
+        os.chdir("../Scripts de Base de Datos")
         with open("scoreboardTest.txt", "r") as file:
             test = list(zip(*map(str.split, map(str.strip, file))))
             for first in test[0]:

@@ -16,6 +16,8 @@ class SudokuAdministratorCreateUser(Frame):
         self.master.mainloop()
 
     def __initUI(self):
+        self.icon = PhotoImage(file="images/SudokuLogo.png", master=self.create)
+        self.create.iconphoto(True, self.icon)
         self.width = 400
         self.height = 600
 
@@ -23,10 +25,11 @@ class SudokuAdministratorCreateUser(Frame):
         self.center.center(self.create, self.width, self.height)
 
         self.create.title('Crear Usuarios')
+        self.create.geometry("%dx%d" %(self.width, self.height))
 
-        #Tamaño de la ventana
-        self.create.geometry("400x600")
-        self.create.configure(background = "#413c3d")
+        # Tamaño de la ventana
+        
+        # self.create.configure(background = "#413c3d")
 
         #Mantiene la ventana fija para evitar que el diseño se vea afectado
         self.create.resizable(False, False)
@@ -34,7 +37,6 @@ class SudokuAdministratorCreateUser(Frame):
         #estilos para crear labels
         FontStyles = tkFont.Font(family="Lucida Grande", size=208)
         LabelStyles = tkFont.Font(family="Lucida Grande", size=13)
-
         
         # Muestra el titulo de la seccion
         label1= Label(self.create, text='Crear un nuevo usuario', font=FontStyles)
@@ -47,7 +49,6 @@ class SudokuAdministratorCreateUser(Frame):
         label2.pack()
         label2.place(x=75,y=180)
 
-        
         input_text = StringVar()
         self.userText = ttk.Entry(self.create, textvariable = input_text)
         self.userText.pack()

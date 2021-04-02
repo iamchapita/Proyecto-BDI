@@ -1,6 +1,6 @@
 from tkinter import *
-from core.sudokuMainWindowUI import SudokuMainWindowUI
-from core.screenCenter import *
+from core.SudokuMainWindowUI import SudokuMainWindowUI
+from core.ScreenCenter import *
 
 class SudokuLoginPageUI(Frame):
 

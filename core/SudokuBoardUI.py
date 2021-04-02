@@ -1,4 +1,5 @@
 from tkinter import *
+from core.ScreenCenter import ScreenCenter
 
 MARGIN = 70 # ! Se le sumaron 20 y se restaron 20 en los parámetros necesarios (NO HAY OTRA FORMA DE HACERLO)
 SIDE = 50
@@ -19,6 +20,8 @@ class SudokuBoardUI(Frame):
         self.parent.title("Sudoku")
         self.parent.resizable(FALSE, FALSE)
         self.parent.configure(background = "white")
+        center = ScreenCenter()
+        center.center(self.parent, WIDTH, HEIGHT)
         self.pack(fill=BOTH)
         self.canvas = Canvas(parent, width=WIDTH, height= HEIGHT)
         self.canvas.configure(background = "white")

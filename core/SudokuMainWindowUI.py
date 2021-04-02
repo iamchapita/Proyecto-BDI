@@ -1,9 +1,9 @@
 from tkinter import *
 from tkinter import messagebox
-from core.screenCenter import ScreenCenter
-from core.sudokuGame import SudokuGame
-from core.sudokuBoardUI import SudokuBoardUI
-from core.sudokuScoreboardUI import SudokuScoreboardUI
+from core.ScreenCenter import ScreenCenter
+from core.SudokuGame import SudokuGame
+from core.SudokuBoardUI import SudokuBoardUI
+from core.SudokuScoreboardUI import SudokuScoreboardUI
 
 class SudokuMainWindowUI(Frame):
 

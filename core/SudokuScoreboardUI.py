@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from core.ScreenCenter import ScreenCenter
 import os
 import re
 
@@ -22,7 +23,8 @@ class SudokuScoreboardUI(Frame):
         self.parent.resizable(False, False)
         self.parent.geometry("%dx%d"%(self.width, self.height))
         self.parent.iconphoto(True, self.logo)
-
+        center = ScreenCenter()
+        center.center(self.parent, self.width, self.height)
         self.dataView = ttk.Treeview(self.parent, columns=("#1","#2","#3"))
         self.dataView.pack()
         self.dataView.heading("#0", text="Indice")

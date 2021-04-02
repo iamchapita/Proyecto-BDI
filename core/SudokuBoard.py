@@ -1,4 +1,4 @@
-from core.sudokuError import SudokuError
+from core.SudokuError import SudokuError
 
 class SudokuBoard(object):
 

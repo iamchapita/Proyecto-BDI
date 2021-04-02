@@ -1,4 +1,4 @@
-from core.sudokuBoard import SudokuBoard
+from core.SudokuBoard import SudokuBoard
 
 class SudokuGame(object):
 

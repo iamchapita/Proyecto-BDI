@@ -1,6 +1,6 @@
 import argparse
 from tkinter import *
-from core.sudokuSplashScreenUI import SudokuSplashScreenUI
+from core.SudokuSplashScreenUI import SudokuSplashScreenUI
 
 boards = ['debug', 'n00b', 'l33t', 'error']
 margin = 20

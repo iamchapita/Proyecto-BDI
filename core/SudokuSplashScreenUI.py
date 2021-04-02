@@ -1,6 +1,6 @@
 from tkinter import *
-from core.screenCenter import ScreenCenter
-from core.sudokuLoginPageUI import SudokuLoginPageUI
+from core.ScreenCenter import ScreenCenter
+from core.SudokuLoginPageUI import SudokuLoginPageUI
 
 class SudokuSplashScreenUI(Frame):
 

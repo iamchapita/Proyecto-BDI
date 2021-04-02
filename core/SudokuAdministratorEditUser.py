@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import tkinter.font as tkFont
-from screenCenter import ScreenCenter
+from core.ScreenCenter import ScreenCenter
 
 class SudokuAdministratorEditUser(Frame):
 

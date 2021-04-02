@@ -1,6 +1,6 @@
 from tkinter import *
 import tkinter.font as tkFont
-from screenCenter import ScreenCenter
+from core.ScreenCenter import ScreenCenter
 
 class SudokuAdministratorDeleteUser(Frame):
 

@@ -1,18 +1,26 @@
+"""
+    @author: gehernandezc@unah.hn
+    @version: 1.0
+    @date 2021/04/03
+"""
+
 from tkinter import *
 from tkinter import ttk
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
+from core.Close import DialogClose
 
 class SudokuAdministratorCreateUser(Frame):
 
     def __init__(self, parent):
         self.parent = parent
         self.child = Tk()
+        self.child.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.child)
         self.pack()
         self.__initUI()
         img = PhotoImage(file="core/images/back.png", master=self.child)
-        btnBack= Button(self.child, image=img, command= self.goBack,bg="#171717", borderwidth=0, highlightthickness=0)
+        btnBack= Button(self.child, image=img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
         btnBack.pack()
         btnBack.place(x=315, y=20)
         self.master.mainloop()
@@ -31,14 +39,11 @@ class SudokuAdministratorCreateUser(Frame):
         self.child.geometry("%dx%d" %(self.width, self.height))
 
         # Tamaño de la ventana
-        
         self.child.configure(background = "#171717")
 
         #Mantiene la ventana fija para evitar que el diseño se vea afectado
         self.child.resizable(False, False)
 
-        #estilos para crear labels
-        
         # Muestra el titulo de la seccion
         label1= Label(self.child, text='Crear un nuevo usuario', font=("Lato",25))
         label1.configure(background = "#171717", fg="white")
@@ -56,12 +61,7 @@ class SudokuAdministratorCreateUser(Frame):
         self.userText.place(x=110,y=240, height = 30, width = 200)
         
         Button(self.child, text = 'Crear', command= self.__save, bg="#6ea8d9", font=("Lato",15)).place(x=155, y=310, height = 50, width = 110)
-        # Button(self.child, text = 'Regresar Menú', command= self.goBack, bg="#6ea8d9").place(x=200, y=480, height = 30, width = 110)
-        # self.backgroundImage = PhotoImage(file="images/WelcomeScreen.png", master=self.child)
-        # canvas = Canvas(self, width=self.backgroundImage.width(), height=self.backgroundImage.height())
-        # labelLogo = Label(self,image=self.backgroundImage)
-        # labelLogo.place(x=0, y=0, relwidth=1, relheight=1)
-        # canvas.grid(row=0, column=0)
+        
         labelBrand = Label(self.child, image=self.brand, borderwidth=0)
         labelBrand.pack()
         labelBrand.place(x=8,y=555)
@@ -70,6 +70,10 @@ class SudokuAdministratorCreateUser(Frame):
         print(self.userText.get())
         self.userText.delete(0, "end")
 
-    def goBack(self):
+    def __goBack(self):
         self.child.destroy()
         self.parent.deiconify()
+
+    def __onClosing(self):
+        d = DialogClose(self.child)
+        self.child.wait_window(d.top)

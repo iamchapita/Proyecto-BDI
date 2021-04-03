@@ -5,6 +5,7 @@ from core.SudokuAdministratorUI import SudokuAdministratorUI
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.ScreenCenter import ScreenCenter
+from core.Close import DialogClose
 
 """
 Frame que muestra el Login y todos sus respectivos widgets de la aplicación
@@ -21,6 +22,7 @@ class SudokuLoginPageUI(Frame):
     def __init__(self):
 
         self.parent = Tk()
+        self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.parent)
         self.pack()
         self.config = ConfigConnection()
@@ -115,3 +117,7 @@ class SudokuLoginPageUI(Frame):
                 self.parent.destroy()
                 # Se instancia una ventana nueva del tipo MainWindow
                 SudokuMainWindowUI()
+    
+    def __onClosing(self):
+        d = DialogClose(self.parent)
+        self.parent.wait_window(d.top)

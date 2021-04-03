@@ -1,22 +1,29 @@
+"""
+    @author: gehernandezc@unah.hn
+    @version: 1.0
+    @date 2021/04/03
+"""
+
 from tkinter import *
 from tkinter import ttk
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
+from core.Close import DialogClose
 
 class SudokuAdministratorEditUser(Frame):
 
     def __init__(self, parent):
         self.parent = parent
         self.child = Tk()
+        self.child.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.child)
         img = PhotoImage(file="core/images/back.png", master=self.child)
-        btnBack= Button(self.child, image=img, command= self.goBack,bg="#171717", borderwidth=0, highlightthickness=0)
+        btnBack= Button(self.child, image=img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
         btnBack.pack()
         btnBack.place(x=315, y=20)
         self.pack()
         self.__initUI()
         self.master.mainloop()
-        
 
     def __initUI(self):
         self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.child)
@@ -32,7 +39,6 @@ class SudokuAdministratorEditUser(Frame):
         self.child.configure(background = "#171717")
         #Mantiene la ventana fija para evitar que el diseño se vea afectado
         self.child.resizable(False, False)
-        #estilos para crear labels
         
         # Muestra el titulo de la seccion
         label1= Label(self.child, text='Editar usuario', font=("Lato",25))
@@ -44,7 +50,6 @@ class SudokuAdministratorEditUser(Frame):
         label2.configure(background = "#171717", fg="#6ea8d9")
         label2.pack()
         label2.place(x=20,y=170)
-
         
         input_text1 = StringVar()
         self.userText = ttk.Entry(self.child, textvariable = input_text1, font=("Lato",10),  justify=CENTER)
@@ -73,6 +78,10 @@ class SudokuAdministratorEditUser(Frame):
         self.userText.delete(0, "end")
         self.userTextEdited.delete(0, "end")
 
-    def goBack(self):
+    def __goBack(self):
         self.child.destroy()
         self.parent.deiconify()
+    
+    def __onClosing(self):
+        d = DialogClose(self.child)
+        self.child.wait_window(d.top)

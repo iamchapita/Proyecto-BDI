@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from core.ScreenCenter import ScreenCenter
+from core.Close import DialogClose
 import os
 import re
 
@@ -16,11 +17,16 @@ class SudokuScoreboardUI(Frame):
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
-    def __init__(self):
-
-        self.parent = Tk()
-        super().__init__(self.parent)
+    def __init__(self, parent):
+        self.parent = parent
+        self.child = Tk()
+        self.child.protocol("WM_DELETE_WINDOW", self.__onClosing)
+        super().__init__(self.child)
         self.pack()
+        img = PhotoImage(file="core/images/back.png", master=self.child)
+        btnBack= Button(self.child, image=img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
+        btnBack.pack()
+        btnBack.place(x=850, y=20)
         self.__initUI()
         self.master.mainloop()
 
@@ -33,14 +39,15 @@ class SudokuScoreboardUI(Frame):
 
         self.width = 960
         self.height = 545
-        self.logo = PhotoImage(file="core/images/SudokuLogo.png", master=self.parent)
-        self.parent.title("Scoreboard")
-        self.parent.resizable(False, False)
-        self.parent.geometry("%dx%d"%(self.width, self.height))
-        self.parent.iconphoto(True, self.logo)
+        self.logo = PhotoImage(file="core/images/SudokuLogo.png", master=self.child)
+        self.child.title("Scoreboard")
+        self.child.resizable(False, False)
+        self.child.configure(background = "#171717")
+        self.child.geometry("%dx%d"%(self.width, self.height))
+        self.child.iconphoto(True, self.logo)
         center = ScreenCenter()
-        center.center(self.parent, self.width, self.height)
-        self.dataView = ttk.Treeview(self.parent, columns=("#1","#2","#3"))
+        center.center(self.child, self.width, self.height)
+        self.dataView = ttk.Treeview(self.child, columns=("#1","#2","#3"))
         self.dataView.pack()
         self.dataView.heading("#0", text="Indice")
         self.dataView.heading("#1", text="Usuario")
@@ -67,4 +74,11 @@ class SudokuScoreboardUI(Frame):
                 for second in test[1]:
                     for third in test[2]:
                         self.dataView.insert("", 0, text="N° ", values=(first,second,third))
+    
+    def __goBack(self):
+        self.child.destroy()
+        self.parent.deiconify() #Regresa al parent pero no pinta los botones ???
 
+    def __onClosing(self):
+        d = DialogClose(self.child)
+        self.child.wait_window(d.top)

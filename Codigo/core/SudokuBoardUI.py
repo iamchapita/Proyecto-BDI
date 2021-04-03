@@ -1,5 +1,6 @@
 from tkinter import *
 from core.ScreenCenter import ScreenCenter
+from core.Close import DialogClose
 
 MARGIN = 70 # ! Se le sumaron 20 y se restaron 20 en los parámetros necesarios (NO HAY OTRA FORMA DE HACERLO)
 SIDE = 50
@@ -11,6 +12,7 @@ class SudokuBoardUI(Frame):
     def __init__(self, parent, game):
         Frame.__init__(self, parent)
         self.parent = parent
+        self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
         self.game = game
         self.row = -1
         self.col = -1
@@ -19,17 +21,22 @@ class SudokuBoardUI(Frame):
     def __initUI(self, parent):
         self.parent.title("Sudoku")
         self.parent.resizable(FALSE, FALSE)
-        self.parent.configure(background = "white")
+        self.parent.configure(background = "#171717")
+        self.parent.geometry("%dx%d" %(550, 850))
         center = ScreenCenter()
         center.center(self.parent, WIDTH, HEIGHT)
         self.pack(fill=BOTH)
         self.canvas = Canvas(parent, width=WIDTH, height= HEIGHT)
-        self.canvas.configure(background = "white")
+        self.canvas.configure(background = "#171717")
         self.canvas.pack(fill=BOTH, side=TOP)
-        clearButton = Button(parent, text="Limpiar Tablero", command=self.__clearAnswers)
+        clearButton = Button(parent, text="Limpiar Tablero", bg="#6ea8d9", font=("Lato",15), command=self.__clearAnswers)
         clearButton.pack(fill=BOTH, side=BOTTOM)
-        pauseButton = Button(parent, text="Pausa", command=self.__pauseGame)
+        returnButton = Button(parent, text="Deshacer jugada", bg="#6ea8d9", font=("Lato",15))
+        returnButton.pack(fill=BOTH, side=BOTTOM)
+        pauseButton = Button(parent, text="Pausa", bg="#6ea8d9", font=("Lato",15), command=self.__pauseGame)
         pauseButton.pack(fill=BOTH, side=BOTTOM)
+        saveButton = Button(parent, text="Guardar partida", bg="#6ea8d9", font=("Lato",15))
+        saveButton.pack(fill=BOTH, side=BOTTOM)
         self.__drawGrid()
         self.__drawPuzzle()
         self.canvas.bind("<Button-1>", self.__cellClicked)
@@ -67,7 +74,7 @@ class SudokuBoardUI(Frame):
                     x = MARGIN+ j * SIDE + SIDE / 2  - 20 # !Se restaron 20
                     y = MARGIN + i * SIDE + SIDE / 2
                     original = self.game.startPuzzle[i][j]
-                    color = "black" if answer == original else "sea green"
+                    color = "white" if answer == original else "sea green"
                     self.canvas.create_text(
                         x, y, text=answer, tags="numbers", fill=color
                     )
@@ -161,3 +168,6 @@ class SudokuBoardUI(Frame):
         self.canvas.delete("victory")
         self.__drawPuzzle()
 
+    def __onClosing(self):
+        d = DialogClose(self.parent)
+        self.parent.wait_window(d.top)

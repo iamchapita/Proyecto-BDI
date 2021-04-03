@@ -7,52 +7,56 @@ class SudokuAdministratorBinnacle(Frame):
 
     def __init__(self, parent=None):
         self.parent = parent
-        self.binnacle = Tk()
-        super().__init__(self.binnacle)
+        self.child = Tk()
+        super().__init__(self.child)
         self.pack()
         self.__initUI()
-        img = PhotoImage(file="images/pause.png", master=self.binnacle)
-        Button(self.binnacle, image=img, command=self.goBack, bg="#413c3d").place(x=780, y=420)
+        img = PhotoImage(file="core/images/back.png", master=self.child)
+        btnBack= Button(self.child, image=img, command= self.goBack,bg="#171717", borderwidth=0, highlightthickness=0)
+        btnBack.pack()
+        btnBack.place(x=880, y=20)
         self.master.mainloop()
 
     def __initUI(self):
+        self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.child)
+        self.brand = PhotoImage(file="core/images/Brand.png", master=self.child)
         self.width = 900
         self.height = 600
 
         self.center = ScreenCenter()
-        self.center.center(self.binnacle, self.width, self.height)
+        self.center.center(self.child, self.width, self.height)
 
-        self.binnacle.title('Bitácora')
+        self.child.title('Bitácora')
 
         #Tamaño de la ventana
-        self.binnacle.geometry("960x540")
-        self.binnacle.configure(background = "#413c3d")
+        self.child.geometry("960x540")
+        self.child.configure(background = "#171717")
 
         #Mantiene la ventana fija para evitar que el diseño se vea afectado
-        self.binnacle.resizable(False, False)
-
-        #estilos para crear labels
-        TitleStyles = tkFont.Font(family="Lucida Grande", size=150)
-        ButtonStyles = tkFont.Font(family="Lucida Grande", size=18)
+        self.child.resizable(False, False)
 
 
-        self.dataView = ttk.Treeview(self.binnacle, columns=("#1","#2"))
+        self.dataView = ttk.Treeview(self.child, columns=("#1","#2"))
         self.dataView.pack()
         self.dataView.heading("#0", text="Indice")
         self.dataView.heading("#1", text="Usuario")
         self.dataView.heading("#2", text="Descripción actividad")
-        self.dataView.place(x=40, y=140)
+        self.dataView.place(x=45, y=160)
         self.dataView.column("#0", width=50)
         self.dataView.column("#1", width=200)
         self.dataView.column("#2", width=615)
 
         
         # Muestra el titulo de la seccion
-        label1= Label(self.binnacle, text='Registro de bitácora', font =TitleStyles)
-        label1.configure(background = "#413c3d", fg="white")
+        label1= Label(self.child, text='Registro de bitácora', font=("Lato",25))
+        label1.configure(background = "#171717", fg="white")
         label1.pack()
-        label1.place(x=750,y=100)
+        label1.place(x=335,y=90)
+
+        labelBrand = Label(self.child, image=self.brand, borderwidth=0)
+        labelBrand.pack()
+        labelBrand.place(x=280,y=485)
 
     def goBack(self):
-        self.binnacle.destroy()
+        self.child.destroy()
         self.parent.deiconify()

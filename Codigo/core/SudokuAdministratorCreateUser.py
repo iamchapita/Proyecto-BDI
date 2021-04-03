@@ -7,64 +7,69 @@ class SudokuAdministratorCreateUser(Frame):
 
     def __init__(self, parent):
         self.parent = parent
-        self.create = Tk()
-        super().__init__(self.create)
+        self.child = Tk()
+        super().__init__(self.child)
         self.pack()
         self.__initUI()
-        img = PhotoImage(file="core/images/pause.png", master=self.create)
-        Button(self.create, image=img, command=self.goBack, bg="#413c3d").place(x=250, y=480)
+        img = PhotoImage(file="core/images/back.png", master=self.child)
+        btnBack= Button(self.child, image=img, command= self.goBack,bg="#171717", borderwidth=0, highlightthickness=0)
+        btnBack.pack()
+        btnBack.place(x=315, y=20)
         self.master.mainloop()
 
     def __initUI(self):
-        self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.create)
-        self.create.iconphoto(True, self.icon)
+        self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.child)
+        self.brand = PhotoImage(file="core/images/Brand.png", master=self.child)
+        self.child.iconphoto(True, self.icon)
         self.width = 400
         self.height = 600
 
         self.center = ScreenCenter()
-        self.center.center(self.create, self.width, self.height)
+        self.center.center(self.child, self.width, self.height)
 
-        self.create.title('Crear Usuarios')
-        self.create.geometry("%dx%d" %(self.width, self.height))
+        self.child.title('Crear Usuarios')
+        self.child.geometry("%dx%d" %(self.width, self.height))
 
         # Tamaño de la ventana
         
-        # self.create.configure(background = "#413c3d")
+        self.child.configure(background = "#171717")
 
         #Mantiene la ventana fija para evitar que el diseño se vea afectado
-        self.create.resizable(False, False)
+        self.child.resizable(False, False)
 
         #estilos para crear labels
-        FontStyles = tkFont.Font(family="Lucida Grande", size=208)
-        LabelStyles = tkFont.Font(family="Lucida Grande", size=13)
         
         # Muestra el titulo de la seccion
-        label1= Label(self.create, text='Crear un nuevo usuario', font=FontStyles)
-        label1.configure(background = "#413c3d", fg="white")
+        label1= Label(self.child, text='Crear un nuevo usuario', font=("Lato",25))
+        label1.configure(background = "#171717", fg="white")
         label1.pack()
-        label1.place(x=110,y=100)
+        label1.place(x=30,y=120)
 
-        label2= Label(self.create, text='Introduzca el nombre de usuario:', font =LabelStyles)
-        label2.configure(background = "#413c3d", fg="#6ea8d9")
+        label2= Label(self.child, text='Introduzca el nombre de usuario:', font =("Lato",15))
+        label2.configure(background = "#171717", fg="#6ea8d9")
         label2.pack()
-        label2.place(x=75,y=180)
+        label2.place(x=65,y=200)
 
         input_text = StringVar()
-        self.userText = ttk.Entry(self.create, textvariable = input_text)
+        self.userText = ttk.Entry(self.child, textvariable = input_text, font=("Lato",10),  justify=CENTER)
         self.userText.pack()
         self.userText.place(x=110,y=240, height = 30, width = 200)
         
-        Button(self.create, text = 'Crear', command= self.__save, bg="#6ea8d9").place(x=155, y=310, height = 50, width = 110)
-        # Button(self.create, text = 'Regresar Menú', command= self.goBack, bg="#6ea8d9").place(x=200, y=480, height = 30, width = 110)
-        # self.backgroundImage = PhotoImage(file="images/WelcomeScreen.png", master=self.create)
+        Button(self.child, text = 'Crear', command= self.__save, bg="#6ea8d9", font=("Lato",15)).place(x=155, y=310, height = 50, width = 110)
+        # Button(self.child, text = 'Regresar Menú', command= self.goBack, bg="#6ea8d9").place(x=200, y=480, height = 30, width = 110)
+        # self.backgroundImage = PhotoImage(file="images/WelcomeScreen.png", master=self.child)
         # canvas = Canvas(self, width=self.backgroundImage.width(), height=self.backgroundImage.height())
         # labelLogo = Label(self,image=self.backgroundImage)
         # labelLogo.place(x=0, y=0, relwidth=1, relheight=1)
         # canvas.grid(row=0, column=0)
+        labelBrand = Label(self.child, image=self.brand, borderwidth=0)
+        labelBrand.pack()
+        labelBrand.place(x=8,y=555)
 
     def __save(self):
         print(self.userText.get())
+        self.userText.delete(0, "end")
 
     def goBack(self):
-        self.create.destroy()
+        self.child.destroy()
         self.parent.deiconify()

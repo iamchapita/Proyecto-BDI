@@ -48,6 +48,25 @@ class MySQLEngine:
 
         self.link.execute(query)
         return self.link.fetchall()
+    
+    def getUserStatus(self, username, password):
+        query = """
+            SELECT
+                (
+                    SELECT
+                        fn_compareData('{}', '{}')
+                ) AS Status,
+                IF(bit_rol = 1, 1, 0) AS Rol
+            FROM
+                User
+            WHERE 
+                tex_nickname = '{}';
+        """.format(username, password, username)
+        self.link.execute(query)
+        # Se utiliza fetchone porque solo se obtendra una tupla
+        # Si la consulta no encuenta el usuario entonces no devuelve nada
+        # Para evitar que retorne Nulo o None se emplea el if
+        return self.link.fetchall()
 
     def closeConnection():
         self.mydb.close()

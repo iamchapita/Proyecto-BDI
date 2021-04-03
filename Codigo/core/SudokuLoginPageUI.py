@@ -2,6 +2,8 @@ from tkinter import *
 from core.SudokuMainWindowUI import SudokuMainWindowUI
 from core.SudokuAdministratorUI import * 
 from core.ScreenCenter import *
+from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLEngine import MySQLEngine
 
 class SudokuLoginPageUI(Frame):
 
@@ -10,6 +12,8 @@ class SudokuLoginPageUI(Frame):
         self.parent = Tk()
         super().__init__(self.parent)
         self.pack()
+        self.config = ConfigConnection()
+        self.db = MySQLEngine(self.config.getConfig())
         self.__initUI()
         self.master.mainloop()
 
@@ -38,11 +42,36 @@ class SudokuLoginPageUI(Frame):
         loginButton = Button(self, text="Iniciar Sesión", bg="#6ea8d9",width=15, height=2, command = lambda: self.__loginFn(usernameText, passwordText))
         canvas.create_window(200, 260, window=loginButton)
 
-    def __loginFn(self, username = "", password = ""):
+    def __loginFn(self, username, password):
 
-        if(len(username.get()) == 0):
+        # Variable de texto donde se almacenará el texto de error que corresponda
+        # para después mostrarlo en un messagebox
+        error = ""
+        
+        # Comprobando la longitud del texto correspondiente al nombre de usuario
+        if (len(username.get()) == 0):
+            error += "El campo usuario está vacio.\n"
+        
+        # Comprobando la longitud del texto correspondiente a la contraseña
+        if(len(password.get()) == 0):
+            error += "El campo contraseña está vacio.\n"
+        
+        print(self.db.select("SELECT id FROM User WHERE tex_nickname = '{}'".format(username.get())))
+
+        # Comprobando si ocurrio algún error
+        if (len(error) == 0):
+            # Se destruye la ventana
             self.parent.destroy()
+            # Se instancia una ventana nueva del tipo MainWindow
             SudokuMainWindowUI()
+
+        # En caso contrario de que se haya presentado un error
         else:
+            messagebox.showerror(title="Error", message=error)
+            return
+
+        """ 
+        Si es admin
+        if()
             self.parent.destroy()
-            SudokuAdministratorUI()
+            SudokuAdministratorUI() """

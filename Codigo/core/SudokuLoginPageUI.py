@@ -1,7 +1,7 @@
 from tkinter import *
 from core.SudokuMainWindowUI import SudokuMainWindowUI
-from core.SudokuAdministratorUI import * 
-from core.ScreenCenter import *
+from core.SudokuAdministratorUI import SudokuAdministratorUI 
+from core.ScreenCenter import ScreenCenter
 
 class SudokuLoginPageUI(Frame):
 
@@ -30,13 +30,13 @@ class SudokuLoginPageUI(Frame):
         labelLogo.place(x=0, y=0, relwidth=1, relheight=1)
         canvas.grid(row=0, column=0)
         usernameText = StringVar()
-        usernameEntry = Entry(self, textvariable = usernameText)
+        usernameEntry = Entry(self, textvariable = usernameText, font=("Lato",15),  justify=CENTER)
         passwordText = StringVar()
-        passwordEntry = Entry(self, textvariable = passwordText, show = "*")
+        passwordEntry = Entry(self, textvariable = passwordText, show = "*", font=("Lato",15),  justify=CENTER)
         canvas.create_window(200, 120, window=usernameEntry)
         canvas.create_window(200, 210, window=passwordEntry)
-        loginButton = Button(self, text="Iniciar Sesión", bg="#6ea8d9",width=15, height=2, command = lambda: self.__loginFn(usernameText, passwordText))
-        canvas.create_window(200, 260, window=loginButton)
+        loginButton = Button(self, text="Iniciar Sesión", bg="#6ea8d9",width=10, height=2,font=("Lato",15), command = lambda: self.__loginFn(usernameText, passwordText))
+        canvas.create_window(200, 280, window=loginButton)
 
     def __loginFn(self, username = "", password = ""):
 

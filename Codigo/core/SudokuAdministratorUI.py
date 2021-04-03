@@ -1,9 +1,10 @@
 from tkinter import *
-from core.SudokuAdministratorCreateUser import *
-from core.SudokuAdministratorDeleteUser import *
-from core.SudokuAdministratorEditUser import *
+from tkinter import messagebox
 from core.SudokuAdministratorBinnacle import *
+from core.SudokuUserAdministration import *
 from core.ScreenCenter import ScreenCenter
+from core.SudokuGame import SudokuGame
+from core.SudokuBoardUI import SudokuBoardUI
 
 class SudokuAdministratorUI(Frame):
 
@@ -17,43 +18,48 @@ class SudokuAdministratorUI(Frame):
     def __initUI(self):
         # Se debe utilizar la ruta core/images/SudokuLogo.png al implementarlo en el main
         self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.parent)
+        self.brand = PhotoImage(file="core/images/Brand.png", master=self.parent)
         self.width = 400
         self.height = 600
         self.parent.title('Opciones Administrador')
         self.parent.iconphoto(True, self.icon)
         # Tamaño de la ventana
         self.parent.geometry("%dx%d" % (self.width, self.height))
-        # Este color esta dispuesto a cambio
-        # self.parent.configure(background = "#413c3d")
+
+        self.parent.configure(background = "#171717")
         self.parent.resizable(False, False)
-        TitleStyles = tkFont.Font(family="Lucida Grande", size=18)
+        TitleStyles = tkFont.Font(family="Lato", size=25, weight='bold')
+        ButtonStyles = tkFont.Font(family="Lato", size=17)
         self.center = ScreenCenter()
         self.center.center(self.parent, self.width, self.height)
-        Button(self.parent, text = 'Crear usuario', bg="#6ea8d9", font=TitleStyles, command= self.goCreateUser).place(x=100, y=110, height = 50, width = 210)
-        Button(self.parent, text = 'Editar usuario', bg="#6ea8d9", font=TitleStyles, command= self.goEditUser).place(x=100, y=190, height = 50, width = 210)
-        Button(self.parent, text = 'Eliminar usuario', bg="#6ea8d9", font=TitleStyles, command= self.goDeleteUser).place(x=100, y=270, height = 50, width = 210)
-        Button(self.parent, text = 'Ir al juego', bg="#6ea8d9", font=TitleStyles, command= self.goGame).place(x=100, y=350, height = 50, width = 210)
-        Button(self.parent, text = 'Bitácora', bg="#6ea8d9", font=TitleStyles, command= self.goBinnacle).place(x=100, y=430, height = 50, width = 210)
-        Button(self.parent, text = 'Salir', bg="#6ea8d9", font=TitleStyles, command= self.quit).place(x=100, y=500, height = 50, width = 210)
-        
-    def goCreateUser(self):
-        self.parent.withdraw()
-        SudokuAdministratorCreateUser(parent=self.parent)
-    
-    def goDeleteUser(self):
-        self.parent.withdraw()
-        SudokuAdministratorDeleteUser(parent=self.parent)
+        label1= Label(self.parent, text='¿Qué deseas hacer?', font=TitleStyles)
+        label1.configure(background = "#171717", fg="white")
+        label1.pack()
+        label1.place(x=60,y=120)
+        Button(self.parent, text = 'Administración usuarios', bg="#6ea8d9", font=ButtonStyles, command= self.goUserAdministration).place(x=50, y=220, height = 50, width = 310)
+        Button(self.parent, text = 'Ir al juego', bg="#6ea8d9", font=ButtonStyles, command= self.goGame).place(x=50, y=280, height = 50, width =310)
+        Button(self.parent, text = 'Bitácora', bg="#6ea8d9", font=ButtonStyles, command= self.goBinnacle).place(x=50, y=340, height = 50, width =310)
+        Button(self.parent, text = 'Salir', bg="#6ea8d9", font=ButtonStyles, command= self.quit).place(x=50, y=400, height = 50, width =310)
+        label2 = Label(self.parent, image=self.brand, borderwidth=0)
+        label2.pack()
+        label2.place(x=8,y=555)
 
-    def goEditUser(self):
+    def goUserAdministration(self):
         self.parent.withdraw()
-        SudokuAdministratorEditUser(parent=self.parent)
+        SudokuUserAdministration(parent=self.parent)
 
     def goBinnacle(self):
         self.parent.withdraw()
         SudokuAdministratorBinnacle(parent=self.parent)
 
     def goGame(self):
-        pass
+        with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
+            self.parent.destroy()
+            root = Tk()
+            game = SudokuGame(boardFile)
+            game.start()
+            SudokuBoardUI(root, game)
 
     def quit(self):
+        messagebox.showinfo(title="Salir",message="¡Vuelve pronto!")
         self.parent.destroy()

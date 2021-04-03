@@ -77,28 +77,41 @@ class SudokuLoginPageUI(Frame):
         if(len(password.get()) == 0):
             error += "El campo contraseña está vacio.\n"
 
-        """ 
-        PROBLEMAS AQUÍ, me toca solucionar
-        statusLogin = self.db.select("SELECT fn_compareData( %s, %s);"%(username.get(), password.get()))
-        print(statusLogin[0][0])
-        if (statusLogin[0][0] == 0):
-            error += "Usuario o contraseña no válidos.\n" 
-        """
-
+        #  Bloque Try para evitar que error si el resultado de la consulta de la base de datos
+        # está vacia (no se encontró el usuario ingresado)
+        try:
+            # Se declara una variable por cada elemento de la tupla retornada
+            # La variable statusLogin guarda un 1 si el usuario se encontró en la base de datos
+            # La variable rol, guarda el rol del usuario y según este muestra la pantalla a continuación
+            statusLogin, rol = self.db.getUserStatus(username.get(), password.get())[0]
+        # Se define un except donde a cada variable se le pasa un valor "por defecto".
+        # Este valor va a devolver error en la interfaz
+        except:
+            statusLogin, rol = (0,0)
+    
+        # Comprobando si el valor de la variable es 0
+        # Esto ocurre si:
+        #   - El usuario no existe
+        #   - El usuario existe pero la contraseña no es correcta
+        # Se comprueba si la longitud del error es 0 para no emitir el mensaje de error
+        # si los campos están vacios.
+        if (statusLogin == 0 and len(error) == 0):
+            error += "Usuario o contraseña no válidos.\n"
+        
         # Comprobando si ocurrio algún error
-        if (len(error) == 0):
-            # Se destruye la ventana
-            self.parent.destroy()
-            # Se instancia una ventana nueva del tipo MainWindow
-            SudokuMainWindowUI()
-
-        # En caso contrario de que se haya presentado un error
-        else:
+        if(len(error) > 0):
             messagebox.showerror(title="Error", message=error)
             return
 
-        """ 
-        Si es admin
-        if()
-            self.parent.destroy()
-            SudokuAdministratorUI() """
+        if (statusLogin == 1):
+
+            if (rol == 1):
+                
+                self.parent.destroy()
+                SudokuAdministratorUI()
+
+            elif (rol == 0):
+                # Se destruye la ventana
+                self.parent.destroy()
+                # Se instancia una ventana nueva del tipo MainWindow
+                SudokuMainWindowUI()

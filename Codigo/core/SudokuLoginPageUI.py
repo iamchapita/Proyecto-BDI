@@ -1,6 +1,8 @@
 from tkinter import *
 from core.SudokuMainWindowUI import SudokuMainWindowUI
-from core.SudokuAdministratorUI import SudokuAdministratorUI 
+from core.SudokuAdministratorUI import SudokuAdministratorUI
+from core.EngineSQL.MySQLEngine import MySQLEngine
+from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.ScreenCenter import ScreenCenter
 
 class SudokuLoginPageUI(Frame):
@@ -54,7 +56,13 @@ class SudokuLoginPageUI(Frame):
         if(len(password.get()) == 0):
             error += "El campo contraseña está vacio.\n"
 
-        print(self.db.select("SELECT id FROM User WHERE tex_nickname = '{}'".format(username.get())))
+        """ 
+        PROBLEMAS AQUÍ, me toca solucionar
+        statusLogin = self.db.select("SELECT fn_compareData( %s, %s);"%(username.get(), password.get()))
+        print(statusLogin[0][0])
+        if (statusLogin[0][0] == 0):
+            error += "Usuario o contraseña no válidos.\n" 
+        """
 
         # Comprobando si ocurrio algún error
         if (len(error) == 0):

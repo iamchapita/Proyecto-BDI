@@ -1,16 +1,15 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """
     @author: kenneth.cruz@unah.hn
-    @version: 0.1.0
+    @author: lamorales@unah.hn
+    @version: 0.1.1
     @date: 2021/04/01
 """
 
 import configparser
 import re
 import os 
-
 
 """
     Obtiene y parsea los datos del archivo de configuración 
@@ -22,7 +21,7 @@ class ConfigConnection:
         try: 
             #Ruta del archivo de configuración
             #self.path = ( "{}/config.ini".format(os.getcwd()) )
-            self.path = re.sub(r"Proyecto\-BDI\/[a-záéíóúñA-Z/%0-9]+$", os.getcwd(), "Proyecto-BDI/Scripts de Base de Datos")
+            self.path = re.sub(r"(Codigo)", "Scripts de Base de Datos/config.ini", os.getcwd())
             #Instancia del objeto configparser
             self.parser = configparser.ConfigParser()
             #Lectura el archivo config.ini
@@ -35,7 +34,7 @@ class ConfigConnection:
     def getConfig(self): 
         
         #Sección por defecto dentro del archivo de configuración (config.ini)
-        config = self.parser['DEFAULT'] 
+        config = self.parser["DEFAULT"]
         
         #Configuración de la conexión a la base de datos
         config = dict(zip(config.keys(), config.values()))

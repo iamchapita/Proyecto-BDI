@@ -4,8 +4,18 @@ from core.ScreenCenter import ScreenCenter
 import os
 import re
 
+"""
+Frame que permite visualizar todos los scoreboards del juego.
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
+"""
 class SudokuScoreboardUI(Frame):
 
+    """
+    Constructor de la clase.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __init__(self):
 
         self.parent = Tk()
@@ -14,6 +24,11 @@ class SudokuScoreboardUI(Frame):
         self.__initUI()
         self.master.mainloop()
 
+    """
+    Creación de widgets de la ventana.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __initUI(self):
 
         self.width = 960
@@ -36,7 +51,15 @@ class SudokuScoreboardUI(Frame):
         self.dataView.column("#1", width=200)
         self.dataView.column("#2", width=250)
         self.dataView.column("#3", width=300)
+        self.loadText()
 
+    """
+    Función que permite leer los mejores puntajes provenientes de una 
+    consulta de la base de datos e insertarlos en una tabla de tkinter.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
+    def loadText(self):
         os.chdir("../Scripts de Base de Datos")
         with open("scoreboardTest.txt", "r") as file:
             test = list(zip(*map(str.split, map(str.strip, file))))

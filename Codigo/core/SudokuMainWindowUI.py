@@ -5,8 +5,18 @@ from core.SudokuGame import SudokuGame
 from core.SudokuBoardUI import SudokuBoardUI
 from core.SudokuScoreboardUI import SudokuScoreboardUI
 
+"""
+Frame que muestra el Main Window y todos sus respectivos widgets de la aplicación
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
+"""
 class SudokuMainWindowUI(Frame):
 
+    """
+    Constructor de la clase.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __init__(self):
 
         self.parent = Tk()
@@ -15,6 +25,11 @@ class SudokuMainWindowUI(Frame):
         self.__initUI()
         self.master.mainloop()
 
+    """
+    Creación de widgets de la ventana.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __initUI(self):
 
         self.width = 400
@@ -39,6 +54,11 @@ class SudokuMainWindowUI(Frame):
         canvas.create_window(205, 370, window=Button(self, text="Mejores Puntajes", bg="#6ea8d9",width=15, height=2, command=self.__bestScores))
         canvas.create_window(205, 430, window=Button(self, text="Salir", width=15, bg="#6ea8d9",height=2, command=self.__logOff))
 
+    """
+    Función que inicia el juego cuando se presiona el botón.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __newGame(self):
         with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
             self.parent.destroy()
@@ -47,13 +67,28 @@ class SudokuMainWindowUI(Frame):
             game.start()
             SudokuBoardUI(root, game)
 
+    """
+    Función que permite continuar un juego pausado.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __continueGame(self):
         pass
 
+    """
+    Función que permite visualizar los mejores puntajes.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __bestScores(self):
         self.parent.destroy()
         SudokuScoreboardUI()
 
+    """
+    Función que permite cerrar sesión al presionar el botón.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __logOff(self):
         messagebox.showinfo(title="Salir",message="¡Vuelve pronto!")
         self.parent.destroy()

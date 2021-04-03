@@ -1,14 +1,25 @@
 from tkinter import *
+from tkinter import messagebox
 from core.SudokuMainWindowUI import SudokuMainWindowUI
 from core.SudokuAdministratorUI import SudokuAdministratorUI
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.ScreenCenter import ScreenCenter
 
+"""
+Frame que muestra el Login y todos sus respectivos widgets de la aplicación
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
+"""
 class SudokuLoginPageUI(Frame):
 
+    """
+    Constructor de la clase.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __init__(self):
-        
+
         self.parent = Tk()
         super().__init__(self.parent)
         self.pack()
@@ -17,6 +28,11 @@ class SudokuLoginPageUI(Frame):
         self.__initUI()
         self.master.mainloop()
 
+    """
+    Creación de widgets de la ventana.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __initUI(self):
 
         self.width = 400
@@ -42,6 +58,11 @@ class SudokuLoginPageUI(Frame):
         loginButton = Button(self, text="Iniciar Sesión", bg="#6ea8d9",width=10, height=2,font=("Lato",15), command = lambda: self.__loginFn(usernameText, passwordText))
         canvas.create_window(200, 280, window=loginButton)
 
+    """
+    Función que verifica la existencia y conexión a la BD.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __loginFn(self, username, password):
 
         # Variable de texto donde se almacenará el texto de error que corresponda

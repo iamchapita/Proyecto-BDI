@@ -2,8 +2,18 @@ from tkinter import *
 from core.ScreenCenter import ScreenCenter
 from core.SudokuLoginPageUI import SudokuLoginPageUI
 
+"""
+Frame que da la bienvenida al usuario.
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
+"""
 class SudokuSplashScreenUI(Frame):
 
+    """
+    Constructor de la clase.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __init__(self):
         
         self.parent = Tk()
@@ -12,6 +22,11 @@ class SudokuSplashScreenUI(Frame):
         self.__initUI()
         self.master.mainloop()
 
+    """
+    Creación de widgets de la ventana.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __initUI(self):
         self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.parent)
         self.backgroundImage = PhotoImage(file="core/images/WelcomeScreen.png", master=self.parent)
@@ -27,6 +42,11 @@ class SudokuSplashScreenUI(Frame):
         canvas.grid(row=0, column=0)
         self.after(1500, self.goToLoginPage)
 
+    """
+    Función que permite continuar a la ventana de Login.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def goToLoginPage(self):
         self.parent.destroy()
         SudokuLoginPageUI()

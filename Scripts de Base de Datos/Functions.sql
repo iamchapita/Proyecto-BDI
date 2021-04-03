@@ -8,13 +8,11 @@ DELIMITER $$
     BEGIN
 
         SET @password = (SELECT tex_password FROM User WHERE tex_nickname = tex_pynickname);
-        SET @result = IF(@password = AES_ENCRYPT(HEX((tex_pypassword)), @username), 1, 0);
-
+        SET @result = IF(@password = HEX(AES_ENCRYPT(tex_pypassword, tex_pynickname)), 1, 0);
         RETURN @result;
 
     END $$
 
 DELIMITER ;
 
-
-SELECT fn_compareData("admin", "admin") AS Data
+-- SELECT fn_compareData("admin", "admin") AS Data

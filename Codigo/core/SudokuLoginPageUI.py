@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter import ttk
 from core.SudokuMainWindowUI import SudokuMainWindowUI
 from core.SudokuAdministratorUI import SudokuAdministratorUI
 from core.EngineSQL.MySQLEngine import MySQLEngine
@@ -45,20 +46,37 @@ class SudokuLoginPageUI(Frame):
         self.parent.resizable(False, False)
         self.parent.geometry("%dx%d"%(self.width, self.height))
         self.parent.iconphoto(True, self.logo)
+        self.parent.configure(background = "#171717")
+        
         center = ScreenCenter()
         center.center(self.parent, self.width, self.height)
-        canvas = Canvas(self, width=self.backgroundImage.width(), height=self.backgroundImage.height())
-        labelLogo = Label(self,image=self.backgroundImage)
-        labelLogo.place(x=0, y=0, relwidth=1, relheight=1)
-        canvas.grid(row=0, column=0)
-        usernameText = StringVar()
-        usernameEntry = Entry(self, textvariable = usernameText, font=("Lato",15),  justify=CENTER)
-        passwordText = StringVar()
-        passwordEntry = Entry(self, textvariable = passwordText, show = "*", font=("Lato",15),  justify=CENTER)
-        canvas.create_window(200, 120, window=usernameEntry)
-        canvas.create_window(200, 210, window=passwordEntry)
-        loginButton = Button(self, text="Iniciar Sesión", bg="#6ea8d9",width=10, height=2,font=("Lato",15), command = lambda: self.__loginFn(usernameText, passwordText))
-        canvas.create_window(200, 280, window=loginButton)
+        
+        # Muestra el titulo de la seccion
+        label1= Label(self.parent, text='Nombre de usuario', font=("Lato",20))
+        label1.configure(background = "#171717", fg="white")
+        label1.pack()
+        label1.place(x=85,y=50)
+
+        input_text1 = StringVar()
+        self.userText = ttk.Entry(self.parent, textvariable = input_text1, font=("Lato",15),  justify=CENTER)
+        self.userText.pack()
+        self.userText.place(x=100,y=90, height = 30, width = 200)
+
+        label2= Label(self.parent, text='Contraseña', font =("Lato",20))
+        label2.configure(background = "#171717", fg="white")
+        label2.pack()
+        label2.place(x=130,y=145)
+
+        input_text2 = StringVar()
+        self.passwordText = ttk.Entry(self.parent,show="*", textvariable = input_text2, font=("Lato",15),  justify=CENTER)
+        self.passwordText.pack()
+        self.passwordText.place(x=100,y=180, height = 30, width = 200)
+        
+        Button(self.parent, text="Iniciar Sesión", bg="#6ea8d9", font=("Lato",15), command=lambda:self.__loginFn(self.userText,self.passwordText)).place(x=128, y=245)
+
+        labelbackgroundImage = Label(self.parent, image=self.backgroundImage, borderwidth=0)
+        labelbackgroundImage.pack()
+        labelbackgroundImage.place(x=3,y=335)
 
     """
     Función que verifica la existencia y conexión a la BD.

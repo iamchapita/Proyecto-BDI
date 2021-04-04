@@ -1,12 +1,13 @@
 from tkinter import *
 from tkinter import messagebox
-from tkinter import ttk
 from core.SudokuMainWindowUI import SudokuMainWindowUI
 from core.SudokuAdministratorUI import SudokuAdministratorUI
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.ScreenCenter import ScreenCenter
 from core.Close import DialogClose
+from core.Tooltip import Tooltip
+import re
 
 """
 Frame que muestra el Login y todos sus respectivos widgets de la aplicación
@@ -57,22 +58,26 @@ class SudokuLoginPageUI(Frame):
         label1.pack()
         label1.place(x=85,y=50)
 
-        input_text1 = StringVar()
-        self.userText = ttk.Entry(self.parent, textvariable = input_text1, font=("Lato",15),  justify=CENTER)
-        self.userText.pack()
-        self.userText.place(x=100,y=90, height = 30, width = 200)
+        self.usernameEntry = Entry(self.parent, font=("Lato",15),  justify=CENTER)
+        self.usernameEntry.pack()
+        self.usernameEntry.place(x=100, y=90, height=30, width=200)
+        textTooltip ="""{} de más de 4 caracteres.\nCaracteres válidos: \n- Mayúsculas\n- Minúsculas\n- Números\n- Simbolos (._-)"""
+        self.usernameToolTip = Tooltip(self.usernameEntry, textTooltip.format("Nombre de usuario"))
 
         label2= Label(self.parent, text='Contraseña', font =("Lato",20))
         label2.configure(background = "#171717", fg="white")
         label2.pack()
         label2.place(x=130,y=145)
 
-        input_text2 = StringVar()
-        self.passwordText = ttk.Entry(self.parent,show="*", textvariable = input_text2, font=("Lato",15),  justify=CENTER)
-        self.passwordText.pack()
-        self.passwordText.place(x=100,y=180, height = 30, width = 200)
+        self.passwordEntry = Entry(self.parent,show="*", font=("Lato",15),  justify=CENTER)
+        self.passwordEntry.pack()
+        self.passwordEntry.place(x=100,y=180, height = 30, width = 200)
         
-        Button(self.parent, text="Iniciar Sesión", bg="#6ea8d9", font=("Lato",15), command=lambda:self.__loginFn(self.userText,self.passwordText)).place(x=128, y=245)
+        self.usernameToolTip = Tooltip(self.passwordEntry, textTooltip.format("Contraseña"))
+
+        self.loginButton = Button(self.parent, command=lambda: self.__loginFn(self.usernameEntry, self.passwordEntry))
+        self.loginButton.configure(text="Iniciar Sesión", bg="#6ea8d9", font=("Lato", 15))
+        self.loginButton.place(x=128, y=245)
 
         labelbackgroundImage = Label(self.parent, image=self.backgroundImage, borderwidth=0)
         labelbackgroundImage.pack()
@@ -88,6 +93,14 @@ class SudokuLoginPageUI(Frame):
         # Variable de texto donde se almacenará el texto de error que corresponda
         # para después mostrarlo en un messagebox
         error = ""
+
+        # Comprobando si el texto del campo usuario reune los requisitos
+        if (re.search(r"[a-zA-Z0-9._-]{4,}", username.get()) is None and len(username.get()) > 0):
+            error += "Usuario o Contraseña no válido.\n"
+
+        # Comprobando si el texto del campo contraseña reune los requisitos
+        if (re.search(r"[a-zA-Z0-9._-]{4,}", password.get()) is None and len(password.get()) > 0):
+            error += "Usuario o Contraseña no válido.\n"
         
         # Comprobando la longitud del texto correspondiente al nombre de usuario
         if (len(username.get()) == 0):

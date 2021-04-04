@@ -59,7 +59,6 @@ class SudokuScoreboardUI(Frame):
         self.dataView.column("#1", width=200)
         self.dataView.column("#2", width=250)
         self.dataView.column("#3", width=300)
-        self.loadText()
 
         # Muestra el titulo de la seccion
         label1= Label(self.child, text='Score Board', font=("Lato",25))
@@ -70,6 +69,7 @@ class SudokuScoreboardUI(Frame):
         labelBrand = Label(self.child, image=self.brand, borderwidth=0)
         labelBrand.pack()
         labelBrand.place(x=280,y=485)
+        self.loadText()
 
     """
     Función que permite leer los mejores puntajes provenientes de una 
@@ -78,21 +78,29 @@ class SudokuScoreboardUI(Frame):
     @version 1.0
     """
     def loadText(self):
-        pass
 
-        # !Comenté estas líneas porque genera error al querer volver a llamar a la función. att: Gabriela
-        # os.chdir("../Scripts de Base de Datos")
-        # with open("scoreboardTest.txt", "r") as file:
-        #     test = list(zip(*map(str.split, map(str.strip, file))))
-        #     for first in test[0]:
-        #         for second in test[1]:
-        #             for third in test[2]:
-        #                 self.dataView.insert("", 0, text="N° ", values=(first,second,third))
+         os.chdir("../Scripts de Base de Datos")
+         with open("scoreboardTest.txt", "r") as file:
+             test = list(zip(*map(str.split, map(str.strip, file))))
+             for first in test[0]:
+                 for second in test[1]:
+                     for third in test[2]:
+                         self.dataView.insert("", 0, text="N° ", values=(first,second,third))
     
+    """
+    Función que permite regresar a la ventana anterior al presionar el botón.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __goBack(self):
         self.child.destroy()
         self.parent.deiconify()
 
+    """
+    Función que permite minimizar o salir del juego.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __onClosing(self):
         d = DialogClose(self.child)
         self.child.wait_window(d.top)

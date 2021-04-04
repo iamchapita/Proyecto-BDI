@@ -13,7 +13,7 @@ USE SudokuDB;
 CREATE TABLE User(
     id SERIAL PRIMARY KEY,
     tex_nickname VARCHAR(30) NOT NULL UNIQUE COMMENT "Nombre de ingreso para el usuario",
-    CHECK( tex_nickname RLIKE "[a-zA-Z0-9._-]{3,}" ), 
+    CHECK( tex_nickname RLIKE "[a-zA-Z0-9._-]{4,}" ), 
     bit_rol BIT(1) DEFAULT 0 NOT NULL COMMENT "0 Usuario | 1 Administrador; Tipos de rol para acceso al sistema", 
     tex_password TEXT NOT NULL COMMENT "Contraseña"
 )COMMENT "Información general sobre el usuario";

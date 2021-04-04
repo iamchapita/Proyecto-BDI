@@ -20,13 +20,13 @@ class DialogClose:
         self.top.title("Salir")
 
         self.center= ScreenCenter()
-        self.center.center(self.top, 320, 155)
+        self.center.center(self.top, 330, 400)
 
         label1 =tk.Label(self.top, text="¿Está seguro?",font =("Lato",15))
         label1.configure(background = "#171717", fg="white")
         label1.grid(row=0, column=0, columnspan=2)
 
-        self.button1 = tk.Button(self.top, text="Si, salir de la app.", bg="#6ea8d9", font=("Lato",12), command=self.__salir)
+        self.button1 = tk.Button(self.top, text="Si, salir del juego.", bg="#6ea8d9", font=("Lato",12), command=self.__salir)
         self.button2 = tk.Button(self.top, text="No, solo minimizar.", bg="#6ea8d9", font=("Lato",12), command=self.__minimizar)
         self.button1.grid(row=1, column=0, padx=5, pady=5)
         self.button2.grid(row=1, column=1, padx=5, pady=5)

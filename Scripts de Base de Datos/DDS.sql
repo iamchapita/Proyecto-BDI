@@ -15,8 +15,7 @@ CREATE TABLE User(
     tex_nickname VARCHAR(30) NOT NULL UNIQUE COMMENT "Nombre de ingreso para el usuario",
     CHECK( tex_nickname RLIKE "[a-zA-Z0-9._-]{3,}" ), 
     bit_rol BIT(1) DEFAULT 0 NOT NULL COMMENT "0 Usuario | 1 Administrador; Tipos de rol para acceso al sistema", 
-    tex_password TEXT NOT NULL COMMENT "Contraseña",
-    CHECK( tex_password RLIKE "[a-zA-Z\d_.-]{ 4,}" ) 
+    tex_password TEXT NOT NULL COMMENT "Contraseña"
 )COMMENT "Información general sobre el usuario";
 
 CREATE TABLE Login(

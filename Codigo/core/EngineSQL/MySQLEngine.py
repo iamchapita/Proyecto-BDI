@@ -63,7 +63,6 @@ class MySQLEngine:
                 tex_nickname = '{}';
         """.format(username, password, username)
         self.link.execute(query)
-        # Se utiliza fetchone porque solo se obtendra una tupla
         # Si la consulta no encuenta el usuario entonces no devuelve nada
         # Para evitar que retorne Nulo o None se emplea el if
         return self.link.fetchall()

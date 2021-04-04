@@ -1,6 +1,7 @@
 from tkinter import *
 import sys
 from core.ScreenCenter import ScreenCenter
+from core.SudokuByeUI import SudokuBye
 
 """
 Clase DialogClose genera una caja de texto de confirmación con las 
@@ -40,4 +41,5 @@ class DialogClose:
     def __salir(self):
         self.top.destroy()
         self.parent.destroy()
+        SudokuBye()
         sys.exit()

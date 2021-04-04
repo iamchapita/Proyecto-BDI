@@ -1,16 +1,21 @@
-"""
-    @author: gehernandezc@unah.hn
-    @version: 1.0
-    @date 2021/04/03
-"""
-
 from tkinter import *
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
 from core.Close import DialogClose
 
+"""
+Frame que permite visualizar los elementos cuando se elimina un usuario
+del juego y la BD.
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
+"""
 class SudokuAdministratorDeleteUser(Frame):
 
+    """
+    Constructor de la clase.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __init__(self, parent):
         self.parent = parent
         self.child = Tk()
@@ -24,6 +29,11 @@ class SudokuAdministratorDeleteUser(Frame):
         btnBack.place(x=315, y=20)
         self.master.mainloop()
 
+    """
+    Creación de los widgets.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __initUI(self):
         self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.child)
         self.brand = PhotoImage(file="core/images/Brand.png", master=self.child)
@@ -61,14 +71,29 @@ class SudokuAdministratorDeleteUser(Frame):
         labelBrand.pack()
         labelBrand.place(x=8,y=555)
 
+    """
+    Función que permite guardar los cambios.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __save(self):
         print(self.userText.get())
         self.userText.delete(0, "end")
 
+    """
+    Función que permite regresar a la ventana anterior al presionar el botón.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __goBack(self):
         self.child.destroy()
         self.parent.deiconify()
     
+    """
+    Función que permite minimizar o salir del juego.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __onClosing(self):
         d = DialogClose(self.child)
         self.child.wait_window(d.top)

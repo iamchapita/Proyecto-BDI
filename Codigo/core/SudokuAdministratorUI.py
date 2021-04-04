@@ -1,8 +1,3 @@
-"""
-    @author: gehernandezc@unah.hn
-    @version: 1.0
-    @date 2021/04/03
-"""
 from tkinter import *
 from tkinter import messagebox
 from core.SudokuAdministratorBinnacle import *
@@ -12,9 +7,19 @@ from core.SudokuGame import SudokuGame
 from core.SudokuBoardUI import SudokuBoardUI
 from core.Close import DialogClose
 
-
+"""
+Frame que permite visualizar las opciones de un usuario que tiene como
+rol administrador.
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
+"""
 class SudokuAdministratorUI(Frame):
 
+    """
+    Constructor de la clase.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __init__(self):
         self.parent = Tk()
         self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
@@ -23,6 +28,11 @@ class SudokuAdministratorUI(Frame):
         self.__initUI()
         self.master.mainloop()
 
+    """
+    Creación de los widgets.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __initUI(self):
         self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.parent)
         self.brand = PhotoImage(file="core/images/Brand.png", master=self.parent)
@@ -55,14 +65,30 @@ class SudokuAdministratorUI(Frame):
         label2.pack()
         label2.place(x=8,y=555)
 
+    """
+    Función que abre una nueva ventada en donde se pueden administrar los
+    usuarios registrados en el juego y la BD.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __goUserAdministration(self):
         self.parent.withdraw()
         SudokuUserAdministration(parent=self.parent)
 
+    """
+    Función que abre una nueva ventada para visualizar la bitacora.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __goBinnacle(self):
         self.parent.withdraw()
         SudokuAdministratorBinnacle(parent=self.parent)
 
+    """
+    Función que le permite al administrador jugar.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __goGame(self):
         with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
             self.parent.destroy()
@@ -71,6 +97,11 @@ class SudokuAdministratorUI(Frame):
             game.start()
             SudokuBoardUI(root, game)
 
+    """
+    Función que permite minimizar o salir del juego.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __onClosing(self):
         d = DialogClose(self.parent)
         self.parent.wait_window(d.top)

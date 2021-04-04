@@ -1,9 +1,3 @@
-"""
-    @author: gehernandezc@unah.hn
-    @version: 1.0
-    @date 2021/04/03
-"""
-
 from tkinter import *
 from tkinter import ttk
 from core.ScreenCenter import ScreenCenter
@@ -12,8 +6,19 @@ from core.SudokuAdministratorDeleteUser import *
 from core.SudokuAdministratorEditUser import *
 from core.Close import DialogClose
 
+"""
+Frame que permite visualizar la administración de los usuario registrados
+en el juego así mismo como en la BD.
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
+"""
 class SudokuUserAdministration(Frame):
 
+    """
+    Constructor de la clase.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __init__(self, parent):
         self.parent=parent
         self.child = Tk()
@@ -27,6 +32,11 @@ class SudokuUserAdministration(Frame):
         btnBack.place(x=315, y=20)
         self.master.mainloop()
 
+    """
+    Creación de los widgets.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __initUI(self):
         # Se debe utilizar la ruta core/images/SudokuLogo.png al implementarlo en el main
         self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.child)
@@ -53,22 +63,50 @@ class SudokuUserAdministration(Frame):
         labelBrand.pack()
         labelBrand.place(x=0,y=555)
     
+    """
+    Función que permite abrir una ventana para crear un usuario y registrarlo
+    en la base de datos.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __goCreateUser(self):
         self.child.withdraw()
         SudokuAdministratorCreateUser(parent=self.child)
     
+    """
+    Función que permite abrir una ventana para eliminar un usuario y registrarlo
+    en la base de datos.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __goDeleteUser(self):
         self.child.withdraw()
         SudokuAdministratorDeleteUser(parent=self.child)
 
+    """
+    Función que permite abrir una ventana para editar un usuario y registrarlo
+    en la base de datos.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __goEditUser(self):
         self.child.withdraw()
         SudokuAdministratorEditUser(parent=self.child)
 
+    """
+    Función que permite regresar a la ventana anterior al presionar el botón.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __goBack(self):
         self.child.destroy()
         self.parent.deiconify()
 
+    """
+    Función que permite minimizar o salir del juego.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __onClosing(self):
         d = DialogClose(self.child)
         self.child.wait_window(d.top)

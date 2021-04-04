@@ -1,17 +1,20 @@
-"""
-    @author: gehernandezc@unah.hn
-    @version: 1.0
-    @date 2021/04/03
-"""
-
 from tkinter import *
 import sys
 from core.ScreenCenter import ScreenCenter
 
 """
-    Clase DialogClose genera una caja de texto de confirmación con las opciones de  de salida de la aplicación y minimizar pantalla.
+Clase DialogClose genera una caja de texto de confirmación con las 
+opciones de  de salida de la aplicación y minimizar pantalla.
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
 """
 class DialogClose:
+
+    """
+    Constructor de la clase.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __init__(self, parent):
         self.top = Toplevel(parent)
         self.parent = parent
@@ -30,11 +33,23 @@ class DialogClose:
         self.button1.grid(row=1, column=0, padx=5, pady=5)
         self.button2.grid(row=1, column=1, padx=5, pady=5)
 
+    """
+    Función que muestra una ventana y preguntar si el usuario se quiere
+    salir del juego.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __salir(self):
         self.top.destroy()
         self.parent.destroy()
         sys.exit()
 
+    """
+    Función que muestra una ventana y preguntar si el usuario quiere minimizar
+    el juego.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __minimizar(self):
         self.top.destroy()
         self.parent.iconify()

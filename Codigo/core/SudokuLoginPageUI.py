@@ -149,6 +149,11 @@ class SudokuLoginPageUI(Frame):
                 # Se instancia una ventana nueva del tipo MainWindow
                 SudokuMainWindowUI()
     
+    """
+    Función que permite minimizar o salir del juego.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __onClosing(self):
         d = DialogClose(self.parent)
         self.parent.wait_window(d.top)

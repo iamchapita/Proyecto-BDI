@@ -1,8 +1,16 @@
 from tkinter import *
 
+"""
+Clase Tooltip muestra las sugerencias al hacer hover en un objeto.
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
+"""
 class Tooltip(object):
+
     """
-    create a tooltip for a given widget
+    Constructor de la clase.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
     """
     def __init__(self, widget, text):
         self.waittime = 500     #miliseconds
@@ -32,6 +40,11 @@ class Tooltip(object):
         if id:
             self.widget.after_cancel(id)
 
+    """
+    Función que muestra la sugerencia.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def showtip(self, event=None):
         x = y = 0
         x, y, cx, cy = self.widget.bbox("insert")
@@ -46,6 +59,11 @@ class Tooltip(object):
         label.configure(justify='left', bg="white", fg = "black", relief='solid', borderwidth=1,)
         label.pack(ipadx=1)
 
+    """
+    Función que esconde la sugerencia despues de cierto tiempo.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def hidetip(self):
         tw = self.tw
         self.tw= None

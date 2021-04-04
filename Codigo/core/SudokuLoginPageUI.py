@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from core.SudokuChangeUserPassword import SudokuChangeUserPassword
 from core.SudokuMainWindowUI import SudokuMainWindowUI
 from core.SudokuAdministratorUI import SudokuAdministratorUI
 from core.EngineSQL.MySQLEngine import MySQLEngine
@@ -121,7 +122,14 @@ class SudokuLoginPageUI(Frame):
         # Este valor va a devolver error en la interfaz
         except:
             statusLogin, rol = (0,0)
-    
+        
+        # ---------------Condición provisional para probar el cambio de contraseña
+        if(username.get()==password.get() and username.get()!="admin"):
+            print("Es primera vez en la plataforma")
+            self.parent.destroy()
+            SudokuChangeUserPassword()
+        # ---------------Condición provisional para probar el cambio de contraseña.
+        
         # Comprobando si el valor de la variable es 0
         # Esto ocurre si:
         #   - El usuario no existe
@@ -134,6 +142,9 @@ class SudokuLoginPageUI(Frame):
         # Comprobando si ocurrio algún error
         if(len(error) > 0):
             messagebox.showerror(title="Error", message=error)
+            self.usernameEntry.delete(0, "end")
+            self.passwordEntry.delete(0, "end")
+            self.usernameEntry.focus()
             return
 
         if (statusLogin == 1):
@@ -148,7 +159,7 @@ class SudokuLoginPageUI(Frame):
                 self.parent.destroy()
                 # Se instancia una ventana nueva del tipo MainWindow
                 SudokuMainWindowUI()
-    
+
     """
     Función que permite minimizar o salir del juego.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales

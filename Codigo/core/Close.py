@@ -22,16 +22,14 @@ class DialogClose:
         self.top.title("Salir")
 
         self.center= ScreenCenter()
-        self.center.center(self.top, 330, 400)
+        self.center.center(self.top, 150, 490)
 
         label1 = Label(self.top, text="¿Está seguro?",font =("Lato",15))
         label1.configure(background = "#171717", fg="white")
         label1.grid(row=0, column=0, columnspan=2)
 
         self.button1 = Button(self.top, text="Si, salir del juego.", bg="#6ea8d9", font=("Lato",12), command=self.__salir)
-        self.button2 = Button(self.top, text="No, solo minimizar.", bg="#6ea8d9", font=("Lato",12), command=self.__minimizar)
         self.button1.grid(row=1, column=0, padx=5, pady=5)
-        self.button2.grid(row=1, column=1, padx=5, pady=5)
 
     """
     Función que muestra una ventana y preguntar si el usuario se quiere
@@ -43,13 +41,3 @@ class DialogClose:
         self.top.destroy()
         self.parent.destroy()
         sys.exit()
-
-    """
-    Función que muestra una ventana y preguntar si el usuario quiere minimizar
-    el juego.
-    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
-    """
-    def __minimizar(self):
-        self.top.destroy()
-        self.parent.iconify()

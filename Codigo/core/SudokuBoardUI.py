@@ -2,7 +2,7 @@ from tkinter import *
 from core.ScreenCenter import ScreenCenter
 from core.Close import DialogClose
 
-MARGIN = 70 # ! Se le sumaron 20 y se restaron 20 en los parámetros necesarios (NO HAY OTRA FORMA DE HACERLO)
+MARGIN = 70 # ! Se le sumaron 20 y se restaron 20 en los parámetros necesarios.
 SIDE = 50
 WIDTH = MARGIN * 2 + SIDE * 9
 HEIGHT = MARGIN * 2 + SIDE * 9 +120# !Se le sumaron 120 para ampliar de forma vertical la ventana

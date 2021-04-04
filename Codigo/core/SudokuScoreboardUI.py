@@ -78,14 +78,14 @@ class SudokuScoreboardUI(Frame):
     @version 1.0
     """
     def loadText(self):
-
-         os.chdir("../Scripts de Base de Datos")
-         with open("scoreboardTest.txt", "r") as file:
-             test = list(zip(*map(str.split, map(str.strip, file))))
-             for first in test[0]:
-                 for second in test[1]:
-                     for third in test[2]:
-                         self.dataView.insert("", 0, text="N° ", values=(first,second,third))
+        pass
+        # os.chdir("../Scripts de Base de Datos")
+        # with open("scoreboardTest.txt", "r") as file:
+        #     test = list(zip(*map(str.split, map(str.strip, file))))
+        #     for first in test[0]:
+        #         for second in test[1]:
+        #             for third in test[2]:
+        #                 self.dataView.insert("", 0, text="N° ", values=(first,second,third))
     
     """
     Función que permite regresar a la ventana anterior al presionar el botón.

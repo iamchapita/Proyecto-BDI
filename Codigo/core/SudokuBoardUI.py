@@ -5,7 +5,7 @@ from core.Close import DialogClose
 MARGIN = 70 # ! Se le sumaron 20 y se restaron 20 en los parámetros necesarios (NO HAY OTRA FORMA DE HACERLO)
 SIDE = 50
 WIDTH = MARGIN * 2 + SIDE * 9
-HEIGHT = MARGIN * 2 + SIDE * 9 + 120 # !Se le sumaron 120 para ampliar de forma vertical la ventana
+HEIGHT = MARGIN * 2 + SIDE * 9 +120# !Se le sumaron 120 para ampliar de forma vertical la ventana
 
 class SudokuBoardUI(Frame):
     
@@ -22,21 +22,33 @@ class SudokuBoardUI(Frame):
         self.parent.title("Sudoku")
         self.parent.resizable(FALSE, FALSE)
         self.parent.configure(background = "#171717")
-        self.parent.geometry("%dx%d" %(550, 850))
+        self.parent.geometry("%dx%d" %(550, 750))
         center = ScreenCenter()
-        center.center(self.parent, WIDTH, HEIGHT)
+        center.center(self.parent, WIDTH, 750)
         self.pack(fill=BOTH)
-        self.canvas = Canvas(parent, width=WIDTH, height= HEIGHT)
+        self.canvas = Canvas(parent, width=WIDTH, height= 610)
         self.canvas.configure(background = "#171717")
         self.canvas.pack(fill=BOTH, side=TOP)
-        clearButton = Button(parent, text="Limpiar Tablero", bg="#6ea8d9", font=("Lato",15), command=self.__clearAnswers)
-        clearButton.pack(fill=BOTH, side=BOTTOM)
-        returnButton = Button(parent, text="Deshacer jugada", bg="#6ea8d9", font=("Lato",15))
-        returnButton.pack(fill=BOTH, side=BOTTOM)
-        pauseButton = Button(parent, text="Pausa", bg="#6ea8d9", font=("Lato",15), command=self.__pauseGame)
-        pauseButton.pack(fill=BOTH, side=BOTTOM)
-        saveButton = Button(parent, text="Guardar partida", bg="#6ea8d9", font=("Lato",15))
-        saveButton.pack(fill=BOTH, side=BOTTOM)
+
+        self.labelNameUser= Label(self.parent, text='Nombre de usuario', font=("Lato",13))
+        self.labelNameUser.configure(background = "#171717", fg="white")
+        self.labelNameUser.pack()
+        self.labelNameUser.place(x=50,y=20)
+
+        self.labelTime= Label(self.parent, text='Time: 00:00:00', font=("Lato",13))
+        self.labelTime.configure(background = "#171717", fg="white")
+        self.labelTime.pack()
+        self.labelTime.place(x=380,y=560)
+
+        self.clearButton = Button(parent, text="Limpiar Tablero", bg="#6ea8d9", font=("Lato",15), command=self.__clearAnswers)
+        self.clearButton.pack(fill=BOTH, side=BOTTOM)
+        self.returnButton = Button(parent, text="Deshacer jugada", bg="#6ea8d9", font=("Lato",15))
+        self.returnButton.pack(fill=BOTH, side=BOTTOM)
+        self.pauseButton = Button(parent, text="Pausa", bg="#6ea8d9", font=("Lato",15), command=self.__pauseGame)
+        self.pauseButton.pack(fill=BOTH, side=BOTTOM)
+        self.saveButton = Button(parent, text="Guardar partida", bg="#6ea8d9", font=("Lato",15))
+        self.saveButton.pack(fill=BOTH, side=BOTTOM)
+        
         self.__drawGrid()
         self.__drawPuzzle()
         self.canvas.bind("<Button-1>", self.__cellClicked)
@@ -49,7 +61,7 @@ class SudokuBoardUI(Frame):
     def __drawGrid(self):
 
         for i in range(10):
-            color = "blue" if i % 3 == 0 else "gray"
+            color = "#6ea8d9" if i % 3 == 0 else "gray"
             x0 = MARGIN + i * SIDE - 20 # !Se restaron 20
             y0 = MARGIN
             x1 = MARGIN + i * SIDE - 20 # !Se restaron 20

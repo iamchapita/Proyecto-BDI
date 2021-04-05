@@ -19,10 +19,12 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 
 INSERT INTO User(tex_nickname, tex_password, bit_rol) VALUES
-    ("admin", HEX(AES_ENCRYPT("admin", "admin")), 1) --  Administrador
+    ("admin", HEX(AES_ENCRYPT("admin", "admin")), 1), --  Administrador
+    ('iampaisa', HEX(AES_ENCRYPT('iampaisa', 'iampaisa')), 0) -- Usuario Alejandro
+;
 ;
 
-INSERT INTO User(tex_nickname, tex_password) VALUES
+/* INSERT INTO User(tex_nickname, tex_password) VALUES
     ('erabbitt0', HEX(AES_ENCRYPT('mJByZXjyki', 'erabbitt0'))),
     ('gstudde1', HEX(AES_ENCRYPT('YdFODDUvP7', 'gstudde1'))),
     ('kkenen2', HEX(AES_ENCRYPT('xGfVpB', 'kkenen2'))),
@@ -39,10 +41,8 @@ INSERT INTO User(tex_nickname, tex_password) VALUES
     ('ksheppardd', HEX(AES_ENCRYPT('9hac0D2aw', 'ksheppardd')))
 ;
 
-/*
-INSERT INTO User(tex_nickname, tex_password) VALUES
-    ('iampaisa',HEX(AES_ENCRYPT('iampaisa', 'iampaisa')));
-    Desencriptar
-    Ejemplo para el usuario "erabbitt0": 
-    AES_DECRYPT(UNHEX('FAC1959052C12F533F4E43B422C62DA6'),'erabbitt0')
+Desencriptar
+Ejemplo para el usuario "erabbitt0": 
+AES_DECRYPT(UNHEX('FAC1959052C12F533F4E43B422C62DA6'),'erabbitt0')
 */
+    

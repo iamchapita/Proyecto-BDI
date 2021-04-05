@@ -18,10 +18,12 @@ DELIMITER $$
     );
     SET @passwordResult = IF(@password = HEX(AES_ENCRYPT(pyPassword, pyNickname)), 1, 0);
     SET @rolResult = IF((SELECT bit_rol FROM User WHERE tex_nickname = pyNickname) = 1, 1, 0);
-    SET @newPasswordResult = IF((SELECT HEX(AES_ENCRYPT(pyPassword, pyNickname)) FROM User WHERE tex_nickname = pyNickname ) = @password, 1, 0);
+    SET @newPasswordResult = IF((SELECT HEX(AES_ENCRYPT(pyNickname, pyNickname)) FROM User WHERE tex_nickname = pyNickname) = @password, 1, 0);
     SET @result = (SELECT CONCAT(@nicknameResult, " ", @passwordResult, " " ,@rolResult, " ", @newPasswordResult));
     RETURN @result;
 
     END $$
 
 DELIMITER ;
+
+-- SELECT fn_compareData("iampaisa", "iampaisa");

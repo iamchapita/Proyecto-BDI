@@ -37,9 +37,11 @@ INSERT INTO User(tex_nickname, tex_password) VALUES
     ('hthomasenb', HEX(AES_ENCRYPT('JPjD98XGFGX', 'hthomasenb'))),
     ('rbaldrickc', HEX(AES_ENCRYPT('u7UQM7xFj1Y', 'rbaldrickc'))),
     ('ksheppardd', HEX(AES_ENCRYPT('9hac0D2aw', 'ksheppardd')))
-; 
+;
 
 /*
+INSERT INTO User(tex_nickname, tex_password) VALUES
+    ('iampaisa',HEX(AES_ENCRYPT('iampaisa', 'iampaisa')));
     Desencriptar
     Ejemplo para el usuario "erabbitt0": 
     AES_DECRYPT(UNHEX('FAC1959052C12F533F4E43B422C62DA6'),'erabbitt0')

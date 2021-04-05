@@ -50,12 +50,8 @@ class MySQLEngine:
         return self.link.fetchall()
     
     def getUserStatus(self, username, password):
-        query = """
-            SELECT fn_compareData("{}", "{}") AS "Status";
-        """.format(username, password)
+        query = "SELECT fn_compareData('{}', '{}');".format(username, password)
         self.link.execute(query)
-        # Si la consulta no encuenta el usuario entonces no devuelve nada
-        # Para evitar que retorne Nulo o None se emplea el if
         return self.link.fetchall()
 
     def closeConnection():

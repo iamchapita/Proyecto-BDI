@@ -95,80 +95,60 @@ class SudokuLoginPageUI(Frame):
         # para después mostrarlo en un messagebox
         error = ""
 
-        if (len(username.get()) > 0):
-            pass
+        if (len(username.get()) > 0 and len(password.get()) > 0):
+
+            # Comprobando si el texto del campo usuario reune los requisitos
+            if (re.search(r"[a-zA-Z0-9._-]{4,}", username.get()) is None):
+                error += "Usuario o Contraseña no válido.\n"
+
+            # Comprobando si el texto del campo contraseña reune los requisitos
+            elif (re.search(r"[a-zA-Z0-9._-]{4,}", password.get()) is None and len(password.get()) > 0):
+                error += "Usuario o Contraseña no válido.\n"
+        
         else:
-            pass
+            if(len(username.get()) == 0):
+                error += "El campo usuario está vacio.\n"
 
-        if (len(password.get()) > 0):
-            pass
-        else:
-            pass
+            if(len(password.get()) == 0):
+                error += "El campo contraseña está vacio.\n"
 
-        # Comprobando si el texto del campo usuario reune los requisitos
-        if (re.search(r"[a-zA-Z0-9._-]{4,}", username.get()) is None and len(username.get()) > 0):
-            error += "Usuario o Contraseña no válido.\n"
-
-        # Comprobando si el texto del campo contraseña reune los requisitos
-        if (re.search(r"[a-zA-Z0-9._-]{4,}", password.get()) is None and len(password.get()) > 0):
-            error += "Usuario o Contraseña no válido.\n"
-        
-        # Comprobando la longitud del texto correspondiente al nombre de usuario
-        if (len(username.get()) == 0):
-            error += "El campo usuario está vacio.\n"
-        
-        # Comprobando la longitud del texto correspondiente a la contraseña
-        if(len(password.get()) == 0):
-            error += "El campo contraseña está vacio.\n"
-
-        #  Bloque Try para evitar que error si el resultado de la consulta de la base de datos
-        # está vacia (no se encontró el usuario ingresado)
-        try:
-            # Se declara una variable por cada elemento de la tupla retornada
-            # La variable statusLogin guarda un 1 si el usuario se encontró en la base de datos
-            # La variable rol, guarda el rol del usuario y según este muestra la pantalla a continuación
-            statusLogin, rol = self.db.getUserStatus(username.get(), password.get())[0]
-        # Se define un except donde a cada variable se le pasa un valor "por defecto".
-        # Este valor va a devolver error en la interfaz
-        except:
-            statusLogin, rol = (0,0)
-        
-        # ---------------Condición provisional para probar el cambio de contraseña
-        if(username.get()==password.get() and username.get()!="admin"):
-            print("Es primera vez en la plataforma")
-            self.parent.destroy()
-            SudokuChangeUserPassword()
-        # ---------------Condición provisional para probar el cambio de contraseña.
-        
-        # Comprobando si el valor de la variable es 0
-        # Esto ocurre si:
-        #   - El usuario no existe
-        #   - El usuario existe pero la contraseña no es correcta
-        # Se comprueba si la longitud del error es 0 para no emitir el mensaje de error
-        # si los campos están vacios.
-        if (statusLogin == 0 and len(error) == 0):
-            error += "Usuario o contraseña no válidos.\n"
-        
-        # Comprobando si ocurrio algún error
-        if(len(error) > 0):
-            messagebox.showerror(title="Error", message=error)
+        if (len(error) > 0):
+            # Se realizo una instancia de messagebox
+            self.errorMessage = messagebox.showerror(title="Error", message=error)
             self.usernameEntry.delete(0, "end")
             self.passwordEntry.delete(0, "end")
             self.usernameEntry.focus()
             return
 
-        if (statusLogin == 1):
+        else:
+            username, password, rol = self.__extractStatus(username, password)
 
-            if (rol == 1):
-                
-                self.parent.destroy()
-                SudokuAdministratorUI()
+            if (username == 1 and password == 1):
+    
+                if (rol == 1):
+                    self.parent.destroy()
+                    SudokuAdministratorUI()
 
-            elif (rol == 0):
-                # Se destruye la ventana
-                self.parent.destroy()
-                # Se instancia una ventana nueva del tipo MainWindow
-                SudokuMainWindowUI()
+                if(rol == 0):
+                    # Se destruye la ventana
+                    self.parent.destroy()
+                    # Se instancia una ventana nueva del tipo MainWindow
+                    SudokuMainWindowUI()
+
+            elif (username == 1 and password == 0):
+                self.errorMessage = messagebox.showerror(title="Error", message="Usuario o Contraseña no válido.")
+                self.usernameEntry.delete(0, "end")
+                self.passwordEntry.delete(0, "end")
+                self.usernameEntry.focus()
+                return
+
+        """ # ---------------Condición provisional para probar el cambio de contraseña
+        # ! Pendiente implementar condición para que muestre esta pantalla
+        if(username.get()==password.get() and username.get()!="admin"):
+            print("Es primera vez en la plataforma")
+            self.parent.destroy()
+            SudokuChangeUserPassword()
+        # ---------------Condición provisional para probar el cambio de contraseña. """
 
     def __onClosing(self):
         self.dialogClose = DialogClose(self.parent)
@@ -182,3 +162,8 @@ class SudokuLoginPageUI(Frame):
                 self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
         except:
             pass
+
+    def __extractStatus(self, username, password):
+        result = self.db.getUserStatus(username.get(), password.get())[0]
+        empty, username, password, rol = result.split(" ")
+        return int(username), int(password), int(rol)

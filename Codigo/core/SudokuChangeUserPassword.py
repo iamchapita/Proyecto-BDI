@@ -47,12 +47,12 @@ class SudokuChangeUserPassword(Frame):
         center.center(self.parent, self.width, self.height)
         
         # Muestra el titulo de la seccion
-        label1= Label(self.parent, text='¡Bienvenido!\n Este es su primer\n ingreso a SUDOKU, \ndebe cambiar obligatoriamente\n su contraseña.', font=("Lato",20))
+        label1= Label(self.parent, text='¡Bienvenido!\n Este es su primer\n ingreso a SUDOKU, \ndebe cambiar obligatoriamente\n su contraseña.', font=("Lato",15))
         label1.configure(background = "#171717", fg="white")
         label1.pack()
-        label1.place(x=20,y=50)
+        label1.place(x=50,y=50)
         
-        label2= Label(self.parent, text='Ingrese su contraseña actual', font=("Lato",15))
+        label2= Label(self.parent, text='Ingrese su contraseña actual', font=("Lato",13))
         label2.configure(background = "#171717", fg="#6ea8d9")
         label2.pack()
         label2.place(x=80,y=230)
@@ -61,12 +61,12 @@ class SudokuChangeUserPassword(Frame):
         self.passwordEntry.pack()
         self.passwordEntry.place(x=110, y=275, height=30, width=200)
 
-        label3= Label(self.parent, text='Ingrese su nueva contraseña', font =("Lato",15))
+        label3= Label(self.parent, text='Ingrese su nueva contraseña', font =("Lato",13))
         label3.configure(background = "#171717", fg="#6ea8d9")
         label3.pack()
         label3.place(x=80,y=330)
 
-        self.newPasswordEntry = Entry(self.parent,show="*", font=("Lato",15),  justify=CENTER)
+        self.newPasswordEntry = Entry(self.parent,show="*", font=("Lato",13),  justify=CENTER)
         self.newPasswordEntry.pack()
         self.newPasswordEntry.place(x=110,y=370, height = 30, width = 200)
         
@@ -75,7 +75,7 @@ class SudokuChangeUserPassword(Frame):
 
         self.loginButton = Button(self.parent, command=lambda: self.__loginChangePassword(self.passwordEntry, self.newPasswordEntry))
         self.loginButton.configure(text="Confirmar contraseña", bg="#6ea8d9", font=("Lato", 15))
-        self.loginButton.place(x=100, y=445)
+        self.loginButton.place(x=90, y=445)
 
         labelBrand = Label(self.parent, image=self.Brand, borderwidth=0)
         labelBrand.pack()

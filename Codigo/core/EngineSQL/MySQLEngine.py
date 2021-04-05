@@ -17,7 +17,6 @@ class MySQLEngine:
         print("Conexión con éxito: {}".format( self.mydb.is_connected() ))
         self.link = self.mydb.cursor()
         
-
     def select(self, query, data=()): 
         try:         
             if len(data):
@@ -31,7 +30,6 @@ class MySQLEngine:
             print("Problemas de conexón: {}".format(e))                
         else:
             self.mydb.close()
-
 
     def insert(self, query, data): 
 
@@ -53,6 +51,27 @@ class MySQLEngine:
         query = "SELECT fn_compareData('{}', '{}');".format(username, password)
         self.link.execute(query)
         return self.link.fetchone()
+
+    def update(self, table, fields=(), values=(), condition = None):
+    
+        query = "UPDATE {} SET ".format(table)
+
+        if (len(fields) == len(values)):
+            for (field, value) in zip(fields, values):
+                query += "{} = {}, ".format(field, value)
+
+            query = re.sub(r"(,)(\s)*$", " ", query)
+            condition = re.sub(r"(\s)*([Ww][Hh][Ee][Rr][Ee])+(\s)*", " ", condition)
+            query += "WHERE {} ".format(condition)
+            query = re.sub(r"(\s)*(;)?(\s)*$", "", query)
+            query += ";" 
+
+        else:
+            raise Exception("fields and values should has same len()")
+        
+        print(query)   
+        self.link.execute(query)
+        self.mydb.commit()
 
     def closeConnection():
         self.mydb.close()

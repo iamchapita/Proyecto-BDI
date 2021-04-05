@@ -13,24 +13,30 @@ class DialogClose(Toplevel):
 
     def __init__(self, parent):
         Toplevel.__init__(self)
+
         # Se configuran 3 columnas para el grid
         self.columnconfigure(0, weight = 1)
         self.columnconfigure(1, weight = 1)
         self.columnconfigure(2, weight=1)
+
         # Se configuran 3 filas para el grid
         self.rowconfigure (0, weight = 1 )
         self.rowconfigure (1, weight = 1 )
         self.rowconfigure (2, weight = 1 )
         self.parent = parent
+
         # Obliga al parent a permanecer congelado hasta que la ventana DialogClose se cierre
         self.grab_set()
         self.configure(background = "#171717")
         self.title("Salir")
 
+        # Variables que controlan el ancho y alto de la ventana
         self.width = 400
         self.height = 150
+        # Estableciendo el ancho y alto de la ventana
         self.geometry("{}x{}".format(self.width, self.height))
 
+        # Centrando la ventana en pantalla
         self.center= ScreenCenter()
         self.center.center(parent=self, width=self.width, height=self.height)
         

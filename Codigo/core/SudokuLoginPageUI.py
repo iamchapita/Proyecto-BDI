@@ -135,7 +135,7 @@ class SudokuLoginPageUI(Frame):
                     # Se instancia una ventana nueva del tipo MainWindow
                     SudokuMainWindowUI()
 
-            elif (username == 1 and password == 0):
+            elif (username == 0 or password == 0):
                 self.errorMessage = messagebox.showerror(title="Error", message="Usuario o Contraseña no válido.")
                 self.usernameEntry.delete(0, "end")
                 self.passwordEntry.delete(0, "end")

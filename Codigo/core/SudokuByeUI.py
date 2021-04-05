@@ -50,4 +50,4 @@ class SudokuBye(Frame):
         label2 = Label(self.parent, image=self.brand, borderwidth=0)
         label2.pack()
         label2.place(x=8,y=200)
-        self.after(2000,self.parent.destroy)
+        self.after(500,self.parent.destroy)

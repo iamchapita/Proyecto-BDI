@@ -52,7 +52,7 @@ class MySQLEngine:
     def getUserStatus(self, username, password):
         query = "SELECT fn_compareData('{}', '{}');".format(username, password)
         self.link.execute(query)
-        return self.link.fetchall()
+        return self.link.fetchone()
 
     def closeConnection():
         self.mydb.close()

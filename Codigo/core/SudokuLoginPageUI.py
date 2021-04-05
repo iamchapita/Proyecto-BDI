@@ -62,8 +62,8 @@ class SudokuLoginPageUI(Frame):
         self.usernameEntry = Entry(self.parent, font=("Lato",15),  justify=CENTER)
         self.usernameEntry.pack()
         self.usernameEntry.place(x=100, y=90, height=30, width=200)
-        textTooltip ="""{} de más de 4 caracteres.\nCaracteres válidos: \n- Mayúsculas\n- Minúsculas\n- Números\n- Simbolos (._-)"""
-        self.usernameToolTip = Tooltip(self.usernameEntry, textTooltip.format("Nombre de usuario"))
+        textTooltip ="Ingrese {}"
+        self.usernameToolTip = Tooltip(self.usernameEntry, textTooltip.format("el nombre de usuario."))
 
         label2= Label(self.parent, text='Contraseña', font =("Lato",20))
         label2.configure(background = "#171717", fg="white")
@@ -74,7 +74,7 @@ class SudokuLoginPageUI(Frame):
         self.passwordEntry.pack()
         self.passwordEntry.place(x=100,y=180, height = 30, width = 200)
         
-        self.usernameToolTip = Tooltip(self.passwordEntry, textTooltip.format("Contraseña"))
+        self.usernameToolTip = Tooltip(self.passwordEntry, textTooltip.format("la contraseña."))
 
         self.loginButton = Button(self.parent, command=lambda: self.__loginFn(self.usernameEntry.get(), self.passwordEntry.get()))
         self.loginButton.configure(text="Iniciar Sesión", bg="#6ea8d9", font=("Lato", 15))

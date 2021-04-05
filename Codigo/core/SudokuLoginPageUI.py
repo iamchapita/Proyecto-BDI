@@ -69,7 +69,6 @@ class SudokuLoginPageUI(Frame):
         label2.configure(background = "#171717", fg="white")
         label2.pack()
         label2.place(x=130,y=145)
-
         self.passwordEntry = Entry(self.parent,show="*", font=("Lato",15),  justify=CENTER)
         self.passwordEntry.pack()
         self.passwordEntry.place(x=100,y=180, height = 30, width = 200)
@@ -95,6 +94,8 @@ class SudokuLoginPageUI(Frame):
         # para después mostrarlo en un messagebox
         error = ""
 
+        # Caso 1
+        # La longitud del texto de los Entry es mayor que 0
         if (len(username.get()) > 0 and len(password.get()) > 0):
 
             # Comprobando si el texto del campo usuario reune los requisitos
@@ -105,25 +106,40 @@ class SudokuLoginPageUI(Frame):
             elif (re.search(r"[a-zA-Z0-9._-]{4,}", password.get()) is None and len(password.get()) > 0):
                 error += "Usuario o Contraseña no válido.\n"
         
+        # Caso 2
+        # La longitud del texto de los Entry es igual a 0
         else:
+            # Si el texto del campo username es igual a 0
             if(len(username.get()) == 0):
                 error += "El campo usuario está vacio.\n"
 
+            # Si el texto del campo password es igual a 0
             if(len(password.get()) == 0):
                 error += "El campo contraseña está vacio.\n"
 
+        # Si ocurrió al menos un errror, esta condición de cumple y muestra el error en un message box
         if (len(error) > 0):
+
             # Se realizo una instancia de messagebox
             self.errorMessage = messagebox.showerror(title="Error", message=error)
+            # Se establecen los Entry a vacios
             self.usernameEntry.delete(0, "end")
             self.passwordEntry.delete(0, "end")
+            # Se retorna el foco al Entry del username
             self.usernameEntry.focus()
             return
 
+        # Si no ocurrieron errores se procede a realizar la consulta a la base de datos y comprobar lo campos
+        # introducidos (username, password)
         else:
-            username, password, rol = self.__extractStatus(username, password)
 
-            if (username == 1 and password == 1):
+            username, password, rol, setNewPassword = self.__extractData(username.get(), password.get())
+            
+            if (username == 1 and password == 1 and rol == 0 and setNewPassword == 1):
+                self.parent.destroy()
+                SudokuChangeUserPassword()
+
+            elif (username == 1 and password == 1):
     
                 if (rol == 1):
                     self.parent.destroy()
@@ -142,14 +158,6 @@ class SudokuLoginPageUI(Frame):
                 self.usernameEntry.focus()
                 return
 
-        """ # ---------------Condición provisional para probar el cambio de contraseña
-        # ! Pendiente implementar condición para que muestre esta pantalla
-        if(username.get()==password.get() and username.get()!="admin"):
-            print("Es primera vez en la plataforma")
-            self.parent.destroy()
-            SudokuChangeUserPassword()
-        # ---------------Condición provisional para probar el cambio de contraseña. """
-
     def __onClosing(self):
         self.dialogClose = DialogClose(self.parent)
         self.parent.wait_window(self.dialogClose)
@@ -163,7 +171,11 @@ class SudokuLoginPageUI(Frame):
         except:
             pass
 
-    def __extractStatus(self, username, password):
-        result = self.db.getUserStatus(username.get(), password.get())[0]
-        empty, username, password, rol = result.split(" ")
-        return int(username), int(password), int(rol)
+    def __extractData(self, username, password):
+        # Se hace el llamado a la función getUserStatus de MySQLEngine.
+        # Esta función realiza el llamado a fn_compareData, que es una función SQL
+        # Se obtiene  el resultado de la operación y se almacena en la variable result
+        result = self.db.getUserStatus(username, password)[0]
+        # Se separa cada elemento del texto mediante un espacio y se almacena en variables
+        username, password, rol, setNewPassword = result.split(" ")
+        return int(username), int(password), int(rol), int(setNewPassword)

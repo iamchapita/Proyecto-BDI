@@ -95,6 +95,16 @@ class SudokuLoginPageUI(Frame):
         # para después mostrarlo en un messagebox
         error = ""
 
+        if (len(username.get()) > 0):
+            pass
+        else:
+            pass
+
+        if (len(password.get()) > 0):
+            pass
+        else:
+            pass
+
         # Comprobando si el texto del campo usuario reune los requisitos
         if (re.search(r"[a-zA-Z0-9._-]{4,}", username.get()) is None and len(username.get()) > 0):
             error += "Usuario o Contraseña no válido.\n"
@@ -163,3 +173,12 @@ class SudokuLoginPageUI(Frame):
     def __onClosing(self):
         self.dialogClose = DialogClose(self.parent)
         self.parent.wait_window(self.dialogClose)
+        # Bloque try except para manejar la excepción devuelta si el self.parent fue destruido
+        try:
+            # Confirma si la instancia de dialogClose existe
+            if (self.dialogClose.winfo_exists() == False):
+                # Si no existe entonces establece de nuevo la función de apertura de dialogClose cuando
+                # se intenta cerrar la ventana
+                self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
+        except:
+            pass

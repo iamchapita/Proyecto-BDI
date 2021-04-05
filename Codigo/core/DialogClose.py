@@ -24,6 +24,8 @@ class DialogClose(Toplevel):
         self.rowconfigure (1, weight = 1 )
         self.rowconfigure (2, weight = 1 )
         self.parent = parent
+        # Se establece que al intentar cerrar la ventana (self.parent) se llame a la función __showDialog
+        self.parent.protocol("WM_DELETE_WINDOW", self.__showDialog)
 
         # Obliga al parent a permanecer congelado hasta que la ventana DialogClose se cierre
         self.grab_set()
@@ -63,6 +65,8 @@ class DialogClose(Toplevel):
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
+    # Destruye la instancia de dialogClose y la aplicacion en general
+    # ! Posiblemente se implemente la función de guardar todo en la base de datos en esta función
     def __getOut(self):
         self.destroy()
         self.parent.destroy()
@@ -70,4 +74,12 @@ class DialogClose(Toplevel):
         sys.exit()
     
     def __cancel(self):
+        # Se establece el protocolo a seguir si se desea cerrar el self.parent
+        # se llama a la función __showDialog
+        self.parent.protocol("WM_DELETE_WINDOW", self.__showDialog)
+        # Se destruye la ventana dialogClose
         self.destroy()
+
+    def __showDialog(self):
+        # Se muestra la ventana dialogClose si esta fue ocultada al pasarle el foco a otra ventana
+        self.tkraise(self.parent)

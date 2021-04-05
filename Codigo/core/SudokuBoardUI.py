@@ -1,6 +1,6 @@
 from tkinter import *
 from core.ScreenCenter import ScreenCenter
-from core.Close import DialogClose
+from core.DialogClose import DialogClose
 
 MARGIN = 70 # ! Se le sumaron 20 y se restaron 20 en los parámetros necesarios.
 SIDE = 50
@@ -181,5 +181,5 @@ class SudokuBoardUI(Frame):
         self.__drawPuzzle()
 
     def __onClosing(self):
-        d = DialogClose(self.parent)
-        self.parent.wait_window(d.top)
+        self.dialogClose = DialogClose(self.parent)
+        self.parent.wait_window(self.dialogClose)

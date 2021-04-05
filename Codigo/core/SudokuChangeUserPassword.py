@@ -1,7 +1,7 @@
 from tkinter import *
 from core.SudokuMainWindowUI import SudokuMainWindowUI
 from core.ScreenCenter import ScreenCenter
-from core.Close import DialogClose
+from core.DialogClose import DialogClose
 from core.Tooltip import Tooltip
 import re
 
@@ -98,5 +98,5 @@ class SudokuChangeUserPassword(Frame):
     @version 1.0
     """
     def __onClosing(self):
-        d = DialogClose(self.parent)
-        self.parent.wait_window(d.top)
+        self.dialogClose = DialogClose(self.parent)
+        self.parent.wait_window(self.dialogClose)

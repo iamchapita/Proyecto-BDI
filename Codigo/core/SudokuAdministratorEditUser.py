@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
-from core.Close import DialogClose
+from core.DialogClose import DialogClose
 
 """
 Frame que permite la visualización para editar un usuario.
@@ -107,5 +107,5 @@ class SudokuAdministratorEditUser(Frame):
     @version 1.0
     """
     def __onClosing(self):
-        d = DialogClose(self.child)
-        self.child.wait_window(d.top)
+        self.dialogClose = DialogClose(self.parent)
+        self.parent.wait_window(self.dialogClose)

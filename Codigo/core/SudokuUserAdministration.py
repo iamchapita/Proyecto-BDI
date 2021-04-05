@@ -4,7 +4,7 @@ from core.ScreenCenter import ScreenCenter
 from core.SudokuAdministratorCreateUser import *
 from core.SudokuAdministratorDeleteUser import *
 from core.SudokuAdministratorEditUser import *
-from core.Close import DialogClose
+from core.DialogClose import DialogClose
 
 """
 Frame que permite visualizar la administración de los usuario registrados
@@ -108,5 +108,5 @@ class SudokuUserAdministration(Frame):
     @version 1.0
     """
     def __onClosing(self):
-        d = DialogClose(self.child)
-        self.child.wait_window(d.top)
+        self.dialogClose = DialogClose(self.parent)
+        self.parent.wait_window(self.dialogClose)

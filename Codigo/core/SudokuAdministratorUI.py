@@ -5,7 +5,7 @@ from core.SudokuUserAdministration import *
 from core.ScreenCenter import ScreenCenter
 from core.SudokuGame import SudokuGame
 from core.SudokuBoardUI import SudokuBoardUI
-from core.Close import DialogClose
+from core.DialogClose import DialogClose
 
 """
 Frame que permite visualizar las opciones de un usuario que tiene como
@@ -103,5 +103,5 @@ class SudokuAdministratorUI(Frame):
     @version 1.0
     """
     def __onClosing(self):
-        d = DialogClose(self.parent)
-        self.parent.wait_window(d.top)
+        self.dialogClose = DialogClose(self.parent)
+        self.parent.wait_window(self.dialogClose)

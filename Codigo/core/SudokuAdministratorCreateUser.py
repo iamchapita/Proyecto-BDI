@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
-from core.Close import DialogClose
+from core.DialogClose import DialogClose
 
 """
 Frame que permite visualizar los elementos cuando un usuario se crea
@@ -100,5 +100,5 @@ class SudokuAdministratorCreateUser(Frame):
     @version 1.0
     """
     def __onClosing(self):
-        d = DialogClose(self.child)
-        self.child.wait_window(d.top)
+        self.dialogClose = DialogClose(self.parent)
+        self.parent.wait_window(self.dialogClose)

@@ -4,7 +4,7 @@ from core.ScreenCenter import ScreenCenter
 from core.SudokuGame import SudokuGame
 from core.SudokuBoardUI import SudokuBoardUI
 from core.SudokuScoreboardUI import SudokuScoreboardUI
-from core.Close import DialogClose
+from core.DialogClose import DialogClose
 
 """
 Frame que muestra el Main Window y todos sus respectivos widgets de la aplicación
@@ -90,5 +90,5 @@ class SudokuMainWindowUI(Frame):
     @version 1.0
     """
     def __onClosing(self):
-        d = DialogClose(self.parent)
-        self.parent.wait_window(d.top)
+        self.dialogClose = DialogClose(self.parent)
+        self.parent.wait_window(self.dialogClose)

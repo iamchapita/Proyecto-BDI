@@ -84,7 +84,8 @@ class MySQLEngine:
         self.mydb.commit()
 
 
-    def closeConnection():
+    #Cierra la conexión establecida a la base de datos
+    def closeConnection(self):
         self.mydb.close()
 
 

@@ -1,6 +1,8 @@
 from tkinter import *
 from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
+from core.EngineSQL.MySQLEngine import MySQLEngine
+from core.EngineSQL.ConfigConnection import ConfigConnection
 
 MARGIN = 70 # ! Se le sumaron 20 y se restaron 20 en los parámetros necesarios.
 SIDE = 50
@@ -16,6 +18,12 @@ class SudokuBoardUI(Frame):
         self.game = game
         self.row = -1
         self.col = -1
+        self.playState = 0 #1 simboliza que el usuario regresó una jugada atrás
+        self.config = ConfigConnection() #Conexión al archivo de configuración
+        self.db = MySQLEngine(self.config.getConfig()) #Conexión a la base de datos
+        self.stack = [] #{row: , col: , val: , state: } Coordenadas del ingreso de los datos a la tabla
+        self.undoStack = [] #{row: , col: , val: , state: } Coordenadas de de las jugadas deshechas
+        self.username = ""
         self.__initUI(parent)
 
     def __initUI(self, parent):
@@ -42,7 +50,7 @@ class SudokuBoardUI(Frame):
 
         self.clearButton = Button(parent, text="Limpiar Tablero", bg="#6ea8d9", font=("Lato",15), command=self.__clearAnswers)
         self.clearButton.pack(fill=BOTH, side=BOTTOM)
-        self.returnButton = Button(parent, text="Deshacer jugada", bg="#6ea8d9", font=("Lato",15))
+        self.returnButton = Button(parent, text="Deshacer jugada", bg="#6ea8d9", font=("Lato",15), command=self.__undoMove)
         self.returnButton.pack(fill=BOTH, side=BOTTOM)
         self.pauseButton = Button(parent, text="Pausa", bg="#6ea8d9", font=("Lato",15), command=self.__pauseGame)
         self.pauseButton.pack(fill=BOTH, side=BOTTOM)
@@ -166,7 +174,14 @@ class SudokuBoardUI(Frame):
             
         if (self.row >= 0 and self.col >= 0 and event.char in "1234567890"):
             try:
+                
+                #Esta cosita pinta los numeritos en el puzzle
                 self.game.puzzle[self.row][self.col] = int(event.char)
+
+                #Agrega el par ordenado de coordenadas y el valor del número ingresado por el usuario a la pila
+                self.stack.append( {"row":self.row, "col":self.col, "val": int(event.char), "state": 0} )
+                print( self.stack )
+
             except:
                 pass
             self.col, self.row = -1, -1
@@ -179,6 +194,43 @@ class SudokuBoardUI(Frame):
         self.game.start()
         self.canvas.delete("victory")
         self.__drawPuzzle()
+
+    """
+        Esta función retrocede un movimiento en el tablero, 
+        dejando el valor inicial cero
+    """
+    def __undoMove(self):
+
+        try:
+            #Mientras existan elementos en la pila
+            if len(self.undoStack): 
+                #Agrega el par ordenado de coordenadas y el valor del último número ingresado por el usuario
+                self.undoStack.append( self.stack.pop() ) 
+                #índice actual de la pila
+                length = len(self.undoStack) - 1
+                #Cambio de estado
+                self.undoStack[length]['state'] = 1
+
+                print( 
+                        "stack:{}, row:{}, col:{}".format(
+                            self.undoStack, 
+                            self.undoStack[length]['row'],
+                            self.undoStack[length]['col']
+                            ) 
+                    )
+                
+                #Esta cosita pinta los numeritos en el puzzle
+                self.game.puzzle[ self.undoStack[length]['row'] ][ self.undoStack[length]['col']  ] = 0
+
+        except:
+            print("Un error ha ocurrido uwu")
+
+        self.col, self.row = -1, -1
+        self.__drawPuzzle()
+        self.__drawCursor()
+        if self.game.checkWin():
+            self.__drawVictory()
+
 
     def __onClosing(self):
         self.dialogClose = DialogClose(self.parent)

@@ -2,6 +2,8 @@ from tkinter import *
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
+from core.EngineSQL.MySQLEngine import MySQLEngine
+from core.EngineSQL.ConfigConnection import ConfigConnection
 
 """
 Frame que permite visualizar los elementos cuando se elimina un usuario
@@ -23,6 +25,8 @@ class SudokuAdministratorDeleteUser(Frame):
         super().__init__(self.child)
         self.pack()
         self.__initUI()
+        self.config = ConfigConnection() 
+        self.db = MySQLEngine(self.config.getConfig())
         img = PhotoImage(file="core/images/back.png", master=self.child)
         btnBack= Button(self.child, image=img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
         btnBack.pack()
@@ -77,8 +81,37 @@ class SudokuAdministratorDeleteUser(Frame):
     @version 1.0
     """
     def __save(self):
-        print(self.userText.get())
-        self.userText.delete(0, "end")
+        # delete(self, table, tex_nickname): 
+        username = self.userText.get()
+        print(username)
+        
+        #Sí el text no está vacío
+        if username: 
+
+            userExist = self.db.select("SELECT tex_nickname FROM User WHERE tex_nickname = %s AND bit_state = 1", (username, ))
+            print( userExist )
+
+            #Consulta hacia la base de datos sobre el nickname del usuario
+            if userExist: 
+                #Sí el usuario existe se valida coincidencia con el usuario buscado
+                if userExist[0][0] == username: 
+                    #Se modifica el estado del usuario de " (1) activo" a (0) "inactivo"
+                    self.db.update(
+                            table="User", 
+                            fields=("bit_state", ), 
+                            values=(0,),
+                            condition="tex_nickname = '{}' AND bit_state = 1".format(username)
+                        )
+                    
+                    self.userText.delete(0, "end") 
+
+                    print( "Se cambió el estado de {}".format(username) )
+
+            else: 
+                print("El usuario no existe o no está registrado, hacer algo aquí porfis uwu")
+
+        else: 
+            print("No se ha ingresado nada al TEXT, hacer algo aquí porfis uwu")
 
     """
     Función que permite regresar a la ventana anterior al presionar el botón.
@@ -95,6 +128,10 @@ class SudokuAdministratorDeleteUser(Frame):
     @version 1.0
     """
     def __onClosing(self):
+        
+        #Cerramos la conexión a la base de datos
+        self.db.closeConnection() 
+        
         self.dialogClose = DialogClose(self.parent)
         self.parent.wait_window(self.dialogClose)
         # Bloque try except para manejar la excepción devuelta si el self.parent fue destruido

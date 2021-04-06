@@ -5,6 +5,7 @@ from core.DialogClose import DialogClose
 from core.Tooltip import Tooltip
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
 import re
 
 """
@@ -72,8 +73,10 @@ class SudokuChangeUserPassword(Frame):
         labelBrand.place(x=8,y=555)
 
     def __changePassword(self, password):
-
         error = ""
+        #objeto para encriptar los datos de la contraseña
+        data = EncryptDecryptSudokuFile(self.db)
+        print( data )
 
         if (len(password) > 0):
             
@@ -96,12 +99,11 @@ class SudokuChangeUserPassword(Frame):
             return
         
         else:
-
             obj = self.db.update(
-                "User",
-                ("tex_password",),
-                ("HEX(AES_ENCRYPT('{}', '{}'))".format(password, self.username),),
-                "tex_nickname = '{}'".format(self.username)
+                    table="User",
+                    fields=("tex_password",),
+                    values=( "'{}'".format( data.encrypt(password, self.username) ), ), # (data, password)
+                    condition="tex_nickname = '{}'".format(self.username)
                 )
             print(obj)
             
@@ -114,6 +116,10 @@ class SudokuChangeUserPassword(Frame):
     @version 1.0
     """
     def __onClosing(self):
+       
+        #Cierra la conexión con la base de datos
+        self.db.closeConnection()
+
         self.dialogClose = DialogClose(self.parent)
         self.parent.wait_window(self.dialogClose)
         # Bloque try except para manejar la excepción devuelta si el self.parent fue destruido

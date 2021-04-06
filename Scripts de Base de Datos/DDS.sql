@@ -1,6 +1,6 @@
 /*
     @author kenneth.cruz@unah.hn
-    @version 0.1.2
+    @version 0.1.3
     @date 2021/03/30
 */
 
@@ -15,7 +15,8 @@ CREATE TABLE User(
     tex_nickname VARCHAR(30) NOT NULL UNIQUE COMMENT "Nombre de ingreso para el usuario",
     CHECK( tex_nickname RLIKE "[a-zA-Z0-9._-]{4,}" ), 
     bit_rol BIT(1) DEFAULT 0 NOT NULL COMMENT "0 Usuario | 1 Administrador; Tipos de rol para acceso al sistema", 
-    tex_password TEXT NOT NULL COMMENT "Contraseña"
+    tex_password TEXT NOT NULL COMMENT "Contraseña",
+    bit_state BIT(1) DEFAULT 1 NOT NULL COMMENT "0 inactivo| 1 activo. Dar de baja a los usuarios, de esta forma se evita eliminar a los usuarios de forma explícita de la base de datos"
 )COMMENT "Información general sobre el usuario";
 
 CREATE TABLE Login(

@@ -73,5 +73,11 @@ class MySQLEngine:
         self.link.execute(query)
         self.mydb.commit()
 
+    def delete(self, table, tex_nickname): 
+        
+        query = "DELETE FROM %s WHERE tex_nickname = %s"
+        self.link.execute(query, tex_nickname)
+        self.mydb.commit()
+
     def closeConnection():
         self.mydb.close()

@@ -129,7 +129,7 @@ class SudokuAdministratorDeleteUser(Frame):
     """
     def __onClosing(self):
         
-        #Cerramos la conexión a la base de datos
+        #Cierra la conexión a la base de datos
         self.db.closeConnection() 
         
         self.dialogClose = DialogClose(self.parent)

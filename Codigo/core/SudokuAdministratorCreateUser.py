@@ -99,8 +99,8 @@ class SudokuAdministratorCreateUser(Frame):
         
         #Sí el text no está vacío
         if username: 
-            #Existencia del usuario en la base de datos
-            userExist = self.db.select("SELECT tex_nickname FROM User WHERE tex_nickname = %s AND bit_state = 1", (username, ))
+            #Existencia del usuario en la base de datos | sin importar que este este de baja (bit_state=0)
+            userExist = self.db.select("SELECT tex_nickname FROM User WHERE tex_nickname = %s", (username, ))
 
             #El usuario no existe en la base de datos
             if not userExist: 

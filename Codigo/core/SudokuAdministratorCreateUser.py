@@ -3,6 +3,10 @@ from tkinter import ttk
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
+from core.EngineSQL.MySQLEngine import MySQLEngine
+from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
+
 
 """
 Frame que permite visualizar los elementos cuando un usuario se crea
@@ -24,6 +28,8 @@ class SudokuAdministratorCreateUser(Frame):
         super().__init__(self.child)
         self.pack()
         self.__initUI()
+        self.config = ConfigConnection() 
+        self.db = MySQLEngine(self.config.getConfig())
         img = PhotoImage(file="core/images/back.png", master=self.child)
         btnBack= Button(self.child, image=img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
         btnBack.pack()
@@ -77,13 +83,46 @@ class SudokuAdministratorCreateUser(Frame):
         labelBrand.place(x=8,y=555)
 
     """
-    Función que permite guardar los cambios.
-    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
+        @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+        @version 1.1
+        @date 2021/04/06
+
+        Esta función verifica la existencia de un usuario en la base de datos, sí este usaurio no existe, lo crea, 
+        generando una clave cifrada a partir del nombre del usuario. 
+        La primera vez que el usuario inicia sesión al sistema, el sistema lo obliga a cambiar de contraseña.
     """
     def __save(self):
-        print(self.userText.get())
-        self.userText.delete(0, "end")
+
+         # delete(self, table, tex_nickname): 
+        username = self.userText.get()
+        print(username)
+        
+        #Sí el text no está vacío
+        if username: 
+            #Existencia del usuario en la base de datos
+            userExist = self.db.select("SELECT tex_nickname FROM User WHERE tex_nickname = %s AND bit_state = 1", (username, ))
+
+            #El usuario no existe en la base de datos
+            if not userExist: 
+
+                encryptPassword = (EncryptDecryptSudokuFile(self.db)).encrypt(username, username)
+
+                self.db.insert(
+                    table="User", 
+                    fields=["tex_nickname", "tex_password"], 
+                    values=[
+                        username, 
+                        encryptPassword
+                        ]
+                )
+
+                self.userText.delete(0, "end") 
+
+            else: 
+                print("El usuario existe en la base de datos, hacer algo aquí porfis uwu")
+
+        else: 
+            print("El TEXT está vacío, hacer algo aquí porfis uwu")
 
     """
     Función que permite regresar a la ventana anterior al presionar el botón.
@@ -100,6 +139,10 @@ class SudokuAdministratorCreateUser(Frame):
     @version 1.0
     """
     def __onClosing(self):
+
+        #Cierra la conexión a la base de datos
+        self.db.closeConnection() 
+
         self.dialogClose = DialogClose(self.parent)
         self.parent.wait_window(self.dialogClose)
         # Bloque try except para manejar la excepción devuelta si el self.parent fue destruido

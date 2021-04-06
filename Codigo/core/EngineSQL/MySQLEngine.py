@@ -32,7 +32,7 @@ class MySQLEngine:
             self.mydb.close()
 
     
-    #Inserta datos en la base de datos, pasando como parámetros el nombre de la base de datos
+    #Realiza inserción  de datos en la base de datos; los pasando como parámetros el nombre de la base de datos
     # los campos en un arreglo al igual que los valores de la tupla 
     def insert(self, table, fields=[], values=[]): 
 
@@ -95,7 +95,12 @@ class MySQLEngine:
         data = ""
 
         for value in values: 
-            data += "'{}' ".format(value)
+
+            #Evita colocar comillas simples a los tipo de dato entero
+            if type(value) == int:  
+                data += "{} ".format(value)
+            else: 
+                data += "'{}' ".format(value)
 
         data = data.replace(" ", ",")
         data = re.sub(r",$", "", data)

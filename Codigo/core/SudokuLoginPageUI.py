@@ -130,10 +130,39 @@ class SudokuLoginPageUI(Frame):
             usernameStatus, passwordStatus, rol, setNewPassword = self.__extractData(username, password)    
             
             if (usernameStatus == 1 and passwordStatus == 1 and rol == 0 and setNewPassword == 1):
+                
+                #Inserta cada usuario que ingresa al sistema
+                self.db.insert(
+                        table="Login", 
+                        fields=["id_user_fk"],
+                        values=[
+                                int(
+                                    self.db.select(
+                                        query="SELECT id FROM User WHERE tex_nickname=%s", 
+                                        data=(username, )
+                                    )[0][0]
+                                )
+                        ]
+                )
+                
                 self.parent.destroy()
                 SudokuChangeUserPassword(username, password)
 
             elif (usernameStatus == 1 and passwordStatus == 1):
+
+                #Inserta cada usuario que ingresa al sistema
+                self.db.insert(
+                        table="Login", 
+                        fields=["id_user_fk"],
+                        values=[
+                                int(
+                                    self.db.select(
+                                        query="SELECT id FROM User WHERE tex_nickname=%s", 
+                                        data=(username, )
+                                    )[0][0]
+                                )
+                        ]
+                )
     
                 if (rol == 1):
                     self.parent.destroy()

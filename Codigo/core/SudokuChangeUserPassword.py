@@ -25,7 +25,6 @@ class SudokuChangeUserPassword(Frame):
         self.config = ConfigConnection()
         self.db = MySQLEngine(self.config.getConfig())
         self.__initUI()
-        self.master.mainloop()
 
     def __initUI(self):
 
@@ -111,7 +110,7 @@ class SudokuChangeUserPassword(Frame):
     @version 1.0
     """
     def __onClosing(self):
-       
+
         #Cierra la conexión con la base de datos
         self.db.closeConnection()
 

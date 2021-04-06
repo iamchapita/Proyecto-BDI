@@ -26,11 +26,6 @@ class SudokuUserAdministration(Frame):
         super().__init__(self.child)
         self.pack()
         self.__initUI()
-        img = PhotoImage(file="core/images/back.png", master=self.child)
-        btnBack= Button(self.child, image=img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
-        btnBack.pack()
-        btnBack.place(x=315, y=20)
-        self.master.mainloop()
 
     """
     Creación de los widgets.
@@ -38,7 +33,8 @@ class SudokuUserAdministration(Frame):
     @version 1.0
     """
     def __initUI(self):
-        # Se debe utilizar la ruta core/images/SudokuLogo.png al implementarlo en el main
+
+        self.img = PhotoImage(file="core/images/back.png", master=self.child)
         self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.child)
         self.brand = PhotoImage(file="core/images/Brand.png", master=self.child)
         self.width = 400
@@ -56,9 +52,27 @@ class SudokuUserAdministration(Frame):
         label1.configure(background = "#171717", fg="white")
         label1.pack()
         label1.place(x=60,y=120)
-        Button(self.child, text = 'Crear usuario', bg="#6ea8d9", font=("Lato",17), command= self.__goCreateUser).place(x=50, y=220, height = 50, width = 310)
-        Button(self.child, text = 'Editar usuario', bg="#6ea8d9", font=("Lato",17), command= self.__goEditUser).place(x=50, y=280, height = 50, width =310)
-        Button(self.child, text = 'Eliminar usuario', bg="#6ea8d9", font=("Lato",17), command= self.__goDeleteUser).place(x=50, y=340, height = 50, width =310)
+        Button(
+            self.child, text='Crear usuario',
+            bg="#6ea8d9", font=("Lato", 17),
+            command=self.__goCreateUser).place(x=50, y=220, height=50, width=310
+            )
+        Button(
+            self.child, text='Editar usuario',
+            bg="#6ea8d9", font=("Lato", 17),
+            command=self.__goEditUser
+            ).place(x=50, y=280, height = 50, width =310)
+        Button(
+            self.child, text='Eliminar usuario',
+            bg="#6ea8d9", font=("Lato", 17),
+            command=self.__goDeleteUser
+            ).place(x=50, y=340, height=50, width=310)
+        Button(
+            self.child, text='Atrás',
+            image=self.img, bg="#171717",
+            borderwidth=0, highlightthickness=0,
+            command=self.__goBack
+            ).place(x=315, y=20)
         labelBrand = Label(self.child, image=self.brand, borderwidth=0)
         labelBrand.pack()
         labelBrand.place(x=0,y=555)
@@ -92,7 +106,6 @@ class SudokuUserAdministration(Frame):
     def __goEditUser(self):
         self.child.withdraw()
         SudokuAdministratorEditUser(parent=self.child)
-
     """
     Función que permite regresar a la ventana anterior al presionar el botón.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
@@ -108,9 +121,9 @@ class SudokuUserAdministration(Frame):
     @version 1.0
     """
     def __onClosing(self):
-        self.dialogClose = DialogClose(self.parent)
-        self.parent.wait_window(self.dialogClose)
-        # Bloque try except para manejar la excepción devuelta si el self.parent fue destruido
+        self.dialogClose = DialogClose(self.child)
+        #self.child.wait_window(self.dialogClose)
+        """ # Bloque try except para manejar la excepción devuelta si el self.parent fue destruido
         try:
             # Confirma si la instancia de dialogClose existe
             if (self.dialogClose.winfo_exists() == False):
@@ -118,4 +131,4 @@ class SudokuUserAdministration(Frame):
                 # se intenta cerrar la ventana
                 self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
         except:
-            pass
+            pass """

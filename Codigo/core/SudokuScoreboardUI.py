@@ -61,7 +61,7 @@ class SudokuScoreboardUI(Frame):
         self.dataView.column("#3", width=300)
 
         # Muestra el titulo de la seccion
-        label1= Label(self.child, text='Score Board', font=("Lato",25))
+        label1= Label(self.child, text='Scoreboard', font=("Lato",25))
         label1.configure(background = "#171717", fg="white")
         label1.pack()
         label1.place(x=380,y=90)

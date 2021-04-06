@@ -24,7 +24,6 @@ class SudokuUserAdministration(Frame):
         self.child = Tk()
         self.child.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.child)
-        self.pack()
         self.__initUI()
 
     """
@@ -48,34 +47,33 @@ class SudokuUserAdministration(Frame):
         self.child.resizable(False, False)
         self.center = ScreenCenter()
         self.center.center(self.child, self.width, self.height)
-        label1= Label(self.child, text='Administrar usuarios', font=("Lato",25))
+        label1= Label(self.child, text='Administrar usuarios', font=("Lato",20))
         label1.configure(background = "#171717", fg="white")
-        label1.pack()
-        label1.place(x=60,y=120)
+        label1.grid(row=1,column=1,sticky = "nsew", pady = 80, padx=70)
+
         Button(
             self.child, text='Crear usuario',
             bg="#6ea8d9", font=("Lato", 17),
-            command=self.__goCreateUser).place(x=50, y=220, height=50, width=310
-            )
+            command=self.__goCreateUser
+            ).grid(row=2,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=37)
         Button(
             self.child, text='Editar usuario',
             bg="#6ea8d9", font=("Lato", 17),
             command=self.__goEditUser
-            ).place(x=50, y=280, height = 50, width =310)
+            ).grid(row=3,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=18)
         Button(
             self.child, text='Eliminar usuario',
             bg="#6ea8d9", font=("Lato", 17),
             command=self.__goDeleteUser
-            ).place(x=50, y=340, height=50, width=310)
+            ).grid(row=4,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=11)
         Button(
             self.child, text='Atrás',
             image=self.img, bg="#171717",
             borderwidth=0, highlightthickness=0,
             command=self.__goBack
-            ).place(x=315, y=20)
+            ).grid(row=0,column=1,sticky = "nsew", pady=10)
         labelBrand = Label(self.child, image=self.brand, borderwidth=0)
-        labelBrand.pack()
-        labelBrand.place(x=0,y=555)
+        labelBrand.grid(row=6,column=1, pady = 135)
     
     """
     Función que permite abrir una ventana para crear un usuario y registrarlo

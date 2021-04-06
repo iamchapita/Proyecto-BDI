@@ -31,10 +31,20 @@ class MySQLEngine:
         else:
             self.mydb.close()
 
-    def insert(self, query, data): 
+    
+    #Inserta datos en la base de datos, pasando como parámetros el nombre de la base de datos
+    # los campos en un arreglo al igual que los valores de la tupla 
+    def insert(self, table, fields=[], values=[]): 
 
-        self.link.execute(query, data)
+        query = "INSERT INTO {} ({}) VALUES ({});".format( table, ", ".join(fields), self.prepareQuery(values) )
+
+        print( query )
+
+        self.link.execute(query)
         self.mydb.commit()
+
+        #self.link.execute(query, data)
+        #self.mydb.commit()
 
     def selectPage(self, query, page=0, count=10): 
 
@@ -73,11 +83,20 @@ class MySQLEngine:
         self.link.execute(query)
         self.mydb.commit()
 
-    def delete(self, table, tex_nickname): 
-        
-        query = "DELETE FROM %s WHERE tex_nickname = %s"
-        self.link.execute(query, tex_nickname)
-        self.mydb.commit()
 
     def closeConnection():
         self.mydb.close()
+
+
+    #Agrega comillas para los n valores de los campos de un query
+    def prepareQuery(self, values):
+        
+        data = ""
+
+        for value in values: 
+            data += "'{}' ".format(value)
+
+        data = data.replace(" ", ",")
+        data = re.sub(r",$", "", data)
+
+        return data

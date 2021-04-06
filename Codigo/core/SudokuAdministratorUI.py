@@ -24,7 +24,6 @@ class SudokuAdministratorUI(Frame):
         self.parent = Tk()
         self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.parent)
-        self.pack()
         self.__initUI()
         self.master.mainloop()
 
@@ -45,7 +44,7 @@ class SudokuAdministratorUI(Frame):
         self.parent.configure(background = "#171717")
         self.parent.resizable(False, False)
 
-        TitleStyles = tkFont.Font(family="Lato", size=25, weight='bold')
+        TitleStyles = tkFont.Font(family="Lato", size=20)
         ButtonStyles = tkFont.Font(family="Lato", size=17)
 
         self.center = ScreenCenter()
@@ -53,17 +52,15 @@ class SudokuAdministratorUI(Frame):
 
         label1= Label(self.parent, text='¿Qué deseas hacer?', font=TitleStyles)
         label1.configure(background = "#171717", fg="white")
-        label1.pack()
-        label1.place(x=60,y=120)
+        label1.grid(row=1,column=1,sticky = "nsew", pady = 80,padx=70)
 
-        Button(self.parent, text = 'Administración usuarios', bg="#6ea8d9", font=ButtonStyles, command= self.__goUserAdministration).place(x=50, y=220, height = 50, width = 310)
-        Button(self.parent, text = 'Ir al juego', bg="#6ea8d9", font=ButtonStyles, command= self.__goGame).place(x=50, y=280, height = 50, width =310)
-        Button(self.parent, text = 'Bitácora', bg="#6ea8d9", font=ButtonStyles, command= self.__goBinnacle).place(x=50, y=340, height = 50, width =310)
-        Button(self.parent, text = 'Salir', bg="#6ea8d9", font=ButtonStyles, command= self.__onClosing).place(x=50, y=400, height = 50, width =310)
+        Button(self.parent, text = 'Administración usuarios', bg="#6ea8d9", font=ButtonStyles, command= self.__goUserAdministration).grid(row=2,column=1,sticky = "nsew", pady = 5, padx=40)
+        Button(self.parent, text = 'Ir al juego', bg="#6ea8d9", font=ButtonStyles, command= self.__goGame).grid(row=3,column=1,sticky = "nsew", pady = 5, padx=40)
+        Button(self.parent, text = 'Bitácora', bg="#6ea8d9", font=ButtonStyles, command= self.__goBinnacle).grid(row=4,column=1,sticky = "nsew", pady = 5, padx=40)
+        Button(self.parent, text = 'Salir', bg="#6ea8d9", font=ButtonStyles, command= self.__onClosing).grid(row=5,column=1,sticky = "nsew", pady = 5, padx=40)
         
         label2 = Label(self.parent, image=self.brand, borderwidth=0)
-        label2.pack()
-        label2.place(x=8,y=555)
+        label2.grid(row=6,column=1,pady = 135)
 
     """
     Función que abre una nueva ventada en donde se pueden administrar los

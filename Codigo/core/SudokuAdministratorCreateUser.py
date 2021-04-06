@@ -26,14 +26,12 @@ class SudokuAdministratorCreateUser(Frame):
         self.child = Tk()
         self.child.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.child)
-        self.pack()
         self.__initUI()
         self.config = ConfigConnection() 
         self.db = MySQLEngine(self.config.getConfig())
         img = PhotoImage(file="core/images/back.png", master=self.child)
         btnBack= Button(self.child, image=img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
-        btnBack.pack()
-        btnBack.place(x=315, y=20)
+        btnBack.grid(row=0,column=1,sticky = "nsew", pady=10)
         self.master.mainloop()
 
     """
@@ -61,26 +59,22 @@ class SudokuAdministratorCreateUser(Frame):
         self.child.resizable(False, False)
 
         # Muestra el titulo de la seccion
-        label1= Label(self.child, text='Crear un nuevo usuario', font=("Lato",25))
+        label1= Label(self.child, text='Crear un nuevo usuario', font=("Lato",20))
         label1.configure(background = "#171717", fg="white")
-        label1.pack()
-        label1.place(x=30,y=120)
+        label1.grid(row=1,column=1,sticky = "nsew", pady = 80,padx=35)
 
         label2= Label(self.child, text='Introduzca el nombre de usuario:', font =("Lato",15))
         label2.configure(background = "#171717", fg="#6ea8d9")
-        label2.pack()
-        label2.place(x=65,y=200)
+        label2.grid(row=2,column=1, pady = 20,padx=35)
 
         input_text = StringVar()
         self.userText = ttk.Entry(self.child, textvariable = input_text, font=("Lato",10),  justify=CENTER)
-        self.userText.pack()
-        self.userText.place(x=110,y=240, height = 30, width = 200)
+        self.userText.grid(row=3,column=1, padx=35)
         
-        Button(self.child, text = 'Crear', command= self.__save, bg="#6ea8d9", font=("Lato",15)).place(x=155, y=310, height = 50, width = 110)
+        Button(self.child, text = 'Crear', command= self.__save, bg="#6ea8d9", font=("Lato",15)).grid(row=4,column=1, pady = 15,padx=35,ipadx=40)
         
         labelBrand = Label(self.child, image=self.brand, borderwidth=0)
-        labelBrand.pack()
-        labelBrand.place(x=8,y=555)
+        labelBrand.grid(row=6,column=1, pady = 125)
 
     """
         @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales

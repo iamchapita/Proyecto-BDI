@@ -25,6 +25,7 @@ class SudokuChangeUserPassword(Frame):
         self.config = ConfigConnection()
         self.db = MySQLEngine(self.config.getConfig())
         self.__initUI()
+        self.master.mainloop()
 
     def __initUI(self):
 
@@ -64,7 +65,7 @@ class SudokuChangeUserPassword(Frame):
         self.loginButton.grid(row=6,column=1,sticky = "nsew", pady = 15, padx=77,ipady=1, ipadx=10)
 
         labelBrand = Label(self.parent, image=self.brand, borderwidth=0)
-        labelBrand.grid(row=7,column=1,sticky = "nsew", pady = 130, padx=10)
+        labelBrand.grid(row=7,column=1,sticky = "nsew", pady = 150, padx=10)
 
     def __changePassword(self, password):
         error = ""
@@ -110,7 +111,7 @@ class SudokuChangeUserPassword(Frame):
     @version 1.0
     """
     def __onClosing(self):
-
+       
         #Cierra la conexión con la base de datos
         self.db.closeConnection()
 

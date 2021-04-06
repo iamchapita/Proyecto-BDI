@@ -50,7 +50,7 @@ class SudokuMainWindowUI(Frame):
         Button(self.parent, text = 'Salir', bg="#6ea8d9", font=("lato", 17), command= self.__onClosing).grid(row=5,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=83)
         
         label2 = Label(self.parent, image=self.brand, borderwidth=0)
-        label2.grid(row=6,column=1,sticky = "nsew", pady = 90, padx=5)
+        label2.grid(row=6,column=1,pady = 130)
     """
     Función que inicia el juego cuando se presiona el botón.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales

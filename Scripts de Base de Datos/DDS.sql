@@ -60,7 +60,9 @@ CREATE TABLE State(
 CREATE TABLE Action(
     id SERIAL PRIMARY KEY,
     bit_state bit(1) DEFAULT 0 NOT NULL COMMENT "'0' rellenar respuesta | '1' Un usuario puede desear 'regresar' una (o varias) jugadas atrás",
-    sma_number SMALLINT UNSIGNED DEFAULT 0 NOT NULL COMMENT "Resultado ingresado por el usuario"
+    sma_number SMALLINT UNSIGNED DEFAULT 0 NOT NULL COMMENT "Resultado ingresado por el usuario",
+    sma_row SMALLINT UNSIGNED NOT NULL COMMENT "Coordenada en el eje x dentro del tablero",
+    sma_column SMALLINT UNSIGNED NOT NULL COMMENT "Coordenada en el eje y dentro del tablero"
 )COMMENT "Resultado de cada casilla que rellena un juagdor";
 
 

@@ -20,7 +20,6 @@ class SudokuChangeUserPassword(Frame):
         self.parent = Tk()
         self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.parent)
-        self.pack()
         self.username = username
         self.password = password
         self.config = ConfigConnection()
@@ -50,27 +49,23 @@ class SudokuChangeUserPassword(Frame):
             font=("Lato", 15)
             )
         label1.configure(background = "#171717", fg="white")
-        label1.pack()
-        label1.place(x=50,y=50)
+        label1.grid(row=1,column=1,sticky = "nsew", pady = 50, padx=50)
     
         label3= Label(self.parent, text='Ingrese su nueva contraseña', font =("Lato",13))
         label3.configure(background = "#171717", fg="#6ea8d9")
-        label3.pack()
-        label3.place(x=80,y=270)
+        label3.grid(row=2,column=1,sticky = "nsew", padx=77)
 
         textTooltip ="""{} de más de 4 caracteres.\nCaracteres válidos: \n- Mayúsculas\n- Minúsculas\n- Números\n- Simbolos (._-)"""
         self.newPasswordEntry = Entry(self.parent,show="*", font=("Lato",13),  justify=CENTER)
-        self.newPasswordEntry.pack()
-        self.newPasswordEntry.place(x=110, y=310, height=30, width=200)
+        self.newPasswordEntry.grid(row=3,column=1,sticky = "nsew",pady=20 ,padx=77,ipady=1, ipadx=1)
         self.passwordToolTip = Tooltip(self.newPasswordEntry, textTooltip.format("Contraseña"))
         
         self.loginButton = Button(self.parent, command=lambda: self.__changePassword(self.newPasswordEntry.get()))
         self.loginButton.configure(text="Confirmar contraseña", bg="#6ea8d9", font=("Lato", 15))
-        self.loginButton.place(x=90, y=445)
+        self.loginButton.grid(row=6,column=1,sticky = "nsew", pady = 15, padx=77,ipady=1, ipadx=10)
 
         labelBrand = Label(self.parent, image=self.brand, borderwidth=0)
-        labelBrand.pack()
-        labelBrand.place(x=8,y=555)
+        labelBrand.grid(row=7,column=1,sticky = "nsew", pady = 130, padx=10)
 
     def __changePassword(self, password):
         error = ""

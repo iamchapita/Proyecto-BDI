@@ -27,7 +27,6 @@ class SudokuLoginPageUI(Frame):
         self.parent = Tk()
         self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.parent)
-        self.pack()
         self.config = ConfigConnection()
         self.db = MySQLEngine(self.config.getConfig())
         self.__initUI()
@@ -53,36 +52,30 @@ class SudokuLoginPageUI(Frame):
         center = ScreenCenter()
         center.center(self.parent, self.width, self.height)
         
-        # Muestra el titulo de la seccion
         label1= Label(self.parent, text='Nombre de usuario', font=("Lato",20))
         label1.configure(background = "#171717", fg="white")
-        label1.pack()
-        label1.place(x=85,y=50)
+        label1.grid(row=1,column=1,sticky = "nsew", pady = 20, padx=75)
 
         self.usernameEntry = Entry(self.parent, font=("Lato",15),  justify=CENTER)
-        self.usernameEntry.pack()
-        self.usernameEntry.place(x=100, y=90, height=30, width=200)
+        self.usernameEntry.grid(row=2,column=1,sticky = "nsew", padx=70)
         textTooltip ="Ingrese {}"
         self.usernameToolTip = Tooltip(self.usernameEntry, textTooltip.format("el nombre de usuario."))
 
         label2= Label(self.parent, text='Contraseña', font =("Lato",20))
         label2.configure(background = "#171717", fg="white")
-        label2.pack()
-        label2.place(x=130, y=145)
+        label2.grid(row=3,column=1,sticky = "nsew", pady = 20, padx=120)
         
         self.passwordEntry = Entry(self.parent,show="*", font=("Lato",15),  justify=CENTER)
-        self.passwordEntry.pack()
-        self.passwordEntry.place(x=100,y=180, height = 30, width = 200)
+        self.passwordEntry.grid(row=4,column=1,sticky = "nsew", padx=70)
         
         self.usernameToolTip = Tooltip(self.passwordEntry, textTooltip.format("la contraseña."))
 
         self.loginButton = Button(self.parent, command=lambda: self.__loginFn(self.usernameEntry.get(), self.passwordEntry.get()))
         self.loginButton.configure(text="Iniciar Sesión", bg="#6ea8d9", font=("Lato", 15))
-        self.loginButton.place(x=128, y=245)
+        self.loginButton.grid(row=5,column=1,sticky = "nsew", pady = 20, padx=120)
 
         labelbackgroundImage = Label(self.parent, image=self.backgroundImage, borderwidth=0)
-        labelbackgroundImage.pack()
-        labelbackgroundImage.place(x=3,y=335)
+        labelbackgroundImage.grid(row=6,column=1,sticky = "nsew", pady = 50, padx=4)
 
     """
     Función que verifica la existencia y conexión a la BD.

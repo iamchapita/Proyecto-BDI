@@ -18,7 +18,6 @@ class SudokuBye(Frame):
 
         self.parent = Tk()
         super().__init__(self.parent)
-        self.pack()
         self.__initUI()
         self.master.mainloop()
 
@@ -45,9 +44,7 @@ class SudokuBye(Frame):
 
         label1= Label(self.parent, text='¡Vuelve Pronto!', font=("lato", 25))
         label1.configure(background = "#171717", fg="white")
-        label1.pack()
-        label1.place(x=60,y=120)
+        label1.grid(row=1,column=1,sticky = "nsew", pady = 80, padx=2)
         label2 = Label(self.parent, image=self.brand, borderwidth=0)
-        label2.pack()
-        label2.place(x=8,y=200)
+        label2.grid(row=2,column=1,sticky = "nsew", padx=2)
         self.after(500,self.parent.destroy)

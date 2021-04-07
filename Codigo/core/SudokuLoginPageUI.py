@@ -30,7 +30,6 @@ class SudokuLoginPageUI(Frame):
         self.config = ConfigConnection()
         self.db = MySQLEngine(self.config.getConfig())
         self.__initUI()
-        self.master.mainloop()
 
     """
     Creación de widgets de la ventana.
@@ -60,6 +59,7 @@ class SudokuLoginPageUI(Frame):
         self.usernameEntry.grid(row=2,column=1,sticky = "nsew", padx=70)
         textTooltip ="Ingrese {}"
         self.usernameToolTip = Tooltip(self.usernameEntry, textTooltip.format("el nombre de usuario."))
+        self.usernameEntry.focus()
 
         label2= Label(self.parent, text='Contraseña', font =("Lato",20))
         label2.configure(background = "#171717", fg="white")

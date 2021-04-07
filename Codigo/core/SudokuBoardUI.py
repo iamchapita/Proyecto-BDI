@@ -12,9 +12,9 @@ HEIGHT = MARGIN * 2 + SIDE * 9 +120# !Se le sumaron 120 para ampliar de forma ve
 class SudokuBoardUI(Frame):
     
     def __init__(self, parent, game):
-        Frame.__init__(self, parent)
         self.parent = parent
         self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
+        super().__init__(self.parent)
         self.game = game
         self.row = -1
         self.col = -1
@@ -24,9 +24,9 @@ class SudokuBoardUI(Frame):
         self.stack = [] #{row: , col: , val: , state: } Coordenadas del ingreso de los datos a la tabla
         self.undoStack = [] #{row: , col: , val: , state: } Coordenadas de de las jugadas deshechas
         self.username = ""
-        self.__initUI(parent)
+        self.__initUI()
 
-    def __initUI(self, parent):
+    def __initUI(self):
         self.parent.title("Sudoku")
         self.parent.resizable(FALSE, FALSE)
         self.parent.configure(background = "#171717")
@@ -34,7 +34,7 @@ class SudokuBoardUI(Frame):
         center = ScreenCenter()
         center.center(self.parent, WIDTH, 750)
         self.pack(fill=BOTH)
-        self.canvas = Canvas(parent, width=WIDTH, height= 610)
+        self.canvas = Canvas(self.parent, width=WIDTH, height= 610)
         self.canvas.configure(background = "#171717")
         self.canvas.pack(fill=BOTH, side=TOP)
 
@@ -48,13 +48,13 @@ class SudokuBoardUI(Frame):
         self.labelTime.pack()
         self.labelTime.place(x=380,y=560)
 
-        self.clearButton = Button(parent, text="Limpiar Tablero", bg="#6ea8d9", font=("Lato",15), command=self.__clearAnswers)
+        self.clearButton = Button(self.parent, text="Limpiar Tablero", bg="#6ea8d9", font=("Lato",15), command=self.__clearAnswers)
         self.clearButton.pack(fill=BOTH, side=BOTTOM)
-        self.returnButton = Button(parent, text="Deshacer jugada", bg="#6ea8d9", font=("Lato",15), command=self.__undoMove)
+        self.returnButton = Button(self.parent, text="Deshacer jugada", bg="#6ea8d9", font=("Lato",15), command=self.__undoMove)
         self.returnButton.pack(fill=BOTH, side=BOTTOM)
-        self.pauseButton = Button(parent, text="Pausa", bg="#6ea8d9", font=("Lato",15), command=self.__pauseGame)
+        self.pauseButton = Button(self.parent, text="Pausa", bg="#6ea8d9", font=("Lato",15), command=self.__pauseGame)
         self.pauseButton.pack(fill=BOTH, side=BOTTOM)
-        self.saveButton = Button(parent, text="Guardar partida", bg="#6ea8d9", font=("Lato",15))
+        self.saveButton = Button(self.parent, text="Guardar partida", bg="#6ea8d9", font=("Lato",15))
         self.saveButton.pack(fill=BOTH, side=BOTTOM)
         
         self.__drawGrid()
@@ -203,7 +203,7 @@ class SudokuBoardUI(Frame):
 
         try:
             #Mientras existan elementos en la pila
-            if len(self.undoStack): 
+            if len(self.stack):
                 #Agrega el par ordenado de coordenadas y el valor del último número ingresado por el usuario
                 self.undoStack.append( self.stack.pop() ) 
                 #índice actual de la pila

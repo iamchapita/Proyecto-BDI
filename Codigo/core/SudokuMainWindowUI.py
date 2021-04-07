@@ -59,10 +59,11 @@ class SudokuMainWindowUI(Frame):
     def __newGame(self):
         with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
             self.parent.destroy()
-            root = Tk()
             game = SudokuGame(boardFile)
             game.start()
+            root = Tk()
             SudokuBoardUI(root, game)
+            root.mainloop()
 
     """
     Función que permite continuar un juego pausado.

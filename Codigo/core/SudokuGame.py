@@ -5,10 +5,10 @@ class SudokuGame(object):
     def __init__(self, boardFile):
         self.boardFile = boardFile
         self.startPuzzle = SudokuBoard(boardFile).board
-
-    def start(self):
         self.gameOver = False
         self.pause = False
+
+    def start(self):
         self.puzzle = []
 
         for i in range(9):

@@ -28,6 +28,7 @@ class SudokuBoardUI(Frame):
         self.minutes = 0
         self.seconds = 0
         self.username = ""
+        self.getUsernameLogin()
         self.__initUI()
 
     def __initUI(self):
@@ -42,7 +43,8 @@ class SudokuBoardUI(Frame):
         self.canvas.configure(background = "#171717")
         self.canvas.pack(fill=BOTH, side=TOP)
 
-        self.labelNameUser= Label(self.parent, text='Nombre de usuario', font=("Lato",13))
+        #'Nombre de usuario'
+        self.labelNameUser= Label(self.parent, text=self.username, font=("Lato",13))
         self.labelNameUser.configure(background = "#171717", fg="white")
         self.labelNameUser.pack()
         self.labelNameUser.place(x=50,y=20)
@@ -116,6 +118,32 @@ class SudokuBoardUI(Frame):
             self.pauseButton.configure(text="Pausa")
 
         #self.game.pause = True
+
+    
+    """ 
+        Obtiene el nombre del usuario que inició sesión
+    """
+    def getUsernameLogin(self): 
+    
+        query = """
+                SELECT 
+                    User.tex_nickname AS name
+                FROM 
+                    User
+                INNER JOIN 
+                    (
+                        SELECT 
+                            id_user_fk AS id
+                        FROM 
+                            Login 
+                        ORDER BY 
+                            dat_date DESC 
+                        LIMIT 1
+                    ) AS login ON User.id = login.id; 
+                """
+        
+        self.username = self.db.select(query=query)
+        self.db.closeConnection()
         
 
     """

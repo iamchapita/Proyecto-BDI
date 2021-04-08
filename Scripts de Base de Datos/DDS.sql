@@ -28,11 +28,17 @@ CREATE TABLE Login(
     FOREIGN KEY (id_user_fk) REFERENCES User(id)
 )COMMENT "Sistema de acceso al sistema";
 
+CREATE TABLE SudokuBoard(
+    id SERIAL PRIMARY KEY,
+    tex_board TEXT NOT NULL COMMENT "Contiene la información inicial de un tablero, para luego ser rellenado en el Board de la aplicación de escritorio"
+) COMMENT "Contiene la información de los tableros que pueden ser cargados en la aplicación";
+
 CREATE TABLE Game(
     id SERIAL PRIMARY KEY,
     id_user_fk BIGINT UNSIGNED NOT NULL COMMENT "Referencia",
+    id_sudokuboard_fk BIGINT UNSIGNED NOT NULL COMMENT "Referencia hacia los archivos que contiene los tableros",
     blo_file BLOB NOT NULL COMMENT "Archivo .sudoku que genera el programa cada vez que inicia un tablero",
-    hor_time TIME NOT NULL COMMENT "hh:mm:ss Minutos transcurridos tras iniciar una partidar o tras continuar una partida pausada",
+    tim_time TIME NOT NULL COMMENT "hh:mm:ss Minutos transcurridos tras iniciar una partidar o tras continuar una partida pausada",
     tim_date TIMESTAMP DEFAULT NOW() NOT NULL COMMENT "último estado en el que es almacenado el tablero en la base de datos",
     cod_nameState ENUM("nuevo", "pausado", "finalizado", "derrota") DEFAULT "nuevo" NOT NULL 
     COMMENT "Estados del juego, el estado finalizado significa haber concluido el juego con éxito, derrota es haber abandonado la partida",
@@ -79,14 +85,13 @@ CREATE TABLE GameAction(
 )COMMENT "Relación entre un tablero y los resultados ingresados por el usuario";
 
 
-
 CREATE VIEW Binacle
     AS 
     SELECT 
         User.id AS "user",
         Login.id AS "login", -- Ingreso al sistema
         LogOff.id AS "logoff", -- Salida del sistema
-        State.id AS "State", -- Pausa, creación, inicio, ganó, perdió el usuario en el juego,
+        Game.id AS "State", -- Pausa, creación, inicio, ganó, perdió el usuario en el juego,
         Action.id AS "acciones" -- Cada vez que inserta un número al tablero
     FROM 
         User
@@ -96,8 +101,6 @@ CREATE VIEW Binacle
         LogOff ON User.id = LogOff.id_user_fk
     INNER JOIN  
         Game ON  User.id = Game.id_user_fk
-    INNER JOIN 
-        State ON Game.id = State.id_game_fk
     INNER JOIN 
         GameAction ON Game.id = GameAction.id_game_fk
     INNER JOIN 

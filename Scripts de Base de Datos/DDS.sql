@@ -44,7 +44,8 @@ CREATE TABLE Game(
     COMMENT "Estados del juego, el estado finalizado significa haber concluido el juego con éxito, derrota es haber abandonado la partida",
 
 
-    FOREIGN KEY (id_user_fk) REFERENCES User(id)
+    FOREIGN KEY (id_user_fk) REFERENCES User(id),
+    FOREIGN KEY (id_sudokuboard_fk) REFERENCES SudokuBoard(id)
 )COMMENT "Tablero del juego";
 
 CREATE TABLE LogOff(

@@ -3,6 +3,7 @@ from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
 from datetime import time
 
 MARGIN = 70 # ! Se le sumaron 20 y se restaron 20 en los parámetros necesarios.
@@ -24,10 +25,12 @@ class SudokuBoardUI(Frame):
         self.db = MySQLEngine(self.config.getConfig()) #Conexión a la base de datos
         self.stack = [] #{row: , col: , val: , state: } Coordenadas del ingreso de los datos a la tabla
         self.undoStack = []  #{row: , col: , val: , state: } Coordenadas de las jugadas deshechas
+        self.encryptDecrypt = EncryptDecryptSudokuFile( self.db ) #Encripta y desencripta los datos del tablero
         self.hours = 0
         self.minutes = 0
         self.seconds = 0
         self.username = ""
+        self.idUsername = None
         self.getUsernameLogin()
         self.__initUI()
 
@@ -119,6 +122,33 @@ class SudokuBoardUI(Frame):
 
         #self.game.pause = True
 
+
+    """
+        Realiza la conexión y los procesos que implica
+        internamente con la base de datos, a partir del botón 'Pausa'
+        - Guarda el estado del tablero en la bd
+        - Guarda el tiempo en pausa en la bd
+        - Guarda la stack en la bd
+        - Guarda undoStack en la bd
+    """
+    def __processPushPause(self): 
+        
+        self.db.insert(
+                table="Game", 
+                fields=["id_user_fk", "blo_file", "hor_time"], 
+                values=[
+                        self.idUsername, 
+                        self.encryptDecrypt.encrypt(self. self.stack, self.username),  
+                        self.timeNow]
+            )
+
+
+    """
+        Realiza la conexión y los procesos que implica
+        internamente con la base de datos, a partir del botón 'Reanudar'
+    """
+    def __processPushResume(self):
+        pass
     
     """ 
         Obtiene el nombre del usuario que inició sesión
@@ -127,7 +157,8 @@ class SudokuBoardUI(Frame):
     
         query = """
                 SELECT 
-                    User.tex_nickname AS name
+                    User.tex_nickname AS name, 
+                    login.id AS id
                 FROM 
                     User
                 INNER JOIN 
@@ -137,14 +168,45 @@ class SudokuBoardUI(Frame):
                         FROM 
                             Login 
                         ORDER BY 
-                            dat_date DESC 
+                            tim_date DESC  
                         LIMIT 1
                     ) AS login ON User.id = login.id; 
                 """
-        
-        self.username = self.db.select(query=query)
+
+        transaction = self.db.select(query=query)
+
+        self.username = transaction[0][0]
+        self.idUsername = transaction[0][1]
+
+        print(  "username: {}, id: {}".format(self.username, self.idUsername) )
+
         self.db.closeConnection()
+
+    """
+        Última partida jugada
+        Obtiene el estado de esa partida ('pausado', 'finalizado', 'derrota')
+    """
+    def getLastGamePlayed(self): 
         
+        query = """
+                SELECT 
+                    id_user_fk AS id, 
+                    blo_file AS stack,
+                    tim_time AS time, 
+                    cod_nameState AS state
+                FROM 
+                    Game 
+                WHERE 
+                    id_user_fk=%s
+                ORDER BY 
+                    id DESC
+                LIMIT 1
+                """
+        
+        transaction = self.db.select(query=query, data=(self.idUsername, ))
+        self.db.closeConnection()
+
+        return transaction
 
     """
         Actualiza el tiempo transcurrido de la partida 
@@ -263,9 +325,13 @@ class SudokuBoardUI(Frame):
         self.__drawCursor()
     
     def __keyPressed(self, event):
+        
+        #A ver de que lado masca la iguana
+        print( self.game.gameOver )
 
         if (self.game.gameOver):
-            return
+            print("Hola buenas tardes")
+            #return
             
         if (self.row >= 0 and self.col >= 0 and event.char in "1234567890"):
             try:

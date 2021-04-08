@@ -22,7 +22,7 @@ CREATE TABLE User(
 CREATE TABLE Login(
     id SERIAL PRIMARY KEY,
     id_user_fk BIGINT UNSIGNED NOT NULL COMMENT "Referencia hacia user",
-    dat_date TIMESTAMP DEFAULT NOW() COMMENT "Hora de ingreso al sistema",
+    tim_date TIMESTAMP DEFAULT NOW() COMMENT "Hora de ingreso al sistema",
     -- tex_nickname TINYTEXT NOT NULL COMMENT "Nombre del usuario",
 
     FOREIGN KEY (id_user_fk) REFERENCES User(id)

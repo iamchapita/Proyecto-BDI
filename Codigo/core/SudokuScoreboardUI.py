@@ -13,7 +13,8 @@ Frame que permite visualizar todos los scoreboards del juego.
 class SudokuScoreboardUI(Frame):
 
     """
-    Constructor de la clase.
+    Constructor de la clase donde si incializan todos los componentes de
+    la ventana.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
@@ -31,7 +32,8 @@ class SudokuScoreboardUI(Frame):
         self.master.mainloop()
 
     """
-    Creación de widgets de la ventana.
+    Constructor de la clase donde si incializan todos los componentes de
+    la ventana.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
@@ -98,10 +100,14 @@ class SudokuScoreboardUI(Frame):
         self.parent.deiconify()
 
     """
-    Función que permite minimizar o salir del juego.
+    Función que pregunta al usuario si desea salir del juego.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
+    @version 2.0
     """
     def __onClosing(self):
-        self.dialogClose = DialogClose(self.parent)
-        self.parent.wait_window(self.dialogClose)
+        MsgBox = messagebox.askquestion ('Salir','Estas seguro de que te quieres salir?',icon = 'warning')
+        if MsgBox == 'yes':
+            self.child.destroy()
+            sys.exit()
+        else:
+            pass

@@ -14,7 +14,8 @@ del juego y la BD.
 class SudokuAdministratorDeleteUser(Frame):
 
     """
-    Constructor de la clase.
+    Constructor de la clase donde si incializan todos los componentes de
+    la ventana.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
@@ -34,7 +35,7 @@ class SudokuAdministratorDeleteUser(Frame):
         self.master.mainloop()
 
     """
-    Creación de los widgets.
+    Creación de los widgets que se veran en pantalla.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
@@ -47,13 +48,10 @@ class SudokuAdministratorDeleteUser(Frame):
         self.center = ScreenCenter()
         self.center.center(self.child, self.width, self.height)
         self.child.title('Eliminar Usuarios')
-        #Tamaño de la ventana
         self.child.geometry("%dx%d" %(self.width, self.height))
         self.child.configure(background = "#171717")
-        #Mantiene la ventana fija para evitar que el diseño se vea afectado
         self.child.resizable(False, False)
 
-        # Muestra el titulo de la seccion
         label1= Label(self.child, text='Eliminar usuario', font=("Lato",25))
         label1.configure(background = "#171717", fg="white")
         label1.pack()
@@ -108,10 +106,10 @@ class SudokuAdministratorDeleteUser(Frame):
                     print( "Se cambió el estado de {}".format(username) )
 
             else: 
-                print("El usuario no existe o no está registrado, hacer algo aquí porfis uwu")
+                messagebox.showerror(title="Usuario inexistente", message="El usuario no existe en la base de datos.")
 
         else: 
-            print("No se ha ingresado nada al TEXT, hacer algo aquí porfis uwu")
+            messagebox.showerror(title="Campo vacio", message="Por favor ingrese algo valido.")
 
     """
     Función que permite regresar a la ventana anterior al presionar el botón.
@@ -123,23 +121,18 @@ class SudokuAdministratorDeleteUser(Frame):
         self.parent.deiconify()
     
     """
-    Función que permite minimizar o salir del juego.
+    Función que pregunta al usuario si desea salir del juego y cierra la 
+    conexión a la base de datos.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
+    @version 2.0
     """
     def __onClosing(self):
-        
-        #Cierra la conexión a la base de datos
+
         self.db.closeConnection() 
-        
-        self.dialogClose = DialogClose(self.parent)
-        self.parent.wait_window(self.dialogClose)
-        # Bloque try except para manejar la excepción devuelta si el self.parent fue destruido
-        try:
-            # Confirma si la instancia de dialogClose existe
-            if (self.dialogClose.winfo_exists() == False):
-                # Si no existe entonces establece de nuevo la función de apertura de dialogClose cuando
-                # se intenta cerrar la ventana
-                self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
-        except:
+
+        MsgBox = messagebox.askquestion ('Salir','Estas seguro de que te quieres salir?',icon = 'warning')
+        if MsgBox == 'yes':
+            self.child.destroy()
+            sys.exit()
+        else:
             pass

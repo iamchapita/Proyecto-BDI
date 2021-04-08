@@ -12,7 +12,8 @@ Frame que permite visualizar todos los componentes de la bitacora.
 class SudokuAdministratorBinnacle(Frame):
 
     """
-    Constructor de la clase.
+    Constructor de la clase donde si incializan todos los componentes de
+    la ventana.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
@@ -30,7 +31,7 @@ class SudokuAdministratorBinnacle(Frame):
         self.master.mainloop()
 
     """
-    Creación de los widgets.
+    Creación de los widgets que se veran en pantalla.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
@@ -44,12 +45,8 @@ class SudokuAdministratorBinnacle(Frame):
         self.center.center(self.child, self.width, self.height)
 
         self.child.title('Bitácora')
-
-        #Tamaño de la ventana
         self.child.geometry("960x540")
         self.child.configure(background = "#171717")
-
-        #Mantiene la ventana fija para evitar que el diseño se vea afectado
         self.child.resizable(False, False)
 
         self.dataView = ttk.Treeview(self.child, columns=("#1","#2"))
@@ -62,7 +59,6 @@ class SudokuAdministratorBinnacle(Frame):
         self.dataView.column("#1", width=200)
         self.dataView.column("#2", width=615)
         
-        # Muestra el titulo de la seccion
         label1= Label(self.child, text='Registro de bitácora', font=("Lato",25))
         label1.configure(background = "#171717", fg="white")
         label1.pack()
@@ -82,19 +78,14 @@ class SudokuAdministratorBinnacle(Frame):
         self.parent.deiconify()
 
     """
-    Función que permite minimizar o salir del juego.
+    Función que pregunta al usuario si desea salir del juego.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
+    @version 2.0
     """
     def __onClosing(self):
-        self.dialogClose = DialogClose(self.parent)
-        self.parent.wait_window(self.dialogClose)
-        # Bloque try except para manejar la excepción devuelta si el self.parent fue destruido
-        try:
-            # Confirma si la instancia de dialogClose existe
-            if (self.dialogClose.winfo_exists() == False):
-                # Si no existe entonces establece de nuevo la función de apertura de dialogClose cuando
-                # se intenta cerrar la ventana
-                self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
-        except:
+        MsgBox = messagebox.askquestion ('Salir','Estas seguro de que te quieres salir?',icon = 'warning')
+        if MsgBox == 'yes':
+            self.child.destroy()
+            sys.exit()
+        else:
             pass

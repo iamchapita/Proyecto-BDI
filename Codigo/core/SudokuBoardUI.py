@@ -22,7 +22,10 @@ class SudokuBoardUI(Frame):
         self.config = ConfigConnection() #Conexión al archivo de configuración
         self.db = MySQLEngine(self.config.getConfig()) #Conexión a la base de datos
         self.stack = [] #{row: , col: , val: , state: } Coordenadas del ingreso de los datos a la tabla
-        self.undoStack = [] #{row: , col: , val: , state: } Coordenadas de de las jugadas deshechas
+        self.undoStack = []  #{row: , col: , val: , state: } Coordenadas de de las jugadas deshechas
+        self.hours = 0
+        self.minutes = 0
+        self.seconds = 0
         self.username = ""
         self.__initUI()
 
@@ -43,7 +46,9 @@ class SudokuBoardUI(Frame):
         self.labelNameUser.pack()
         self.labelNameUser.place(x=50,y=20)
 
-        self.labelTime= Label(self.parent, text='Time: 00:00:00', font=("Lato",13))
+        self.timer = StringVar()
+        
+        self.labelTime= Label(self.parent, text='00:00:00', font=("Lato",13))
         self.labelTime.configure(background = "#171717", fg="white")
         self.labelTime.pack()
         self.labelTime.place(x=380,y=560)
@@ -61,10 +66,15 @@ class SudokuBoardUI(Frame):
         self.__drawPuzzle()
         self.canvas.bind("<Button-1>", self.__cellClicked)
         self.canvas.bind("<Key>", self.__keyPressed)
+        self.__timer()
     
     def __pauseGame(self):
+        pass
+        # Se cancela el evento after, El timer deja de funcionar
+        #self.parent.after_cancel(self.afterId)
+        
 
-        self.game.pause = True
+        #self.game.pause = True
 
     def __drawGrid(self):
 
@@ -244,3 +254,27 @@ class SudokuBoardUI(Frame):
                 self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
         except:
             pass
+
+    
+    # Fución encargada de pintar el tiempo de partida en pantalla
+    def __timer(self):
+        
+        self.timer.set("{:02d}:{:02d}:{:02d}".format(self.hours, self.minutes, self.seconds))
+        self.labelTime.configure(text = self.timer.get())
+        
+        if (self.seconds <= 59):
+            #time.sleep(1)
+            self.seconds += 1
+
+            if (self.minutes <= 59 and self.seconds == 59 + 1):
+                self.minutes += 1
+
+                if (self.minutes == 60 and self.seconds == 59 + 1 ):
+                    self.hours += 1
+                    self.minutes = 0
+                    self.seconds = 0
+        else:
+            self.seconds = 0
+
+        # Se obtiene el id del proceso after, con este id se procede a cancelar el proceso after
+        self.afterId =  self.parent.after(1000, self.__timer)

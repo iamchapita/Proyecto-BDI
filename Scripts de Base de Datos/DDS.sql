@@ -1,6 +1,6 @@
 /*
     @author kenneth.cruz@unah.hn
-    @version 0.1.3
+    @version 0.1.4
     @date 2021/03/30
 */
 
@@ -34,6 +34,9 @@ CREATE TABLE Game(
     blo_file BLOB NOT NULL COMMENT "Archivo .sudoku que genera el programa cada vez que inicia un tablero",
     hor_time TIME NOT NULL COMMENT "hh:mm:ss Minutos transcurridos tras iniciar una partidar o tras continuar una partida pausada",
     tim_date TIMESTAMP DEFAULT NOW() NOT NULL COMMENT "último estado en el que es almacenado el tablero en la base de datos",
+    cod_nameState ENUM("nuevo", "pausado", "finalizado", "derrota") DEFAULT "nuevo" NOT NULL 
+    COMMENT "Estados del juego, el estado finalizado significa haber concluido el juego con éxito, derrota es haber abandonado la partida",
+
 
     FOREIGN KEY (id_user_fk) REFERENCES User(id)
 )COMMENT "Tablero del juego";
@@ -46,7 +49,7 @@ CREATE TABLE LogOff(
     FOREIGN KEY (id_user_fk) REFERENCES User(id)
 )COMMENT "Cierre de sesión por parte de un usuario";
 
-
+/*
 CREATE TABLE State(
     id SERIAL PRIMARY KEY,
     id_game_fk BIGINT UNSIGNED NOT NULL COMMENT "Referencia hacia la entidad Juego",
@@ -55,7 +58,7 @@ CREATE TABLE State(
 
     FOREIGN KEY (id_game_fk) REFERENCES Game(id)
 )COMMENT "Estados en los que puede estar el tablero de juego para un jugador";
-
+*/
 
 CREATE TABLE Action(
     id SERIAL PRIMARY KEY,
@@ -63,7 +66,7 @@ CREATE TABLE Action(
     sma_number SMALLINT UNSIGNED DEFAULT 0 NOT NULL COMMENT "Resultado ingresado por el usuario",
     sma_row SMALLINT UNSIGNED NOT NULL COMMENT "Coordenada en el eje x dentro del tablero",
     sma_column SMALLINT UNSIGNED NOT NULL COMMENT "Coordenada en el eje y dentro del tablero"
-)COMMENT "Resultado de cada casilla que rellena un juagdor";
+)COMMENT "Resultado de cada casilla que rellena un jugador";
 
 
 CREATE TABLE GameAction(

@@ -33,11 +33,11 @@ class SudokuBoardUI(Frame):
         self.parent.title("Sudoku")
         self.parent.resizable(FALSE, FALSE)
         self.parent.configure(background = "#171717")
-        self.parent.geometry("%dx%d" %(550, 750))
+        self.parent.geometry("%dx%d" %(550, 685))
         center = ScreenCenter()
-        center.center(self.parent, WIDTH, 750)
+        center.center(self.parent, WIDTH, 682)
         self.pack(fill=BOTH)
-        self.canvas = Canvas(self.parent, width=WIDTH, height= 610)
+        self.canvas = Canvas(self.parent, width=WIDTH, height= 540)
         self.canvas.configure(background = "#171717")
         self.canvas.pack(fill=BOTH, side=TOP)
 
@@ -51,7 +51,7 @@ class SudokuBoardUI(Frame):
         self.labelTime= Label(self.parent, text='00:00:00', font=("Lato",13))
         self.labelTime.configure(background = "#171717", fg="white")
         self.labelTime.pack()
-        self.labelTime.place(x=380,y=560)
+        self.labelTime.place(x=430,y=20)
 
         self.clearButton = Button(self.parent, text="Limpiar Tablero", bg="#6ea8d9", font=("Lato",15), command=self.__clearAnswers)
         self.clearButton.pack(fill=BOTH, side=BOTTOM)
@@ -59,8 +59,8 @@ class SudokuBoardUI(Frame):
         self.returnButton.pack(fill=BOTH, side=BOTTOM)
         self.pauseButton = Button(self.parent, text="Pausa", bg="#6ea8d9", font=("Lato",15), command=self.__pauseGame)
         self.pauseButton.pack(fill=BOTH, side=BOTTOM)
-        self.saveButton = Button(self.parent, text="Guardar partida", bg="#6ea8d9", font=("Lato",15))
-        self.saveButton.pack(fill=BOTH, side=BOTTOM)
+        self.finishButton = Button(self.parent, text="Finalizar partida", bg="#6ea8d9", font=("Lato",15), command=self.__endGame)
+        self.finishButton.pack(fill=BOTH, side=BOTTOM)
         
         self.__drawGrid()
         self.__drawPuzzle()
@@ -68,6 +68,13 @@ class SudokuBoardUI(Frame):
         self.canvas.bind("<Key>", self.__keyPressed)
         self.__timer()
     
+    def __endGame(self):
+        MsgBox = messagebox.askquestion ('Finalizar partida','¿Está seguro de finalizar la partida como derrota?',icon = 'warning')
+        if MsgBox == 'yes':
+            print("Regresar al menú principal")
+        else:
+            pass
+
     def __pauseGame(self):
         pass
         # Se cancela el evento after, El timer deja de funcionar

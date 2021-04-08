@@ -3,6 +3,8 @@ from tkinter import ttk
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
+from core.EngineSQL.MySQLEngine import *
+from core.EngineSQL.ConfigConnection import *
 
 """
 Frame que permite la visualización para editar un usuario.
@@ -16,18 +18,16 @@ class SudokuAdministratorEditUser(Frame):
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
-    def __init__(self, parent):
+    def __init__(self, parent, username):
         self.parent = parent
         self.child = Tk()
-        self.child.protocol("WM_DELETE_WINDOW", self.__onClosing)
+        #self.child.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.child)
-        img = PhotoImage(file="core/images/back.png", master=self.child)
-        btnBack= Button(self.child, image=img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
-        btnBack.pack()
-        btnBack.place(x=315, y=20)
+        self.config = ConfigConnection()
+        self.db = MySQLEngine(self.config.getConfig())
+        self.username = username
         self.pack()
         self.__initUI()
-        self.master.mainloop()
 
     """
     Creación de los widgets.
@@ -35,13 +35,18 @@ class SudokuAdministratorEditUser(Frame):
     @version 1.0
     """
     def __initUI(self):
+
+        self.img = PhotoImage(file="core/images/back.png", master=self.child)
+        self.buttonBack = Button(self.child, image=self.img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
+        self.buttonBack.pack()
+        self.buttonBack.place(x=315, y=20)
         self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.child)
         self.brand = PhotoImage(file="core/images/Brand.png", master=self.child)
         self.width = 400
         self.height = 600
         self.center = ScreenCenter()
         self.center.center(self.child, self.width, self.height)
-        self.child.title('Editar Usuarios')
+        self.child.title('Editar nombre de Usuario')
         self.child.iconphoto(True, self.icon)
         #Tamaño de la ventana
         self.child.geometry("%dx%d" %(self.width, self.height))
@@ -50,32 +55,23 @@ class SudokuAdministratorEditUser(Frame):
         self.child.resizable(False, False)
         
         # Muestra el titulo de la seccion
-        label1= Label(self.child, text='Editar usuario', font=("Lato",25))
+        label1= Label(self.child, text='Editar nombre de usuario', font=("Lato",25))
         label1.configure(background = "#171717", fg="white")
         label1.pack()
         label1.place(x=100,y=100)
-
-        label2= Label(self.child, text='Introduzca el nombre de usuario a editar:', font =("Lato",15))
-        label2.configure(background = "#171717", fg="#6ea8d9")
-        label2.pack()
-        label2.place(x=20,y=170)
-        
-        input_text1 = StringVar()
-        self.userText = ttk.Entry(self.child, textvariable = input_text1, font=("Lato",10),  justify=CENTER)
-        self.userText.pack()
-        self.userText.place(x=110,y=210, height = 30, width = 200)
-
+    
         label3= Label(self.child, text='Introduzca el nuevo nombre de usuario:', font =("Lato",15))
         label3.configure(background = "#171717", fg="#6ea8d9")
         label3.pack()
         label3.place(x=25,y=270)
         
-        input_text2 = StringVar()
-        self.userTextEdited = ttk.Entry(self.child, textvariable = input_text2, font=("Lato",10),  justify=CENTER)
-        self.userTextEdited.pack()
-        self.userTextEdited.place(x=110,y=310, height = 30, width = 200)
+        self.usernameEdited = ttk.Entry(self.child, font=("Lato",10),  justify=CENTER)
+        self.usernameEdited.pack()
+        self.usernameEdited.place(x=110,y=310, height = 30, width = 200)
         
-        Button(self.child, text = 'Editar', command= self.__save, bg="#6ea8d9", font=("Lato",15)).place(x=155, y=380, height = 50, width = 110)
+        self.editButton = Button(self.child, text='Editar', command=self.__save)
+        self.editButton.configure(bg="#6ea8d9", font=("Lato", 15))
+        self.editButton.place(x=155, y=380, height = 50, width = 110)
         
         labelBrand = Label(self.child, image=self.brand, borderwidth=0)
         labelBrand.pack()
@@ -87,8 +83,12 @@ class SudokuAdministratorEditUser(Frame):
     @version 1.0
     """
     def __save(self):
-        print(self.userText.get())
-        print(self.userTextEdited.get())
+        result = self.db.select("SELECT tex_nickname FROM User WHERE bit_rol = 0;")
+        for nickname in result:
+            if (self.usernameEdited.get() == self.username):
+                print("El usuario ya existe")
+                return
+        ## Falta implementar lógica para actualizar la BD
         self.userText.delete(0, "end")
         self.userTextEdited.delete(0, "end")
 

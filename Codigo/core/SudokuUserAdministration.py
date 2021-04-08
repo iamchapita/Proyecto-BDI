@@ -4,6 +4,7 @@ from core.ScreenCenter import ScreenCenter
 from core.SudokuAdministratorCreateUser import *
 from core.SudokuAdministratorDeleteUser import *
 from core.SudokuAdministratorEditUser import *
+from core.SudokuUserList import *
 from core.DialogClose import DialogClose
 
 """
@@ -55,8 +56,14 @@ class SudokuUserAdministration(Frame):
             self.child, text='Crear usuario',
             bg="#6ea8d9", font=("Lato", 17),
             command=self.__goCreateUser
-            ).grid(row=2,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=37)
+            ).grid(row=3, column=1, sticky="nsew", pady=5, padx=80, ipadx=37)
+            
         Button(
+            self.child, text='Lista de Usuarios',
+            bg="#6ea8d9", font=("Lato", 17),
+            command=self.__listUsers
+            ).grid(row=4,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=18)
+        """ Button(
             self.child, text='Editar usuario',
             bg="#6ea8d9", font=("Lato", 17),
             command=self.__goEditUser
@@ -66,6 +73,7 @@ class SudokuUserAdministration(Frame):
             bg="#6ea8d9", font=("Lato", 17),
             command=self.__goDeleteUser
             ).grid(row=4,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=11)
+        """
         Button(
             self.child, text='Atrás',
             image=self.img, bg="#171717",
@@ -73,7 +81,7 @@ class SudokuUserAdministration(Frame):
             command=self.__goBack
             ).grid(row=0,column=1,sticky = "nsew", pady=10)
         labelBrand = Label(self.child, image=self.brand, borderwidth=0)
-        labelBrand.grid(row=6,column=1, pady = 135)
+        labelBrand.grid(row=6, column=1, pady=135)
     
     """
     Función que permite abrir una ventana para crear un usuario y registrarlo
@@ -84,26 +92,6 @@ class SudokuUserAdministration(Frame):
     def __goCreateUser(self):
         self.child.withdraw()
         SudokuAdministratorCreateUser(parent=self.child)
-    
-    """
-    Función que permite abrir una ventana para eliminar un usuario y registrarlo
-    en la base de datos.
-    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
-    """
-    def __goDeleteUser(self):
-        self.child.withdraw()
-        SudokuAdministratorDeleteUser(parent=self.child)
-
-    """
-    Función que permite abrir una ventana para editar un usuario y registrarlo
-    en la base de datos.
-    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
-    """
-    def __goEditUser(self):
-        self.child.withdraw()
-        SudokuAdministratorEditUser(parent=self.child)
     """
     Función que permite regresar a la ventana anterior al presionar el botón.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
@@ -112,6 +100,10 @@ class SudokuUserAdministration(Frame):
     def __goBack(self):
         self.child.destroy()
         self.parent.deiconify()
+
+    def __listUsers(self):
+        self.child.withdraw()
+        SudokuUserList(self.parent)
 
     """
     Función que permite minimizar o salir del juego.

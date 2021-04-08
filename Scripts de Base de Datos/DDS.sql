@@ -79,6 +79,7 @@ CREATE TABLE GameAction(
 )COMMENT "Relación entre un tablero y los resultados ingresados por el usuario";
 
 
+-- REVISAR VISTA, DEVOLVIÓ ERROR PORQUE TENIA LA TABLA STATE (TABLA ELIMINADA)
 
 CREATE VIEW Binacle
     AS 
@@ -86,7 +87,6 @@ CREATE VIEW Binacle
         User.id AS "user",
         Login.id AS "login", -- Ingreso al sistema
         LogOff.id AS "logoff", -- Salida del sistema
-        State.id AS "State", -- Pausa, creación, inicio, ganó, perdió el usuario en el juego,
         Action.id AS "acciones" -- Cada vez que inserta un número al tablero
     FROM 
         User
@@ -96,8 +96,6 @@ CREATE VIEW Binacle
         LogOff ON User.id = LogOff.id_user_fk
     INNER JOIN  
         Game ON  User.id = Game.id_user_fk
-    INNER JOIN 
-        State ON Game.id = State.id_game_fk
     INNER JOIN 
         GameAction ON Game.id = GameAction.id_game_fk
     INNER JOIN 

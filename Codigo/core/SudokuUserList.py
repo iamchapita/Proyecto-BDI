@@ -8,8 +8,20 @@ from core.EngineSQL.ConfigConnection import *
 import os
 import re
 
+"""
+Frame que permite visualizar la lista de todos los usuarios registrados
+en el juego y en la BD.
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
+"""
 class SudokuUserList(Frame):
 
+    """
+    Constructor de la clase donde si incializan todos los componentes de
+    la ventana.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __init__(self, parent):
         self.parent = parent
         self.child = Tk()
@@ -21,6 +33,12 @@ class SudokuUserList(Frame):
         self.pack()
         self.__initUI()
 
+    """
+    Constructor de la clase donde si incializan todos los componentes de
+    la ventana.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
     def __initUI(self):
 
         self.width = 960
@@ -80,13 +98,6 @@ class SudokuUserList(Frame):
         self.__loadData()
         self.dataView.bind("<ButtonRelease-1>", self.__getSelectedItem)
         
-
-    """
-    Función que permite leer los mejores puntajes provenientes de una 
-    consulta de la base de datos e insertarlos en una tabla de tkinter.
-    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
-    """
     def __getSelectedItem(self, event):
         self.currentItem = self.dataView.focus()
         print(self.dataView.item(self.currentItem))
@@ -124,10 +135,14 @@ class SudokuUserList(Frame):
         self.parent.deiconify()
 
     """
-    Función que permite minimizar o salir del juego.
+    Función que pregunta al usuario si desea salir del juego.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
+    @version 2.0
     """
     def __onClosing(self):
-        self.dialogClose = DialogClose(self.parent)
-        self.parent.wait_window(self.dialogClose)
+        MsgBox = messagebox.askquestion ('Salir','Estas seguro de que te quieres salir?',icon = 'warning')
+        if MsgBox == 'yes':
+            self.child.destroy()
+            sys.exit()
+        else:
+            pass

@@ -1,3 +1,4 @@
+import os
 from tkinter import *
 from tkinter import ttk
 from core.ScreenCenter import ScreenCenter
@@ -16,7 +17,8 @@ en el juego así mismo como en la BD.
 class SudokuUserAdministration(Frame):
 
     """
-    Constructor de la clase.
+    Constructor de la clase donde si incializan todos los componentes de
+    la ventana.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
@@ -28,7 +30,7 @@ class SudokuUserAdministration(Frame):
         self.__initUI()
 
     """
-    Creación de los widgets.
+    Creación de los widgets que se veran en pantalla.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
@@ -106,19 +108,14 @@ class SudokuUserAdministration(Frame):
         SudokuUserList(self.parent)
 
     """
-    Función que permite minimizar o salir del juego.
+    Función que pregunta al usuario si desea salir del juego.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
+    @version 2.0
     """
     def __onClosing(self):
-        self.dialogClose = DialogClose(self.child)
-        #self.child.wait_window(self.dialogClose)
-        """ # Bloque try except para manejar la excepción devuelta si el self.parent fue destruido
-        try:
-            # Confirma si la instancia de dialogClose existe
-            if (self.dialogClose.winfo_exists() == False):
-                # Si no existe entonces establece de nuevo la función de apertura de dialogClose cuando
-                # se intenta cerrar la ventana
-                self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
-        except:
-            pass """
+        MsgBox = messagebox.askquestion ('Salir','Estas seguro de que te quieres salir?',icon = 'warning')
+        if MsgBox == 'yes':
+            self.child.destroy()
+            sys.exit()
+        else:
+            pass

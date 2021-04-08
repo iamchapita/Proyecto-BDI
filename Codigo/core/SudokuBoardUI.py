@@ -69,7 +69,6 @@ class SudokuBoardUI(Frame):
         self.canvas.bind("<Key>", self.__keyPressed)
         self.__timer()
     
-<<<<<<< HEAD
     def __endGame(self):
         MsgBox = messagebox.askquestion ('Finalizar partida','¿Está seguro de finalizar la partida como derrota?',icon = 'warning')
         if MsgBox == 'yes':
@@ -77,14 +76,12 @@ class SudokuBoardUI(Frame):
         else:
             pass
 
-=======
     """
         Mantiene la funcionalidad de 'Pausar partida' y 'Reanudar partda'
         Detiene la partida del puzzle, 
         conlleva a que el tiempo se detiene, 
         se guarda el estado del tablero en la base de datos la base de datos
     """
->>>>>>> 20628da9dbde194c78b83c33e14767c2395b2242
     def __pauseGame(self):
         
         #Se ha presionado 'pausa'

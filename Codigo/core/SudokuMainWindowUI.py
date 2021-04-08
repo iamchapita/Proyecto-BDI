@@ -5,6 +5,10 @@ from core.SudokuGame import SudokuGame
 from core.SudokuBoardUI import SudokuBoardUI
 from core.SudokuScoreboardUI import SudokuScoreboardUI
 from core.DialogClose import DialogClose
+from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLEngine import MySQLEngine
+from random import randint
+import os
 
 """
 Frame que muestra el Main Window y todos sus respectivos widgets de la aplicación
@@ -22,6 +26,9 @@ class SudokuMainWindowUI(Frame):
     def __init__(self):
         self.parent = Tk()
         self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
+        self.config = ConfigConnection() #Conexión al archivo de configuración        
+        self.db = MySQLEngine( self.config.getConfig() ) #Conexión a la base de datos
+        self.idBoard = None #Numero del board seleccionado
         super().__init__(self.parent)
         self.__initUI()
         self.master.mainloop()
@@ -64,13 +71,50 @@ class SudokuMainWindowUI(Frame):
     @version 1.0
     """
     def __newGame(self):
-        with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
+        
+        query = "SELECT id, tex_board FROM SudokuBoard"
+        sudokuBoard = self.db.select(query=query)
+
+        print( sudokuBoard )
+
+        filename = "n00b.sudoku"
+
+        self.__processFile(filename, sudokuBoard)
+        
+        #with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
+        with open('core/sudoku/{}'.format(filename), 'r') as boardFile:
             self.parent.destroy()
             game = SudokuGame(boardFile)
             game.start()
             root = Tk()
             SudokuBoardUI(root, game)
             root.mainloop()
+
+    
+    """
+        Se escribe un nuevo tablero dentro del archivo .sudoku
+        @data = [(id, tex_board)]
+    """
+    def __processFile(self, filename, data=[]): 
+        
+        boardFile = open('core/sudoku/{}'.format(filename), 'w')
+        #Borra la información contenida en el documento
+        boardFile.truncate()
+
+        if data:     
+            
+            index = randint(0, len(data)-1)
+
+            #Se selecciona un board al azar
+            board = data[index][1]
+
+            self.idBoard = data[index][0]
+
+            #Escribe el nuevo tablero en el documento .sudoku
+            boardFile.write( board )
+
+        boardFile.close()
+                
 
     """
     Función que permite continuar un juego pausado.

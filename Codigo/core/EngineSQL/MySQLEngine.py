@@ -38,8 +38,6 @@ class MySQLEngine:
 
         query = "INSERT INTO {} ({}) VALUES ({});".format( table, ", ".join(fields), self.prepareQuery(values) )
 
-        print( query )
-
         self.link.execute(query)
         self.mydb.commit()
 
@@ -79,7 +77,6 @@ class MySQLEngine:
         else:
             raise Exception("fields and values should has same len()")
         
-        print(query)   
         self.link.execute(query)
         self.mydb.commit()
 

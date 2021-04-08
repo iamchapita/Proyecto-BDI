@@ -71,7 +71,6 @@ class SudokuChangeUserPassword(Frame):
         error = ""
         #objeto para encriptar los datos de la contraseña
         data = EncryptDecryptSudokuFile(self.db)
-        print( data )
 
         if (len(password) > 0):
             
@@ -100,8 +99,7 @@ class SudokuChangeUserPassword(Frame):
                     values=( "'{}'".format( data.encrypt(password, self.username) ), ), # (data, password)
                     condition="tex_nickname = '{}'".format(self.username)
                 )
-            print(obj)
-            
+            self.db.closeConnection()
             self.parent.destroy()
             SudokuMainWindowUI()
     
@@ -111,9 +109,9 @@ class SudokuChangeUserPassword(Frame):
     @version 1.0
     """
     def __onClosing(self):
-       
+        
         #Cierra la conexión con la base de datos
-        self.db.closeConnection()
+        #self.db.closeConnection()
 
         self.dialogClose = DialogClose(self.parent)
         self.parent.wait_window(self.dialogClose)

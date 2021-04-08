@@ -147,6 +147,7 @@ class SudokuLoginPageUI(Frame):
                 )
                 
                 self.parent.destroy()
+                self.db.closeConnection()
                 SudokuChangeUserPassword(username, password)
 
             elif (usernameStatus == 1 and passwordStatus == 1):
@@ -167,11 +168,13 @@ class SudokuLoginPageUI(Frame):
     
                 if (rol == 1):
                     self.parent.destroy()
+                    self.db.closeConnection()
                     SudokuAdministratorUI()
 
                 if(rol == 0):
                     # Se destruye la ventana
                     self.parent.destroy()
+                    self.db.closeConnection()
                     # Se instancia una ventana nueva del tipo MainWindow
                     SudokuMainWindowUI()
 
@@ -191,6 +194,7 @@ class SudokuLoginPageUI(Frame):
         MsgBox = messagebox.askquestion ('Salir','Estas seguro de que te quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
             self.parent.destroy()
+            self.db.closeConnection()
         else:
             pass
 

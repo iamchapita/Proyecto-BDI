@@ -109,10 +109,10 @@ class SudokuAdministratorCreateUser(Frame):
                 self.userText.delete(0, "end") 
 
             else: 
-                print("El usuario existe en la base de datos, hacer algo aquí porfis uwu")
+                messagebox.showwarning(title="Usuario existente", message="El usuario existe en la base de datos.")
 
         else: 
-            print("El TEXT está vacío, hacer algo aquí porfis uwu")
+            messagebox.showerror(title="Campo vacio", message="Por favor ingrese algo valido.")
 
     """
     Función que permite regresar a la ventana anterior al presionar el botón.

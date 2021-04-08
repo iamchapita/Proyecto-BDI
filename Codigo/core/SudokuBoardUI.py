@@ -3,6 +3,7 @@ from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
+from datetime import time
 
 MARGIN = 70 # ! Se le sumaron 20 y se restaron 20 en los parámetros necesarios.
 SIDE = 50
@@ -18,11 +19,11 @@ class SudokuBoardUI(Frame):
         self.game = game
         self.row = -1
         self.col = -1
-        self.playState = 0 #1 simboliza que el usuario regresó una jugada atrás
+        self.timeNow = "" #Tiempo en pausa
         self.config = ConfigConnection() #Conexión al archivo de configuración
         self.db = MySQLEngine(self.config.getConfig()) #Conexión a la base de datos
         self.stack = [] #{row: , col: , val: , state: } Coordenadas del ingreso de los datos a la tabla
-        self.undoStack = []  #{row: , col: , val: , state: } Coordenadas de de las jugadas deshechas
+        self.undoStack = []  #{row: , col: , val: , state: } Coordenadas de las jugadas deshechas
         self.hours = 0
         self.minutes = 0
         self.seconds = 0
@@ -68,6 +69,7 @@ class SudokuBoardUI(Frame):
         self.canvas.bind("<Key>", self.__keyPressed)
         self.__timer()
     
+<<<<<<< HEAD
     def __endGame(self):
         MsgBox = messagebox.askquestion ('Finalizar partida','¿Está seguro de finalizar la partida como derrota?',icon = 'warning')
         if MsgBox == 'yes':
@@ -75,13 +77,64 @@ class SudokuBoardUI(Frame):
         else:
             pass
 
+=======
+    """
+        Mantiene la funcionalidad de 'Pausar partida' y 'Reanudar partda'
+        Detiene la partida del puzzle, 
+        conlleva a que el tiempo se detiene, 
+        se guarda el estado del tablero en la base de datos la base de datos
+    """
+>>>>>>> 20628da9dbde194c78b83c33e14767c2395b2242
     def __pauseGame(self):
-        pass
-        # Se cancela el evento after, El timer deja de funcionar
-        #self.parent.after_cancel(self.afterId)
         
+        #Se ha presionado 'pausa'
+        if self.pauseButton.cget('text') == "Pausa": 
+
+            dt = time(
+                        hour=self.hours, 
+                        minute=self.minutes, 
+                        second=self.seconds, 
+                        microsecond=0
+                    )
+
+            self.timeNow = dt.isoformat(timespec="auto")
+
+            print( self.timeNow )
+
+            # Se cancela el evento after, El timer deja de funcionar
+            self.parent.after_cancel(self.afterId)
+
+            #Cambia el nombre del text en el button
+            self.pauseButton.configure(text="Reanudar")
+
+        #Se ha presionado 'Reanudar'
+        else: 
+            
+            self.__updateTime()
+
+            # Se obtiene el id del proceso after, con este id se procede a cancelar el proceso after
+            self.afterId =  self.parent.after(1000, self.__timer)
+            
+            #Cambia el nombre del text en el button
+            self.pauseButton.configure(text="Pausa")
 
         #self.game.pause = True
+        
+
+    """
+        Actualiza el tiempo transcurrido de la partida 
+        mediante la transición 'pausa'-'reanudar'
+    """
+    def __updateTime(self): 
+        
+        #hh:mm:ss 00:04:16 -> [0, 4, 16] 
+        time = list(map(int, (self.timeNow).split( ":" ) ))
+        
+
+        self.hours = time[0]
+        self.minutes = time[1]
+        self.seconds = time[2]
+
 
     def __drawGrid(self):
 

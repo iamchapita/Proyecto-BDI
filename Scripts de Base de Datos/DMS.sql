@@ -8,9 +8,9 @@
 USE SudokuDB;
 
 SET FOREIGN_KEY_CHECKS = 0;
-/*TRUNCATE TABLE Login;*/
 TRUNCATE TABLE User;
 /*TRUNCATE TABLE Game;
+TRUNCATE TABLE Login;
 TRUNCATE TABLE LogOff;
 TRUNCATE TABLE State;
 TRUNCATE TABLE Action;
@@ -19,9 +19,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 
 INSERT INTO User(tex_nickname, tex_password, bit_rol) VALUES
-    ("admin", HEX(AES_ENCRYPT("admin", "admin")), 1), --  Administrador
-    ('iampaisa', HEX(AES_ENCRYPT('iampaisa', 'iampaisa')), 0) -- Usuario Alejandro
-;
+    ("admin", HEX(AES_ENCRYPT("admin", "admin")), 1) --  Administrador
 ;
 
 /* INSERT INTO User(tex_nickname, tex_password) VALUES

@@ -9,7 +9,6 @@ Crear un programa en Python3 que haga uso de Python/Tkinter y MariaDB/MySQL (en 
 - El juego actual debe ser modificado de acuerdo con los requerimientos del proyecto.
 - Este es el único código de Sudoku válido para el proyecto.
 
-
 ## Requerimientos del Proyecto
 
 - El propósito del proyecto es hacer uso del código fuente hecho en Tkinter de Python2 y adaptarlo a Python3 usando conceptos de Base de Datos, modificando el código fuente del juego, donde:

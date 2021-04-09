@@ -6,6 +6,7 @@
     @date: 2021/04/08
 """
 
+from datetime import time
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
@@ -56,7 +57,7 @@ class ToolConnection:
                 values=[
                             idUsername, 
                             idBoard, 
-                            self.encryptDecrypt.encrypt(binarydata=stack, password=username), 
+                            self.encryptDecrypt.encrypt(binarydata="{}".format(stack), password=username), 
                             time
                 ]
             )
@@ -78,13 +79,13 @@ class ToolConnection:
                             "tim_time"
                         ], 
                 values=[
-                            self.encryptDecrypt.encrypt(binarydata=stack, password=username), 
+                            self.encryptDecrypt.encrypt(binarydata="{}".format(stack), password=username), 
                             time
                 ],
                 condition="""
                             WHERE 
-                                id_sudokuboard_fk = {}
-                            """.format( idUsername )
+                                id_sudokuboard_fk = {} 
+                            """.format( idBoard )
                 )
                 
         self.updateState(idUsername=idUsername, state=state)
@@ -135,3 +136,37 @@ class ToolConnection:
                     )
         
         #self.db.closeConnection()
+
+
+    """
+        Obtiene el id del Board que está en juego
+    """
+    def getIdBoard(self, idUsername: str) -> int: 
+        
+        query = """
+                SELECT 
+                    id_sudokuboard_fk
+                FROM 
+                    Game 
+                WHERE 
+                    id_user_fk=%s
+                ORDER BY 
+                    tim_date DESC
+                LIMIT 1;
+                """
+        id = self.db.select(query=query, data=( idUsername, ))
+        return id[0][0]
+
+
+    """
+        Formato hh:mm:ss
+    """
+    def formatTime(self, hour: int, minute: int, second: int) -> str: 
+        dt = time(
+                        hour=hour, 
+                        minute=minute, 
+                        second=second, 
+                        microsecond=0
+                    )
+
+        return dt.isoformat(timespec="auto")

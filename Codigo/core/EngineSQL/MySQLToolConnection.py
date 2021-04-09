@@ -7,6 +7,7 @@
 """
 
 from datetime import time
+from random import randint
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
@@ -170,3 +171,36 @@ class ToolConnection:
                     )
 
         return dt.isoformat(timespec="auto")
+
+
+    """
+        Se escribe un nuevo tablero dentro del archivo .sudoku
+        @data = [(id, tex_board)]
+    """
+    def processFile(self, filename: str) -> int: 
+        
+        idBoard = 0
+        query = "SELECT id, tex_board FROM SudokuBoard"
+        
+        #Obtiene la información de todos los boards (tableros iniciales) cargados en la entidad SudokuBoard
+        sudokuBoard = self.db.select(query=query)
+
+        boardFile = open('core/sudoku/{}'.format(filename), 'w')
+        #Borra la información contenida en el documento
+        boardFile.truncate()
+
+        if sudokuBoard:     
+            
+            index = randint(0, len(sudokuBoard)-1)
+
+            #Se selecciona un board al azar
+            board = sudokuBoard[index][1]
+
+            idBoard = sudokuBoard[index][0]
+
+            #Escribe el nuevo tablero en el documento .sudoku
+            boardFile.write( board )
+
+        boardFile.close()
+
+        return idBoard

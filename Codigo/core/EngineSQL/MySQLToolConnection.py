@@ -2,7 +2,7 @@
 
 """
     @author: kenneth.cruz@unah.hn
-    @version: 0.1.0
+    @version: 0.1.3
     @date: 2021/04/08
 """
 
@@ -31,7 +31,7 @@ class ToolConnection:
 
         print(  "username: {}, id: {}".format(self.username, self.idUsername) )
 
-        self.db.closeConnection()
+        #self.db.closeConnection()
 
         #(id, name)
         return (transaction[0][0], transaction[0][1])
@@ -85,4 +85,19 @@ class ToolConnection:
                         ]
             )
         
-        self.db.closeConnection()
+        #self.db.closeConnection()
+
+
+    """
+        Se registra la salida de un usuario del sistema
+    """
+    def logout(self):
+        id, username = self.getLastLoginUser()
+
+        self.db.insert(
+                        table="LogOff", 
+                        fields=["id_user_fk"], 
+                        values=[id]
+                    )
+        
+        #self.db.closeConnection()

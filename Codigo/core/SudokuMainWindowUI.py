@@ -112,7 +112,7 @@ class SudokuMainWindowUI(Frame):
         Se escribe un nuevo tablero dentro del archivo .sudoku
         @data = [(id, tex_board)]
     """
-    def __processFile(self, filename, data=[]): 
+    def __processFile(self, filename: str, data=[]) -> None: 
         
         boardFile = open('core/sudoku/{}'.format(filename), 'w')
         #Borra la información contenida en el documento

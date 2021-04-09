@@ -2,25 +2,27 @@
 
 """
     @author: kenneth.cruz@unah.hn
-    @version: 0.1.3
+    @version: 0.1.4
     @date: 2021/04/08
 """
 
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
 
 class ToolConnection: 
 
     def __init__(self):
         self.config = ConfigConnection() #Conexión al archivo de configuración
         self.db = MySQLEngine(self.config.getConfig()) #Conexión a la base de datos
+        self.encryptDecrypt = EncryptDecryptSudokuFile( self.db ) #Encripta y desencripta los datos del tablero
 
 
     """ 
         Obtiene el nombre del usuario que inició sesión
     """
     #def getUsernameLogin(self): 
-    def getLastLoginUser(self): 
+    def getLastLoginUser(self)-> tuple: 
     
         query = "SELECT * FROM GetLastLoginUser;"
 
@@ -38,10 +40,10 @@ class ToolConnection:
 
 
     """
-        Creación de una partida dentro del Board
+        Crea una partida dentro del Board
         @param: idUsername, idBoard, cod_state, time, stack
     """
-    def insertGameBoard(self, idUsername, idBoard, state=1, time="00:00:00", stack=[]):
+    def insertGameBoard(self, username: str, idUsername: int, idBoard: int, state=1, time="00:00:00", stack=[]) -> None:
         
         self.db.insert(
                 table="Game", 
@@ -54,18 +56,52 @@ class ToolConnection:
                 values=[
                             idUsername, 
                             idBoard, 
-                            "{}".format( stack ), 
+                            self.encryptDecrypt.encrypt(binarydata=stack, password=username), 
                             time
                 ]
             )
-            
+        
+        self.updateState(idUsername=idUsername, state=state)
+        
+        #self.db.closeConnection()
+
+
+    """
+        Actualiza el estado y las jugadas de la partida que está jugando un usuario en el Board
+    """
+    def updateGameBoard(self, username: str, idUsername: int, idBoard: int, state: int, time: str, stack: list) -> None:
+        
+        self.db.update(
+                table="Game", 
+                fields=[
+                            "blo_file", 
+                            "tim_time"
+                        ], 
+                values=[
+                            self.encryptDecrypt.encrypt(binarydata=stack, password=username), 
+                            time
+                ],
+                condition="""
+                            WHERE 
+                                id_sudokuboard_fk = {}
+                            """.format( idUsername )
+                )
+                
+        self.updateState(idUsername=idUsername, state=state)
+
+    """
+        Actualiza el estado del tablero que se encuentra en juego
+    """
+    def updateState(self, idUsername: int, state: int) -> None:
+        
+        #Obtiene el id del último juego jugado (y almacenado) del usuario que inició sesión
         query = """
                     SELECT 
                         id
                     FROM 
                         Game 
                     WHERE 
-                        id_user_fk={} AND tim_time='00:00:00'
+                        id_user_fk={} 
                     ORDER BY 
                         tim_date DESC
                     LIMIT 1
@@ -85,13 +121,11 @@ class ToolConnection:
                         ]
             )
         
-        #self.db.closeConnection()
-
 
     """
-        Se registra la salida de un usuario del sistema
+        Registra la salida de un usuario del sistema
     """
-    def logout(self):
+    def logout(self) -> None:
         id, username = self.getLastLoginUser()
 
         self.db.insert(

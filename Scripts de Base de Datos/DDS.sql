@@ -107,3 +107,23 @@ CREATE VIEW Binacle
     INNER JOIN 
         Action ON Action.id = GameAction.id_action_fk
 ;
+
+
+CREATE VIEW GetLastLoginUser
+    AS 
+    SELECT 
+        login.id AS id,
+        User.tex_nickname AS name 
+    FROM 
+        User
+    INNER JOIN 
+        (
+            SELECT 
+                id_user_fk AS id
+            FROM 
+                Login 
+            ORDER BY 
+                tim_date DESC  
+            LIMIT 1
+        ) AS login ON User.id = login.id
+;

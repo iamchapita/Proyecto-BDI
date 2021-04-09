@@ -195,6 +195,12 @@ class SudokuUserList(Frame):
             self.usernameEdited.delete("0", "end")
             self.__clearDataView()
             self.__loadDataView()
+            MsgBox = messagebox.showinfo(title = 'Éxito', message = "EL nombre de usuario fue cambiado exitosamente.")
+            if MsgBox == 'ok':
+                self.currentItem = ""
+                self.__clearDataView()
+                self.__loadDataView()           
+                return
 
     def __editPassword(self):
         self.__clearDataView()

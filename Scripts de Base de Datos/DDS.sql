@@ -30,7 +30,7 @@ CREATE TABLE Login(
 
 CREATE TABLE SudokuBoard(
     id SERIAL PRIMARY KEY,
-    tex_board TEXT NOT NULL COMMENT "Contiene la información inicial de un tablero, para luego ser rellenado en el Board de la aplicación de escritorio"
+    tex_board TEXT NOT NULL UNIQUE COMMENT "Contiene la información inicial de un tablero, para luego ser rellenado en el Board de la aplicación de escritorio"
 ) COMMENT "Contiene la información de los tableros que pueden ser cargados en la aplicación";
 
 

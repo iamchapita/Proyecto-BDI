@@ -4,6 +4,8 @@ import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
 from core.SudokuByeUI import SudokuBye
+from core.EngineSQL.MySQLToolConnection import ToolConnection
+
 
 """
 Frame que permite visualizar todos los componentes de la bitacora.
@@ -86,6 +88,10 @@ class SudokuAdministratorBinnacle(Frame):
     def __onClosing(self):
         MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
+            
+            #Se ingresa a la base de datos la información del usuario que cierra sesión
+            (ToolConnection()).logout()
+            
             self.child.destroy()
             sys.exit()
             SudokuBye()

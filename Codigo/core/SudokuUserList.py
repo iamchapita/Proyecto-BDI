@@ -29,7 +29,7 @@ class SudokuUserList(Frame):
         self.config = ConfigConnection()
         self.db = MySQLEngine(self.config.getConfig())
         super().__init__(self.child)
-        self.currentItem = 0
+        self.currentItem = ""
         self.pack()
         self.__initUI()
 
@@ -118,9 +118,10 @@ class SudokuUserList(Frame):
     # Obtiene el elemento seleccionado del dataView (TreeView)
     def __getSelectedItem(self, event):
         self.currentItem = self.dataView.focus()
-        print(self.dataView.item(self.currentItem))
         self.currentItem = self.dataView.item(self.currentItem)
-        self.__loadComboboxData()
+        if(self.currentItem["values"]):
+            self.currentItem = self.currentItem["values"]
+            self.__loadComboboxData()
 
     # Obtiene los nombres de usuario y el estado de los mismos y los posiciona
     # en el dataView
@@ -138,10 +139,11 @@ class SudokuUserList(Frame):
 
     # Obtiene el estado del usuario seleccionado y lo establece como opción en el ComboBox
     def __loadComboboxData(self):
-        if(self.currentItem["values"][1] == "Habilitado"):
-            self.stateCombobox.current(1)
-        else:
-            self.stateCombobox.current(2)
+        
+            if(self.currentItem[1] == "Habilitado"):
+                self.stateCombobox.current(1)
+            else:
+                self.stateCombobox.current(2)
 
     # Elimina todas las opciones (usuarios) del dataView
     def __clearDataView(self):
@@ -154,7 +156,8 @@ class SudokuUserList(Frame):
         self.__clearDataView()
         self.__loadDataView()
         error = ""
-        if (self.currentItem):
+
+        if (len(self.currentItem) > 0):
 
             if (self.usernameEdited.get() != "Nombre de Usuario" and self.usernameEdited.get() != ""):
                 result = self.db.select("SELECT tex_nickname FROM User;")    
@@ -163,6 +166,9 @@ class SudokuUserList(Frame):
                     if (self.usernameEdited.get() == nickname[0]):
                         error += "El nombre de usuario introducido ya está en uso."
                 
+                if (re.search(r"[a-zA-Z0-9._-]{4,}", self.usernameEdited.get()) is None):
+                    error += "El nombre de usuario no es válido."
+
             else:
                 error += "Debe introducir un nombre de usuario."
         
@@ -178,11 +184,15 @@ class SudokuUserList(Frame):
             return
 
         else:
-            self.db.update("User", ("tex_nickname",), ("'{}'".format(self.usernameEdited.get()),), "tex_nickname = '{}'".format(self.currentItem["values"][0]))
+            self.db.update(
+                "User",
+                ["tex_nickname"],
+                ["'{}'".format(self.usernameEdited.get())],
+                "tex_nickname = '{}'".format(self.currentItem[0])
+                )
             self.usernameEdited.delete("0", "end")
             self.__clearDataView()
             self.__loadDataView()
-
 
     def __editPassword(self):
         pass

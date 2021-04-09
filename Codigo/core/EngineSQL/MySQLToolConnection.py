@@ -79,8 +79,8 @@ class ToolConnection:
                             "tim_time"
                         ], 
                 values=[
-                            self.encryptDecrypt.encrypt(binarydata="{}".format(stack), password=username), 
-                            time
+                            "'{}'".format( self.encryptDecrypt.encrypt(binarydata="{}".format(stack), password=username) ), 
+                            "'{}'".format( time )
                 ],
                 condition="""
                             WHERE 

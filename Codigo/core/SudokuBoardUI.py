@@ -6,7 +6,6 @@ from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
 from core.SudokuByeUI import SudokuBye
-from datetime import time
 
 MARGIN = 70 # ! Se le sumaron 20 y se restaron 20 en los parámetros necesarios.
 SIDE = 50
@@ -22,7 +21,7 @@ class SudokuBoardUI(Frame):
         self.game = game
         self.row = -1
         self.col = -1
-        self.timeNow = "" #Tiempo en pausa
+        self.timeNow = "00:00:00" #Tiempo en pausa
         self.config = ConfigConnection() #Conexión al archivo de configuración
         self.db = MySQLEngine(self.config.getConfig()) #Conexión a la base de datos
         self.stack = [] #{row: , col: , val: , state: } Coordenadas del ingreso de los datos a la tabla
@@ -33,6 +32,7 @@ class SudokuBoardUI(Frame):
         self.seconds = 0
         self.username = ""
         self.idUsername = None
+        self.idBoard = None #Numero del board seleccionado
         self.getUsernameLogin()
         self.__initUI()
 
@@ -79,6 +79,19 @@ class SudokuBoardUI(Frame):
     def __endGame(self):
         MsgBox = messagebox.askquestion ('Finalizar partida','¿Está seguro de finalizar la partida como derrota?',icon = 'warning')
         if MsgBox == 'yes':
+
+            self.pauseTime()
+            
+            #El juego termina y el estado del tablero cambia
+            (ToolConnection()).updateGameBoard(
+                            username=self.username,
+                            idUsername= self.idUsername, 
+                            idBoard= self.idBoard, #id del board que se está jugando
+                            state= 4, # derrota
+                            time= self.timeNow, 
+                            stack= self.stack
+                )
+
             print("Regresar al menú principal")
         else:
             pass
@@ -94,19 +107,7 @@ class SudokuBoardUI(Frame):
         #Se ha presionado 'pausa'
         if self.pauseButton.cget('text') == "Pausa": 
 
-            dt = time(
-                        hour=self.hours, 
-                        minute=self.minutes, 
-                        second=self.seconds, 
-                        microsecond=0
-                    )
-
-            self.timeNow = dt.isoformat(timespec="auto")
-
-            print( self.timeNow )
-
-            # Se cancela el evento after, El timer deja de funcionar
-            self.parent.after_cancel(self.afterId)
+            self.pauseTime()
 
             #Cambia el nombre del text en el button
             self.pauseButton.configure(text="Reanudar")
@@ -124,6 +125,22 @@ class SudokuBoardUI(Frame):
 
         #self.game.pause = True
 
+
+    """
+        Detiene el temporizador y actualiza el tiempo transcurrida en la partida
+    """
+    def pauseTime(self) -> None: 
+        
+        self.timeNow = (ToolConnection()).formatTime(
+                            hour=self.hours, 
+                            minute=self.minutes, 
+                            second=self.seconds
+                    )
+
+        print( self.timeNow )
+
+        # Se cancela el evento after, El timer deja de funcionar
+        self.parent.after_cancel(self.afterId)
 
     """
         Realiza la conexión y los procesos que implica
@@ -161,7 +178,17 @@ class SudokuBoardUI(Frame):
     """        
     def getUsernameLogin(self):
         
-        self.idUsername, self.username = (ToolConnection()).getLastLoginUser()
+        tool = ToolConnection()
+
+        self.idUsername, self.username = tool.getLastLoginUser()
+
+        self.idBoard = tool.getIdBoard(idUsername=self.idUsername)
+
+        print( "username:{}, id: {}, idBoard: {}".format(
+                self.username, 
+                self.idUsername, 
+                self.idBoard) 
+            )
 
 
     """

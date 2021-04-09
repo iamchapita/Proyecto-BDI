@@ -3,6 +3,7 @@ from tkinter import ttk
 from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
 from core.SudokuByeUI import SudokuBye
+from core.EngineSQL.MySQLToolConnection import ToolConnection
 import os
 import re
 
@@ -108,6 +109,10 @@ class SudokuScoreboardUI(Frame):
     def __onClosing(self):
         MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
+
+            #Se ingresa a la base de datos la información del usuario que cierra sesión
+            (ToolConnection()).logout()
+
             self.child.destroy()
             sys.exit()
             SudokuBye()

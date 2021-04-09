@@ -190,7 +190,7 @@ class SudokuUserList(Frame):
                 "User",
                 ["tex_nickname"],
                 ["'{}'".format(self.usernameEdited.get())],
-                "tex_nickname = '{}'".forat(self.currentItem[0])
+                "tex_nickname = '{}'".format(self.currentItem[0])
                 )
             self.usernameEdited.delete("0", "end")
             self.__clearDataView()

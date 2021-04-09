@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter.ttk import Treeview
-from core.SudokuAdministratorEditUser import *
 from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
 from core.EngineSQL.MySQLEngine import *

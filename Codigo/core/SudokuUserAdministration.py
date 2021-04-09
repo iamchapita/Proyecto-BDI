@@ -4,7 +4,6 @@ from tkinter import ttk
 from core.ScreenCenter import ScreenCenter
 from core.SudokuAdministratorCreateUser import *
 from core.SudokuAdministratorDeleteUser import *
-from core.SudokuAdministratorEditUser import *
 from core.SudokuUserList import *
 from core.DialogClose import DialogClose
 

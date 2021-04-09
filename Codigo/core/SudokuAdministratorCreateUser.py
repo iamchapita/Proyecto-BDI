@@ -8,6 +8,8 @@ from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
 from core.SudokuByeUI import SudokuBye
+from core.EngineSQL.MySQLToolConnection import ToolConnection
+
 
 """
 Frame que permite visualizar los elementos cuando un usuario se crea
@@ -143,6 +145,10 @@ class SudokuAdministratorCreateUser(Frame):
 
         MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
+            
+            #Se ingresa a la base de datos la información del usuario que cierra sesión
+            (ToolConnection()).logout()
+
             self.child.destroy()
             self.db.closeConnection() 
             sys.exit()

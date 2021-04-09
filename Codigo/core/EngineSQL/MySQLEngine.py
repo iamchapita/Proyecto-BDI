@@ -60,8 +60,8 @@ class MySQLEngine:
         self.link.execute(query)
         return self.link.fetchone()
 
-    def update(self, table, fields=(), values=(), condition = None):
-    
+    def update(self, table, fields, values, condition = None):
+        
         query = "UPDATE {} SET ".format(table)
 
         if (len(fields) == len(values)):
@@ -72,7 +72,7 @@ class MySQLEngine:
             condition = re.sub(r"(\s)*([Ww][Hh][Ee][Rr][Ee])+(\s)*", " ", condition)
             query += "WHERE {} ".format(condition)
             query = re.sub(r"(\s)*(;)?(\s)*$", "", query)
-            query += ";" 
+            query += ";"
 
         else:
             raise Exception("fields and values should has same len()")

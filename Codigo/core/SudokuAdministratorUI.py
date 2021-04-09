@@ -8,6 +8,8 @@ from core.SudokuGame import SudokuGame
 from core.SudokuBoardUI import SudokuBoardUI
 from core.DialogClose import DialogClose
 from core.SudokuByeUI import SudokuBye
+from core.EngineSQL.MySQLToolConnection import ToolConnection
+
 
 """
 Frame que permite visualizar las opciones de un usuario que tiene como
@@ -106,6 +108,10 @@ class SudokuAdministratorUI(Frame):
 
         MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
+            
+            #Se ingresa a la base de datos la información del usuario que cierra sesión
+            (ToolConnection()).logout()
+            
             self.parent.destroy()
             sys.exit()
             SudokuBye()

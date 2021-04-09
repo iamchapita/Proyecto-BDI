@@ -39,8 +39,8 @@ class SudokuAdministratorCreateUser(Frame):
     """
     def __initUI(self):
         self.img = PhotoImage(file="core/images/back.png", master=self.child)
-        self.btnBack= Button(self.child, image=self.img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
-        self.btnBack.grid(row=0,column=1,sticky = "nsew", pady=10)
+        self.backButton= Button(self.child, image=self.img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
+        self.backButton.grid(row=0,column=1,sticky = "nsew", pady=10)
         self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.child)
         self.brand = PhotoImage(file="core/images/Brand.png", master=self.child)
         self.child.iconphoto(True, self.icon)
@@ -89,15 +89,14 @@ class SudokuAdministratorCreateUser(Frame):
 
         #Sí el text no está vacío
         else:
-
+            
+            # Buscando si el nombre de usuario existe en la BD
+            userExist = self.db.select("SELECT tex_nickname FROM User WHERE tex_nickname = %s", (self.usernameEntry.get(),))
+            
             # Si el campo no cumple con la expresión regular
             if (re.search(r"[a-zA-Z0-9._-]{4,}", self.usernameEntry.get()) is None):
                 error += "El nombre de usuario no es válido."
-                return
 
-            # Buscando si el nombre de usuario existe en la BD
-            userExist = self.db.select("SELECT tex_nickname FROM User WHERE tex_nickname = %s", (self.usernameEntry.get(),))
-    
             # Si existe entonces error
             if(userExist):
                 error += "El nombre de usuario no está disponible."
@@ -130,6 +129,7 @@ class SudokuAdministratorCreateUser(Frame):
     @version 1.0
     """
     def __goBack(self):
+        self.db.closeConnection() 
         self.child.destroy()
         self.parent.deiconify()
 
@@ -141,9 +141,9 @@ class SudokuAdministratorCreateUser(Frame):
     """
     def __onClosing(self):
 
-        self.db.closeConnection() 
         MsgBox = messagebox.askquestion ('Salir','Estas seguro de que te quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
+            self.db.closeConnection() 
             self.child.destroy()
             sys.exit()
         else:

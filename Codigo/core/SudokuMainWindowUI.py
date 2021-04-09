@@ -33,12 +33,13 @@ class SudokuMainWindowUI(Frame):
         self.db = MySQLEngine( self.config.getConfig() ) #Conexión a la base de datos
         self.idBoard = None #Numero del board seleccionado
         super().__init__(self.parent)
-        self.__initUI()
-        self.master.mainloop()
 
         self.username = ""
         self.idUsername = None
-        self.getUsernameLogin()        
+        self.getUsernameLogin()   
+
+        self.__initUI()
+        self.master.mainloop()     
 
     """
     Creación de los widgets que se veran en pantalla.
@@ -189,5 +190,7 @@ class SudokuMainWindowUI(Frame):
         logeado (id, username)
     """        
     def getUsernameLogin(self):
-        
+
         self.idUsername, self.username = (ToolConnection()).getLastLoginUser()
+
+        print( "A VER id: {}, username: {}".format(self.idUsername, self.username) )

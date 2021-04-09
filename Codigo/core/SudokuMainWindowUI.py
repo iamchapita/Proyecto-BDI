@@ -93,7 +93,11 @@ class SudokuMainWindowUI(Frame):
 
         #Carga la información de tablero 'nuevo' a la base de datos
         #self.__createNewGame()
-        (ToolConnection()).insertGameBoard(idUsername=self.idUsername, idBoard=self.idBoard)
+        (ToolConnection()).insertGameBoard(
+                                    username=self.username, 
+                                    idUsername=self.idUsername, 
+                                    idBoard=self.idBoard
+                    )
         
         #with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
         with open('core/sudoku/{}'.format(filename), 'r') as boardFile:

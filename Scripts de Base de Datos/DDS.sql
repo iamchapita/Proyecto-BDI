@@ -1,6 +1,6 @@
 /*
     @author kenneth.cruz@unah.hn
-    @version 0.1.4
+    @version 0.1.7
     @date 2021/03/30
 */
 
@@ -33,6 +33,7 @@ CREATE TABLE SudokuBoard(
     tex_board TEXT NOT NULL COMMENT "Contiene la información inicial de un tablero, para luego ser rellenado en el Board de la aplicación de escritorio"
 ) COMMENT "Contiene la información de los tableros que pueden ser cargados en la aplicación";
 
+
 CREATE TABLE Game(
     id SERIAL PRIMARY KEY,
     id_user_fk BIGINT UNSIGNED NOT NULL COMMENT "Referencia",
@@ -40,9 +41,6 @@ CREATE TABLE Game(
     blo_file BLOB NOT NULL COMMENT "Archivo .sudoku que genera el programa cada vez que inicia un tablero",
     tim_time TIME NOT NULL COMMENT "hh:mm:ss Minutos transcurridos tras iniciar una partidar o tras continuar una partida pausada",
     tim_date TIMESTAMP DEFAULT NOW() NOT NULL COMMENT "último estado en el que es almacenado el tablero en la base de datos",
-    cod_nameState ENUM("nuevo", "pausado", "finalizado", "derrota") DEFAULT "nuevo" NOT NULL 
-    COMMENT "Estados del juego, el estado finalizado significa haber concluido el juego con éxito, derrota es haber abandonado la partida",
-
 
     FOREIGN KEY (id_user_fk) REFERENCES User(id),
     FOREIGN KEY (id_sudokuboard_fk) REFERENCES SudokuBoard(id)
@@ -56,16 +54,17 @@ CREATE TABLE LogOff(
     FOREIGN KEY (id_user_fk) REFERENCES User(id)
 )COMMENT "Cierre de sesión por parte de un usuario";
 
-/*
+
 CREATE TABLE State(
     id SERIAL PRIMARY KEY,
     id_game_fk BIGINT UNSIGNED NOT NULL COMMENT "Referencia hacia la entidad Juego",
-    cod_nameState ENUM("nuevo", "pausado", "finalizado", "derrota") DEFAULT "nuevo" NOT NULL 
+    cod_state ENUM("nuevo", "pausado", "finalizado", "derrota") DEFAULT "nuevo" NOT NULL 
     COMMENT "Estados del juego, el estado finalizado significa haber concluido el juego con éxito, derrota es haber abandonado la partida",
+    tim_date TIMESTAMP DEFAULT NOW() NOT NULL COMMENT "último estado en el que es almacenado el tablero en la base de datos",
 
     FOREIGN KEY (id_game_fk) REFERENCES Game(id)
 )COMMENT "Estados en los que puede estar el tablero de juego para un jugador";
-*/
+
 
 CREATE TABLE Action(
     id SERIAL PRIMARY KEY,

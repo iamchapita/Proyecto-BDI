@@ -1,6 +1,6 @@
 import os
+import re
 from tkinter import *
-from tkinter import ttk
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
@@ -28,13 +28,9 @@ class SudokuAdministratorCreateUser(Frame):
         self.child = Tk()
         self.child.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.child)
-        self.__initUI()
         self.config = ConfigConnection() 
         self.db = MySQLEngine(self.config.getConfig())
-        img = PhotoImage(file="core/images/back.png", master=self.child)
-        btnBack= Button(self.child, image=img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
-        btnBack.grid(row=0,column=1,sticky = "nsew", pady=10)
-        self.master.mainloop()
+        self.__initUI()
 
     """
     Creación de los widgets que se veran en pantalla.
@@ -42,6 +38,9 @@ class SudokuAdministratorCreateUser(Frame):
     @version 1.0
     """
     def __initUI(self):
+        self.img = PhotoImage(file="core/images/back.png", master=self.child)
+        self.btnBack= Button(self.child, image=self.img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
+        self.btnBack.grid(row=0,column=1,sticky = "nsew", pady=10)
         self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.child)
         self.brand = PhotoImage(file="core/images/Brand.png", master=self.child)
         self.child.iconphoto(True, self.icon)
@@ -64,9 +63,8 @@ class SudokuAdministratorCreateUser(Frame):
         label2.configure(background = "#171717", fg="#6ea8d9")
         label2.grid(row=2,column=1, pady = 20,padx=35)
 
-        input_text = StringVar()
-        self.userText = ttk.Entry(self.child, textvariable = input_text, font=("Lato",10),  justify=CENTER)
-        self.userText.grid(row=3,column=1, padx=35)
+        self.usernameEntry = Entry(self.child, font=("Lato",10),  justify=CENTER)
+        self.usernameEntry.grid(row=3,column=1, padx=35)
         
         Button(self.child, text = 'Crear', command= self.__save, bg="#6ea8d9", font=("Lato",15)).grid(row=4,column=1, pady = 15,padx=35,ipadx=40)
         
@@ -82,37 +80,49 @@ class SudokuAdministratorCreateUser(Frame):
     @date 2021/04/06
     """
     def __save(self):
-
-         # delete(self, table, tex_nickname): 
-        username = self.userText.get()
-        print(username)
         
+        error = ""
+
+        # Si el campo está vacío
+        if (len(self.usernameEntry.get()) == 0):
+            error += "El campo de usuario está vacío."
+
         #Sí el text no está vacío
-        if username: 
-            #Existencia del usuario en la base de datos | sin importar que este este de baja (bit_state=0)
-            userExist = self.db.select("SELECT tex_nickname FROM User WHERE tex_nickname = %s", (username, ))
+        else:
 
-            #El usuario no existe en la base de datos
-            if not userExist: 
+            # Si el campo no cumple con la expresión regular
+            if (re.search(r"[a-zA-Z0-9._-]{4,}", self.usernameEntry.get()) is None):
+                error += "El nombre de usuario no es válido."
+                return
 
-                encryptPassword = (EncryptDecryptSudokuFile(self.db)).encrypt(username, username)
+            # Buscando si el nombre de usuario existe en la BD
+            userExist = self.db.select("SELECT tex_nickname FROM User WHERE tex_nickname = %s", (self.usernameEntry.get(),))
+    
+            # Si existe entonces error
+            if(userExist):
+                error += "El nombre de usuario no está disponible."
+        
+        # Si la longitud de error es mayor que 0 entonces
+        if (len(error) > 0):
+            messagebox.showwarning(title="Error", message=error)
+            # Limpiando Entry
+            self.usernameEntry.delete(0, "end") 
+            return
+        
+        else:
+            encryptPassword = (EncryptDecryptSudokuFile(self.db)).encrypt(self.usernameEntry.get(), self.usernameEntry.get())
 
-                self.db.insert(
-                    table="User", 
-                    fields=["tex_nickname", "tex_password"], 
-                    values=[
-                        username, 
-                        encryptPassword
-                        ]
-                )
+            self.db.insert(
+                table="User", 
+                fields=["tex_nickname", "tex_password"], 
+                values=[
+                    self.usernameEntry.get(), 
+                    encryptPassword
+                    ]
+            )
 
-                self.userText.delete(0, "end") 
-
-            else: 
-                messagebox.showwarning(title="Usuario existente", message="El usuario existe en la base de datos.")
-
-        else: 
-            messagebox.showerror(title="Campo vacio", message="Por favor ingrese algo valido.")
+            self.usernameEntry.delete(0, "end")
+            messagebox.showinfo(title="Éxito", message="El usuario fue creado satisfactoriamente.")
 
     """
     Función que permite regresar a la ventana anterior al presionar el botón.
@@ -132,7 +142,6 @@ class SudokuAdministratorCreateUser(Frame):
     def __onClosing(self):
 
         self.db.closeConnection() 
-
         MsgBox = messagebox.askquestion ('Salir','Estas seguro de que te quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
             self.child.destroy()

@@ -4,7 +4,9 @@ from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.SudokuByeUI import SudokuBye
+
 
 """
 Frame que permite visualizar los elementos cuando se elimina un usuario
@@ -132,6 +134,10 @@ class SudokuAdministratorDeleteUser(Frame):
 
         MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
+            
+            #Se ingresa a la base de datos la información del usuario que cierra sesión
+            (ToolConnection()).logout()
+            
             self.child.destroy()
             self.db.closeConnection() 
             sys.exit()

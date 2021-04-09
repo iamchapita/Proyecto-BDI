@@ -5,6 +5,7 @@ from core.SudokuMainWindowUI import SudokuMainWindowUI
 from core.SudokuAdministratorUI import SudokuAdministratorUI
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
 from core.Tooltip import Tooltip
@@ -194,6 +195,10 @@ class SudokuLoginPageUI(Frame):
     def __onClosing(self):
         MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
+            
+            #Se ingresa a la base de datos la información del usuario que cierra sesión
+            (ToolConnection()).logout()
+            
             self.parent.destroy()
             SudokuBye()
             self.db.closeConnection()

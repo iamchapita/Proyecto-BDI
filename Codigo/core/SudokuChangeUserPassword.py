@@ -5,7 +5,9 @@ from core.DialogClose import DialogClose
 from core.Tooltip import Tooltip
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
+
 from core.SudokuByeUI import SudokuBye
 import re
 
@@ -112,6 +114,10 @@ class SudokuChangeUserPassword(Frame):
     def __onClosing(self):
         MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
+            
+            #Se ingresa a la base de datos la información del usuario que cierra sesión
+            (ToolConnection()).logout()
+            
             self.parent.destroy()
             self.db.closeConnection()
             SudokuBye()

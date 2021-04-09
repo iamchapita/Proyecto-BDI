@@ -7,6 +7,7 @@ from core.ScreenCenter import ScreenCenter
 from core.SudokuGame import SudokuGame
 from core.SudokuBoardUI import SudokuBoardUI
 from core.DialogClose import DialogClose
+from core.SudokuByeUI import SudokuBye
 
 """
 Frame que permite visualizar las opciones de un usuario que tiene como
@@ -99,13 +100,14 @@ class SudokuAdministratorUI(Frame):
     """
     Función que pregunta al usuario si desea salir del juego.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 2.0
+    @version 3.0
     """
     def __onClosing(self):
 
-        MsgBox = messagebox.askquestion ('Salir','Estas seguro de que te quieres salir?',icon = 'warning')
+        MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
             self.parent.destroy()
             sys.exit()
+            SudokuBye()
         else:
             pass

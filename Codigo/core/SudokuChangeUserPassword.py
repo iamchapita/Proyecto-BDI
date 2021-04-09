@@ -6,6 +6,7 @@ from core.Tooltip import Tooltip
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
+from core.SudokuByeUI import SudokuBye
 import re
 
 """
@@ -104,23 +105,15 @@ class SudokuChangeUserPassword(Frame):
             SudokuMainWindowUI()
     
     """
-    Función que permite minimizar o salir del juego.
+    Función que pregunta al usuario si desea salir del juego.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
+    @version 3.0
     """
     def __onClosing(self):
-        
-        #Cierra la conexión con la base de datos
-        #self.db.closeConnection()
-
-        self.dialogClose = DialogClose(self.parent)
-        self.parent.wait_window(self.dialogClose)
-        # Bloque try except para manejar la excepción devuelta si el self.parent fue destruido
-        try:
-            # Confirma si la instancia de dialogClose existe
-            if (self.dialogClose.winfo_exists() == False):
-                # Si no existe entonces establece de nuevo la función de apertura de dialogClose cuando
-                # se intenta cerrar la ventana
-                self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
-        except:
+        MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
+        if MsgBox == 'yes':
+            self.parent.destroy()
+            self.db.closeConnection()
+            SudokuBye()
+        else:
             pass

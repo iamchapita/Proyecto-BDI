@@ -383,6 +383,10 @@ class SudokuBoardUI(Frame):
     def __onClosing(self):
         MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
+            
+            #Se ingresa a la base de datos la información del usuario que cierra sesión
+            (ToolConnection()).logout()
+
             self.db.closeConnection() 
             self.parent.destroy()
             sys.exit()

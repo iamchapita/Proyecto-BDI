@@ -91,7 +91,8 @@ class SudokuMainWindowUI(Frame):
         self.__processFile(filename, sudokuBoard)
 
         #Carga la información de tablero 'nuevo' a la base de datos
-        self.__createNewGame()
+        #self.__createNewGame()
+        (ToolConnection()).insertGameBoard(idUsername=self.idUsername, idBoard=self.idBoard)
         
         #with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
         with open('core/sudoku/{}'.format(filename), 'r') as boardFile:
@@ -101,33 +102,6 @@ class SudokuMainWindowUI(Frame):
             root = Tk()
             SudokuBoardUI(root, game)
             root.mainloop()
-
-
-    """
-        Creación de un nuevo registro de Juego
-        dentro de la base de datos
-    """
-    def __createNewGame(self):
-        
-        self.db.insert(
-                table="Game", 
-                fields=[
-                            "id_user_fk",
-                            "id_sudokuboard_fk", 
-                            "blo_file", 
-                            "tim_time", 
-                            "cod_nameState"
-                        ], 
-                values=[
-                            self.idUsername, 
-                            self.idBoard, 
-                            "[]", 
-                            "00:00:00", 
-                            1
-                ]
-            )
-        
-        self.db.closeConnection()
 
     """
         Se escribe un nuevo tablero dentro del archivo .sudoku

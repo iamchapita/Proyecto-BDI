@@ -5,10 +5,13 @@ from core.SudokuGame import SudokuGame
 from core.SudokuBoardUI import SudokuBoardUI
 from core.SudokuScoreboardUI import SudokuScoreboardUI
 from core.DialogClose import DialogClose
-from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.EngineSQL.MySQLEngine import MySQLEngine
+from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLToolConnection import ToolConnection
+
 from random import randint
 import os
+
 
 """
 Frame que muestra el Main Window y todos sus respectivos widgets de la aplicación
@@ -32,6 +35,10 @@ class SudokuMainWindowUI(Frame):
         super().__init__(self.parent)
         self.__initUI()
         self.master.mainloop()
+
+        self.username = ""
+        self.idUsername = None
+        self.getUsernameLogin()        
 
     """
     Creación de los widgets que se veran en pantalla.
@@ -72,14 +79,18 @@ class SudokuMainWindowUI(Frame):
     """
     def __newGame(self):
         
-        query = "SELECT id, tex_board FROM SudokuBoard"
-        sudokuBoard = self.db.select(query=query)
-
-        print( sudokuBoard )
-
         filename = "n00b.sudoku"
 
+        query = "SELECT id, tex_board FROM SudokuBoard"
+        #Obtiene la información de todos los boards (tableros iniciales) cargados en la entidad SudokuBoard
+        sudokuBoard = self.db.select(query=query)
+
+
+        #Carga la información de sudokuBoard al archivo n00b.sudoku
         self.__processFile(filename, sudokuBoard)
+
+        #Carga la información de tablero 'nuevo' a la base de datos
+        self.__createNewGame()
         
         #with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
         with open('core/sudoku/{}'.format(filename), 'r') as boardFile:
@@ -90,7 +101,33 @@ class SudokuMainWindowUI(Frame):
             SudokuBoardUI(root, game)
             root.mainloop()
 
-    
+
+    """
+        Creación de un nuevo registro de Juego
+        dentro de la base de datos
+    """
+    def __createNewGame(self):
+        
+        self.db.insert(
+                table="Game", 
+                fields=[
+                            "id_user_fk",
+                            "id_sudokuboard_fk", 
+                            "blo_file", 
+                            "tim_time", 
+                            "cod_nameState"
+                        ], 
+                values=[
+                            self.idUsername, 
+                            self.idBoard, 
+                            "[]", 
+                            "00:00:00", 
+                            1
+                ]
+            )
+        
+        self.db.closeConnection()
+
     """
         Se escribe un nuevo tablero dentro del archivo .sudoku
         @data = [(id, tex_board)]
@@ -145,3 +182,12 @@ class SudokuMainWindowUI(Frame):
             sys.exit()
         else:
             pass
+
+    
+    """
+        Asigna los valores de inicio de sesión del usuario 
+        logeado (id, username)
+    """        
+    def getUsernameLogin(self):
+        
+        self.idUsername, self.username = (ToolConnection()).getLastLoginUser()

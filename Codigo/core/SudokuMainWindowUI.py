@@ -179,7 +179,7 @@ class SudokuMainWindowUI(Frame):
     def __onClosing(self):
         MsgBox = messagebox.askquestion ('Salir','Estas seguro de que te quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
-            self.child.destroy()
+            self.parent.destroy()
             sys.exit()
         else:
             pass

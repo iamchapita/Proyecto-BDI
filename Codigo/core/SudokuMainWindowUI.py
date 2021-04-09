@@ -10,7 +10,6 @@ from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.SudokuByeUI import SudokuBye
 
-from random import randint
 import os
 
 
@@ -81,19 +80,15 @@ class SudokuMainWindowUI(Frame):
     """
     def __newGame(self):
         
+        tool = ToolConnection()
         filename = "n00b.sudoku"
 
-        query = "SELECT id, tex_board FROM SudokuBoard"
-        #Obtiene la información de todos los boards (tableros iniciales) cargados en la entidad SudokuBoard
-        sudokuBoard = self.db.select(query=query)
-
-
         #Carga la información de sudokuBoard al archivo n00b.sudoku
-        self.__processFile(filename, sudokuBoard)
+        self.idBoard = tool.processFile(filename=filename)
 
         #Carga la información de tablero 'nuevo' a la base de datos
         #self.__createNewGame()
-        (ToolConnection()).insertGameBoard(
+        tool.insertGameBoard(
                                     username=self.username, 
                                     idUsername=self.idUsername, 
                                     idBoard=self.idBoard
@@ -107,31 +102,7 @@ class SudokuMainWindowUI(Frame):
             root = Tk()
             SudokuBoardUI(root, game)
             root.mainloop()
-
-    """
-        Se escribe un nuevo tablero dentro del archivo .sudoku
-        @data = [(id, tex_board)]
-    """
-    def __processFile(self, filename: str, data=[]) -> None: 
-        
-        boardFile = open('core/sudoku/{}'.format(filename), 'w')
-        #Borra la información contenida en el documento
-        boardFile.truncate()
-
-        if data:     
             
-            index = randint(0, len(data)-1)
-
-            #Se selecciona un board al azar
-            board = data[index][1]
-
-            self.idBoard = data[index][0]
-
-            #Escribe el nuevo tablero en el documento .sudoku
-            boardFile.write( board )
-
-        boardFile.close()
-                
 
     """
     Función que permite continuar un juego pausado.

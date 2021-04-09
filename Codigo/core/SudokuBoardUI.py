@@ -3,6 +3,7 @@ from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
 from datetime import time
 
@@ -150,37 +151,14 @@ class SudokuBoardUI(Frame):
     def __processPushResume(self):
         pass
     
-    """ 
-        Obtiene el nombre del usuario que inició sesión
     """
-    def getUsernameLogin(self): 
-    
-        query = """
-                SELECT 
-                    User.tex_nickname AS name, 
-                    login.id AS id
-                FROM 
-                    User
-                INNER JOIN 
-                    (
-                        SELECT 
-                            id_user_fk AS id
-                        FROM 
-                            Login 
-                        ORDER BY 
-                            tim_date DESC  
-                        LIMIT 1
-                    ) AS login ON User.id = login.id; 
-                """
+        Asigna los valores de inicio de sesión del usuario 
+        logeado (id, username)
+    """        
+    def getUsernameLogin(self):
+        
+        self.idUsername, self.username = (ToolConnection()).getLastLoginUser()
 
-        transaction = self.db.select(query=query)
-
-        self.username = transaction[0][0]
-        self.idUsername = transaction[0][1]
-
-        print(  "username: {}, id: {}".format(self.username, self.idUsername) )
-
-        self.db.closeConnection()
 
     """
         Última partida jugada

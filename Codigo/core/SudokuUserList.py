@@ -4,8 +4,9 @@ from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
 from core.EngineSQL.MySQLEngine import *
 from core.EngineSQL.ConfigConnection import *
-from core.EntryPlaceholder import *
 from core.EngineSQL.MySQLToolConnection import ToolConnection
+from core.FileManipulation.EncryptDecrypt import *
+from core.EntryPlaceholder import *
 import os
 import re
 
@@ -189,14 +190,54 @@ class SudokuUserList(Frame):
                 "User",
                 ["tex_nickname"],
                 ["'{}'".format(self.usernameEdited.get())],
-                "tex_nickname = '{}'".format(self.currentItem[0])
+                "tex_nickname = '{}'".forat(self.currentItem[0])
                 )
             self.usernameEdited.delete("0", "end")
             self.__clearDataView()
             self.__loadDataView()
 
     def __editPassword(self):
-        pass
+        self.__clearDataView()
+        self.__loadDataView()
+
+        error = ""
+
+        if (self.currentItem):
+
+            if (self.passwordEdited.get() == "Contraseña" or not self.passwordEdited.get()):
+                error += "El campo Contraseña está vacío."
+
+            else:
+                if (re.search(r"[a-zA-Z0-9._-]{4,}", self.passwordEdited.get()) is None):
+                    error += "Contraseña no válida."
+
+        else:
+            error += "Debe seleccionar un usuario."            
+        
+        if (error):
+            MsgBox = messagebox.showerror(title = 'Error', message = error)
+            if MsgBox == 'ok':
+                self.currentItem = ""
+                self.__clearDataView()
+                self.__loadDataView()           
+                return
+
+        else:
+            # Objeto para encriptar la contraseña
+            data = EncryptDecryptSudokuFile(self.db)
+            # Función que ejecuta la operación de UPDATE en la Base de Datos
+            self.db.update(
+                "User",
+                ["tex_password"],
+                ["'{}'".format(data.encrypt(self.passwordEdited.get(), self.currentItem[0]))],
+                "tex_nickname = '{}'".format(self.currentItem[0])
+                )
+            MsgBox = messagebox.showinfo(title = 'Operación Éxitosa', message = "Cambio de contraseña Éxitoso.")
+            if MsgBox == 'ok':
+                self.currentItem = ""
+                self.__clearDataView()
+                self.__loadDataView()           
+                return
 
     def __editState(self):
         pass
@@ -207,6 +248,7 @@ class SudokuUserList(Frame):
     @version 1.0
     """
     def __goBack(self):
+        self.db.closeConnection()
         self.child.destroy()
         self.parent.deiconify()
 

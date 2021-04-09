@@ -105,7 +105,7 @@ class SudokuUserAdministration(Frame):
 
     def __listUsers(self):
         self.child.withdraw()
-        SudokuUserList(self.parent)
+        SudokuUserList(self.child)
 
     """
     Función que pregunta al usuario si desea salir del juego.

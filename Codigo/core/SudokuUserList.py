@@ -212,12 +212,14 @@ class SudokuUserList(Frame):
     """
     Función que pregunta al usuario si desea salir del juego.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 2.0
+    @version 3.0
     """
     def __onClosing(self):
-        MsgBox = messagebox.askquestion ('Salir','Estas seguro de que te quieres salir?',icon = 'warning')
+        MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
+            self.db.closeConnection() 
             self.child.destroy()
             sys.exit()
+            SudokuBye()
         else:
             pass

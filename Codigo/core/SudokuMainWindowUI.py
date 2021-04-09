@@ -8,6 +8,7 @@ from core.DialogClose import DialogClose
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.EngineSQL.MySQLToolConnection import ToolConnection
+from core.SudokuByeUI import SudokuBye
 
 from random import randint
 import os
@@ -148,20 +149,22 @@ class SudokuMainWindowUI(Frame):
     """
     Función que pregunta al usuario si desea salir del juego.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 2.0
+    @version 3.0
     """
     def __onClosing(self):
-        MsgBox = messagebox.askquestion ('Salir','Estas seguro de que te quieres salir?',icon = 'warning')
+        MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
             self.parent.destroy()
-            sys.exit()
+            self.db.closeConnection()
+            SudokuBye()
         else:
             pass
 
-    
     """
-        Asigna los valores de inicio de sesión del usuario 
-        logeado (id, username)
+    Función que asigna los valores de inicio de sesión del usuario 
+    logeado (id, username)
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
     """        
     def getUsernameLogin(self):
 

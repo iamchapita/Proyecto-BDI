@@ -134,14 +134,17 @@ class SudokuBoardUI(Frame):
     """
     def __processPushPause(self): 
         
-        self.db.insert(
-                table="Game", 
-                fields=["id_user_fk", "blo_file", "hor_time"], 
-                values=[
+
+        self.db.update(
+            table="Game", 
+            fields=["id_user_fk", "blo_file", "hor_time"],
+            values=[
                         self.idUsername, 
                         self.encryptDecrypt.encrypt(self. self.stack, self.username),  
-                        self.timeNow]
-            )
+                        self.timeNow
+            ],
+            condition=""
+        )
 
 
     """

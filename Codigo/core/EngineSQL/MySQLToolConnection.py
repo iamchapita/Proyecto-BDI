@@ -6,8 +6,8 @@
     @date: 2021/04/08
 """
 
-from MySQLEngine import MySQLEngine
-from ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLEngine import MySQLEngine
+from core.EngineSQL.ConfigConnection import ConfigConnection
 
 class ToolConnection: 
 

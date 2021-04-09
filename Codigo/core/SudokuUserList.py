@@ -5,6 +5,7 @@ from core.DialogClose import DialogClose
 from core.EngineSQL.MySQLEngine import *
 from core.EngineSQL.ConfigConnection import *
 from core.EntryPlaceholder import *
+from core.EngineSQL.MySQLToolConnection import ToolConnection
 import os
 import re
 
@@ -217,6 +218,10 @@ class SudokuUserList(Frame):
     def __onClosing(self):
         MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
+            
+            #Se ingresa a la base de datos la información del usuario que cierra sesión
+            (ToolConnection()).logout()
+            
             self.db.closeConnection() 
             self.child.destroy()
             sys.exit()

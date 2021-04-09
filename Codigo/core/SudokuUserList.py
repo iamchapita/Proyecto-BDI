@@ -1,10 +1,10 @@
 from tkinter import *
 from tkinter.ttk import Treeview
-from core.SudokuAdministratorEditUser import *
 from core.ScreenCenter import ScreenCenter
 from core.DialogClose import DialogClose
 from core.EngineSQL.MySQLEngine import *
 from core.EngineSQL.ConfigConnection import *
+from core.EntryPlaceholder import *
 import os
 import re
 
@@ -42,7 +42,7 @@ class SudokuUserList(Frame):
     def __initUI(self):
 
         self.width = 960
-        self.height = 545
+        self.height = 600
         self.img = PhotoImage(file="core/images/back.png", master=self.child)
         self.backButton= Button(self.child, image=self.img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
         self.backButton.pack()
@@ -61,7 +61,7 @@ class SudokuUserList(Frame):
 
         self.dataView = Treeview(self.child, columns=("#1", "#2"))
         self.dataView.pack()
-        self.dataView.place(x=200, y=130)
+        self.dataView.place(x=200, y=120)
         
         self.dataView.column("#0", width=100, anchor=CENTER)
         self.dataView.column("#1", width=200, anchor=CENTER)
@@ -74,37 +74,59 @@ class SudokuUserList(Frame):
         self.userEditButton = Button(self.child, text='Editar usuario', command=self.__editUsername)
         self.userEditButton.configure(bg="#6ea8d9", font=("Lato", 17))
         self.userEditButton.pack()  #.grid(row=3, column=1, sticky="nsew", )
-        self.userEditButton.place(x=170, y=400)
+        self.userEditButton.place(x=170, y=470)
 
         self.stateEditButton = Button(self.child, text='Editar estado', command=self.__editState)
         self.stateEditButton.configure(bg="#6ea8d9", font=("Lato", 17))
         self.stateEditButton.pack()  #.grid(row=3, column=1, sticky="nsew", )
-        self.stateEditButton.place(x = 375, y = 400)
+        self.stateEditButton.place(x = 375, y = 470)
         
         self.passwordEditButton = Button(self.child, text='Editar contraseña', command=self.__editPassword)
         self.passwordEditButton.configure(bg="#6ea8d9", font=("Lato", 17))
         self.passwordEditButton.pack()  #.grid(row=3, column=1, sticky="nsew", )
-        self.passwordEditButton.place(x=575, y=400)
+        self.passwordEditButton.place(x=575, y=470)
+
+        self.usernameEdited = Entry(self.child, font=("Lato", 10), justify=CENTER)
+        EntryPlaceholder(self.usernameEdited, "Nombre de Usuario")
+        self.usernameEdited.pack()
+        self.usernameEdited.place(x=170, y=400, height=30, width=178)
+
+        self.stateCombobox = ttk.Combobox(self.child, state="readonly")
+        self.stateCombobox["values"] = ["--Seleccione--","Habilitado", "Deshabilitado"]
+        self.stateCombobox.configure(width = 19, height = 10, justify=CENTER)
+        self.stateCombobox.place(x=375, y=400)
+        self.stateCombobox.current(0)
+        
+        self.passwordEdited = Entry(self.child, font=("Lato", 10), justify=CENTER)
+        EntryPlaceholder(self.passwordEdited, "Contraseña")
+        self.passwordEdited.pack()
+        self.passwordEdited.place(x=575, y=400, height=30, width=217)
         
         # Muestra el titulo de la seccion
         label1= Label(self.child, text='Lista de Usuarios', font=("Lato",25))
         label1.configure(background = "#171717", fg="white")
         label1.pack()
-        label1.place(x=345,y=50)
+        label1.place(x=345,y=40)
 
         labelBrand = Label(self.child, image=self.brand, borderwidth=0)
         labelBrand.pack()
-        labelBrand.place(x=280,y=485)
-        self.__loadData()
+        labelBrand.place(x=280,y=550)
         self.dataView.bind("<ButtonRelease-1>", self.__getSelectedItem)
-        
+        self.__loadDataView()
+        #self.child.after()
+
+    # Obtiene el elemento seleccionado del dataView (TreeView)
     def __getSelectedItem(self, event):
         self.currentItem = self.dataView.focus()
         print(self.dataView.item(self.currentItem))
         self.currentItem = self.dataView.item(self.currentItem)
+        self.__loadComboboxData()
 
-    def __loadData(self):
+    # Obtiene los nombres de usuario y el estado de los mismos y los posiciona
+    # en el dataView
+    def __loadDataView(self):
 
+        #self.dataView.delete(*self.dataView.get_children())
         result = self.db.select("SELECT tex_nickname, bit_state FROM User WHERE bit_rol = 0;")
         count  = 1
         for nickname, state in result:
@@ -113,11 +135,54 @@ class SudokuUserList(Frame):
             else:
                 self.dataView.insert("", index=count, text=count, values=(nickname, "Deshabilitado"))
             count += 1
+
+    # Obtiene el estado del usuario seleccionado y lo establece como opción en el ComboBox
+    def __loadComboboxData(self):
+        if(self.currentItem["values"][1] == "Habilitado"):
+            self.stateCombobox.current(1)
+        else:
+            self.stateCombobox.current(2)
+
+    # Elimina todas las opciones (usuarios) del dataView
+    def __clearDataView(self):
+        for i in self.dataView.get_children():
+            self.dataView.delete(i)
         
+    # Función encargada de evaluar si se cumplen las condiciones para editar el *Nombre de Usuario* 
+    # del usuario seleccionado en el dataView
     def __editUsername(self):
+        self.__clearDataView()
+        self.__loadDataView()
+        error = ""
         if (self.currentItem):
-            self.db.closeConnection()
-            SudokuAdministratorEditUser(self.parent, (self.currentItem["values"][0]))
+
+            if (self.usernameEdited.get() != "Nombre de Usuario" and self.usernameEdited.get() != ""):
+                result = self.db.select("SELECT tex_nickname FROM User;")    
+            
+                for nickname in result:
+                    if (self.usernameEdited.get() == nickname[0]):
+                        error += "El nombre de usuario introducido ya está en uso."
+                
+            else:
+                error += "Debe introducir un nombre de usuario."
+        
+        else:
+            error += "Debe seleccionar un usuario."
+
+        if (len(error) > 0):
+            MsgBox = messagebox.showerror(title = 'Error', message = error)
+            if MsgBox == 'ok':
+                self.currentItem = ""
+                self.__clearDataView()
+                self.__loadDataView()           
+            return
+
+        else:
+            self.db.update("User", ("tex_nickname",), ("'{}'".format(self.usernameEdited.get()),), "tex_nickname = '{}'".format(self.currentItem["values"][0]))
+            self.usernameEdited.delete("0", "end")
+            self.__clearDataView()
+            self.__loadDataView()
+
 
     def __editPassword(self):
         pass

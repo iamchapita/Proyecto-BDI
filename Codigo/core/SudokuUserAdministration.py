@@ -4,7 +4,6 @@ from tkinter import ttk
 from core.ScreenCenter import ScreenCenter
 from core.SudokuAdministratorCreateUser import *
 from core.SudokuAdministratorDeleteUser import *
-from core.SudokuAdministratorEditUser import *
 from core.SudokuUserList import *
 from core.DialogClose import DialogClose
 
@@ -105,7 +104,7 @@ class SudokuUserAdministration(Frame):
 
     def __listUsers(self):
         self.child.withdraw()
-        SudokuUserList(self.parent)
+        SudokuUserList(self.child)
 
     """
     Función que pregunta al usuario si desea salir del juego.

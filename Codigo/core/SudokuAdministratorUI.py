@@ -29,6 +29,12 @@ class SudokuAdministratorUI(Frame):
         self.parent = Tk()
         self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.parent)
+        
+        self.idBoard = None #Numero del board seleccionado
+        self.username = ""
+        self.idUsername = None
+        self.getUsernameLogin()   
+        
         self.__initUI()
         self.master.mainloop()
 
@@ -92,7 +98,24 @@ class SudokuAdministratorUI(Frame):
     @version 1.0
     """
     def __goGame(self):
-        with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
+                
+        tool = ToolConnection()
+        filename = "n00b.sudoku"
+
+        #Carga la información de sudokuBoard al archivo n00b.sudoku
+        self.idBoard = tool.processFile(filename=filename)
+
+        #Carga la información de tablero 'nuevo' a la base de datos
+        #self.__createNewGame()
+        tool.insertGameBoard(
+                                    username=self.username, 
+                                    idUsername=self.idUsername, 
+                                    idBoard=self.idBoard
+                    )
+
+        #with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
+        with open('core/sudoku/{}'.format(filename), 'r') as boardFile:
+
             self.parent.destroy()
             root = Tk()
             game = SudokuGame(boardFile)
@@ -117,3 +140,12 @@ class SudokuAdministratorUI(Frame):
             SudokuBye()
         else:
             pass
+
+    
+    """
+        Función que asigna los valores de inicio de sesión del usuario 
+        logeado (id, username)
+    """
+    def getUsernameLogin(self) -> None:
+
+        self.idUsername, self.username = (ToolConnection()).getLastLoginUser()

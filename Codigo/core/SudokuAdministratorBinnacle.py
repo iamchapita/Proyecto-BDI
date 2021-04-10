@@ -69,6 +69,38 @@ class SudokuAdministratorBinnacle(Frame):
         labelBrand.pack()
         labelBrand.place(x=280,y=485)
 
+    
+    """
+        Obtiene los 5 últimos registros o actividades de cada uno 
+        de los usuarios
+    """
+    def loadBinacle(self) -> None: 
+        
+        #Las mejores 10 puntuaciones de todos los juegos jugados por un usuario (siendo estas 'finalizadas')
+        #Esta consulta se realiza de está forma debido a la naturaleza del data view
+        query = """
+                    SELECT 
+                        Result.time AS time,
+                        Result.date AS date
+                    FROM
+                    (
+                        
+                    ) Result
+                    ORDER BY 
+                        Result.time ASC;
+                """.format( self.idUsername )
+
+        transaction = self.db.select( query=query )
+
+        if transaction:
+            count = len(transaction)
+            for data in transaction:
+                self.dataView.insert("", 0, text="{}".format(count) , values=(self.username, data[0], data[1]))
+                count -=1
+        else: 
+            print("El jugador no tiene juegos finalizados")
+    
+    
     """
     Función que permite regresar a la ventana anterior al presionar el botón.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales

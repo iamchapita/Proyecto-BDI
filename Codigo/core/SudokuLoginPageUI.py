@@ -129,9 +129,15 @@ class SudokuLoginPageUI(Frame):
         # introducidos (username, password)
         else:
 
-            usernameStatus, passwordStatus, rol, setNewPassword = self.__extractData(username, password)    
-            
-            if (usernameStatus == 1 and passwordStatus == 1 and rol == 0 and setNewPassword == 1):
+            usernameStatus, passwordStatus, rol, setNewPassword, userState = self.__extractData(username, password)
+    
+            # Si el usuario:
+            # - Se encontró en la BD
+            # - Si la contraseña está correcta
+            # - Si el rol es de jugardor
+            # - Si se debe establecer una nueva contraseña
+            # - Si el usuario está habilitado
+            if (usernameStatus == 1 and passwordStatus == 1 and rol == 0 and setNewPassword == 1 and userState == 1):
                 
                 #Inserta cada usuario que ingresa al sistema
                 self.db.insert(
@@ -151,7 +157,11 @@ class SudokuLoginPageUI(Frame):
                 self.db.closeConnection()
                 SudokuChangeUserPassword(username, password)
 
-            elif (usernameStatus == 1 and passwordStatus == 1):
+            # Si el usuario:
+            # - Se encuentra en la Base de datos 
+            # - La contraseña es correcta
+            # - El usurio está habilitado
+            elif (usernameStatus == 1 and passwordStatus == 1 and userState == 1):
 
                 #Inserta cada usuario que ingresa al sistema
                 self.db.insert(
@@ -166,12 +176,14 @@ class SudokuLoginPageUI(Frame):
                                 )
                         ]
                 )
-    
+
+                # Si el usuario tiene rol de administrador
                 if (rol == 1):
                     self.parent.destroy()
                     self.db.closeConnection()
                     SudokuAdministratorUI()
 
+                # Si el usuario tiene rol de jugador
                 if(rol == 0):
                     # Se destruye la ventana
                     self.parent.destroy()
@@ -179,8 +191,20 @@ class SudokuLoginPageUI(Frame):
                     # Se instancia una ventana nueva del tipo MainWindow
                     SudokuMainWindowUI()
 
+            # Si no se encuentra el usuario o contraseña en la Base de Datos
             elif (usernameStatus == 0 or passwordStatus == 0):
                 self.errorMessage = messagebox.showerror(title="Error", message="Usuario o Contraseña no válido.")
+                self.usernameEntry.delete(0, "end")
+                self.passwordEntry.delete(0, "end")
+                self.usernameEntry.focus()
+                return
+            
+            # Si el estado del usuario es deshabilitado
+            elif (userState == 0):
+                self.errorMessage = messagebox.showinfo(
+                    title="Información",
+                    message="Su nombre de usuario ha sido deshabilitado.\nPongase en contacto con el administrador."
+                )
                 self.usernameEntry.delete(0, "end")
                 self.passwordEntry.delete(0, "end")
                 self.usernameEntry.focus()
@@ -215,5 +239,5 @@ class SudokuLoginPageUI(Frame):
         # Se obtiene  el resultado de la operación y se almacena en la variable result
         result = self.db.getUserStatus(username, password)[0]
         # Se separa cada elemento del texto mediante un espacio y se almacena en variables
-        usernameStatus, passwordStatus, rol, setNewPassword = result.split(" ")
-        return int(usernameStatus), int(passwordStatus), int(rol), int(setNewPassword)
+        usernameStatus, passwordStatus, rol, setNewPassword, userState = result.split(" ")
+        return int(usernameStatus), int(passwordStatus), int(rol), int(setNewPassword), int(userState)

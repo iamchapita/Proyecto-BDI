@@ -152,8 +152,9 @@ class SudokuUserList(Frame):
         for i in self.dataView.get_children():
             self.dataView.delete(i)
         
-    # Función encargada de evaluar si se cumplen las condiciones para editar el *Nombre de Usuario* 
-    # del usuario seleccionado en el dataView
+    # Función encargada de evaluar si se cumplen las condiciones con el *Nombre de Usuario* ingresado en el Entry
+    # y con el nombre del usuario seleccionado en el dataView para postetiormente realizar la actualización del campo
+    # tex_nickname en la tabla User de la Base de datos.
     def __editUsername(self):
         self.__clearDataView()
         self.__loadDataView()
@@ -207,6 +208,9 @@ class SudokuUserList(Frame):
                 self.__loadDataView()           
                 return
 
+    # Función encargada de validar el cambio de contraseña que el adminstrador desea hacer sobre el usuario
+    # seleccionado en el dataView, posteriormente si las validaciones son correctas, se procede a actualizar el campo
+    # tex_password en la tabla User de la Base de datos.
     def __editPassword(self):
         self.__clearDataView()
         self.__loadDataView()
@@ -250,6 +254,8 @@ class SudokuUserList(Frame):
                 self.__loadDataView()           
                 return
 
+    # Función que permite al administrador hacer el cambio de estado de un usuario.
+    # Los posibles estados(Habilitado, Deshabilitaoo) le permiten a un usuario hacer uso del juego.
     def __editState(self):
         pass
     

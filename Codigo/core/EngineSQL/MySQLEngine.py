@@ -52,11 +52,15 @@ class MySQLEngine:
         self.link.execute(query)
         return self.link.fetchall()
     
+    # Esta función será borrada y en su sular se usaŕa executeFunction
     def getUserStatus(self, username: str, password) -> list:
         query = "SELECT fn_compareData('{}', '{}');".format(username, password)
         self.link.execute(query)
         return self.link.fetchone()
 
+    # Ejecuta una función SQL.
+    # Recibe como parámetros el nombre de la función de SQL y un arreglo donde se 
+    # espera se introduzcan los parametros de dicha función
     def executeFunction(self, functionName, parameters):
 
         query = "SELECT {}".format(functionName)
@@ -76,6 +80,12 @@ class MySQLEngine:
         self.link.execute(query)
         return self.link.fetchone()
     
+    # Ejecuta una instrucción SQL de Actualización
+    # Recibe como parámetros:
+    # - El nombre de la tabla a actualizar
+    # - Los campos a actualizar
+    # - Los valores de los campos a actualizar
+    # - Una condición WHERE(SQL)
     def update(self, table, fields, values, condition = None):
         
         query = "UPDATE {} SET ".format(table)
@@ -97,10 +107,6 @@ class MySQLEngine:
 
         self.link.execute(query)
         self.mydb.commit()
-
-
-    def callProcedure(self, name, args):
-        self.link.execute("CALL {}('{}','{}')".format(name, args[0], args[1]))
 
 
     #Cierra la conexión establecida a la base de datos

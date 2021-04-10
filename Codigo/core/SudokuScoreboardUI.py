@@ -2,7 +2,10 @@ from tkinter import *
 from tkinter import ttk
 from core.ScreenCenter import ScreenCenter
 from core.SudokuByeUI import SudokuBye
+from core.EngineSQL.MySQLEngine import MySQLEngine
+from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.EngineSQL.MySQLToolConnection import ToolConnection
+from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
 import os
 import re
 
@@ -29,6 +32,12 @@ class SudokuScoreboardUI(Frame):
         btnBack= Button(self.child, image=img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
         btnBack.pack()
         btnBack.place(x=850, y=20)
+        self.config = ConfigConnection() #Conexión al archivo de configuración
+        self.db = MySQLEngine(self.config.getConfig()) #Conexión a la base de datos
+        self.username = ""
+        self.idUsername = None
+        self.idBoard = None #Numero del board seleccionado
+        self.getUsernameLogin()
         self.__initUI()
         self.master.mainloop()
 
@@ -75,21 +84,65 @@ class SudokuScoreboardUI(Frame):
         self.loadText()
 
     """
+        Asigna los valores de inicio de sesión del usuario 
+        logeado (id, username)
+    """        
+    def getUsernameLogin(self):
+        
+        tool = ToolConnection()
+
+        self.idUsername, self.username, self.rol = tool.getLastLoginUser()
+
+
+
+    """
     Función que permite leer los mejores puntajes provenientes de una 
     consulta de la base de datos e insertarlos en una tabla de tkinter.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
+    @version 1.1
     """
     def loadText(self):
-        os.chdir("../Scripts de Base de Datos")
-        with open("scoreboardTest.txt", "r") as file:
-            test = list(zip(*map(str.split, map(str.strip, file))))
-            for first in test[0]:
-                for second in test[1]:
-                    for third in test[2]:
-                        self.dataView.insert("", 0, text="N° ", values=(first,second,third))
-                        os.chdir("../Codigo")
-                        file.close()
+        #Las mejores 10 puntuaciones de todos los juegos jugados por un usuario (siendo estas 'finalizadas')
+        query = """
+                    SELECT 
+                        Result.time AS time,
+                        Result.date AS date
+                    FROM
+                    (
+                        SELECT 
+                            Game.tim_time AS time, 
+                            Game.tim_date AS date
+                        FROM 
+                            Game
+                        INNER JOIN 
+                        (
+                            SELECT 
+                                id_game_fk
+                            FROM 
+                                State
+                            WHERE 
+                                cod_state=4 -- DERROTAS, CAMBIAR ESTE ESTADO DESPUES
+                        ) BoardState ON Game.id = BoardState.id_game_fk
+                        WHERE 
+                            Game.id_user_fk={}
+                        ORDER BY 
+                            Game.tim_time DESC
+                        LIMIT 10
+                    ) Result
+                    ORDER BY 
+                        Result.time ASC;
+                """.format( self.idUsername )
+
+        transaction = self.db.select( query=query )
+
+        if transaction:
+            count = len(transaction)
+            for data in transaction:
+                self.dataView.insert("", 0, text="{}".format(count) , values=(self.username, data[0], data[1]))
+                count -=1
+        else: 
+            print("El jugador no tiene juegos finalizados")
+
    
     """
     Función que permite regresar a la ventana anterior al presionar el botón.
@@ -111,6 +164,8 @@ class SudokuScoreboardUI(Frame):
 
             #Se ingresa a la base de datos la información del usuario que cierra sesión
             (ToolConnection()).logout()
+            #Cierra la conexión a la base de datos
+            self.db.closeConnection()
 
             self.child.destroy()
             sys.exit()

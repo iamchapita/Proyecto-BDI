@@ -1,29 +1,31 @@
 USE SudokuDB;
 
-DROP PROCEDURE IF EXISTS sp_verifyLogin;
-/*
-DELIMITER $$
+DROP PROCEDURE IF EXISTS sp_updatePassword;
 
-CREATE PROCEDURE sp_verifyLogin (IN pyNickname TEXT, IN pyPassword TEXT, OUT result TEXT)
+/* INSERT INTO User(tex_nickname, tex_password, bit_state) VALUES 
+("iampaisa", HEX(AES_ENCRYPT("contra", "iampaisa")), 1);
+*/
+
+/* DELIMITER $$
+CREATE PROCEDURE sp_updatePassword(IN pyOldNickname TEXT, IN pyNewNickname TEXT)
 BEGIN
 
-    SET @nicknameResult = IF(pyNickname IN (SELECT tex_nickname FROM User), 1, 0);
-    SET @password = (
-        SELECT
-            tex_password
-        FROM
-            User
-        WHERE
-            tex_nickname = pyNickname
-    );
-    SET @passwordResult = IF(@password = HEX(AES_ENCRYPT(pyPassword, pyNickname)), 1, 0);
-    SET @rolResult = IF((SELECT bit_rol FROM User WHERE tex_nickname = pyNickname) = 1, 1, 0);
-    SET result = (SELECT CONCAT(" ", @nicknameResult, " ", @passwordResult, " " ,@rolResult));
-    
-END$$
+    SET @oldPassword = (
+        SELECT 
+            AES_DECRYPT(UNHEX(tex_password), pyOldNickname) 
+        FROM 
+            User 
+        WHERE 
+            tex_nickname = pyOldNickname
+        );
 
-DELIMITER ;
+    UPDATE 
+        User 
+    SET 
+        tex_password = HEX(AES_ENCRYPT(@oldPassword, pyNewNickname)) 
+    WHERE 
+        tex_nickname = pyOldNickname;
 
-SET @result = "";
-CALL sp_verifyLogin("admin", "admin", @result);
-SELECT @result AS Resultado; */
+END $$
+
+DELIMITER ; */

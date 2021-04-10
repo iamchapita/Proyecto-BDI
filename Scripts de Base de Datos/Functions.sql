@@ -2,8 +2,9 @@ USE SudokuDB;
 
 SET GLOBAL log_bin_trust_function_creators = 1;
 
+DROP FUNCTION IF EXISTS fn_compareData;
+DROP FUNCTION IF EXISTS fn_updatePassword;
 DELIMITER $$
-    DROP FUNCTION IF EXISTS fn_compareData;
     CREATE FUNCTION fn_compareData(pyNickname TEXT, pyPassword TEXT) RETURNS TEXT
     BEGIN
 
@@ -22,6 +23,30 @@ DELIMITER $$
     SET @newPasswordResult = IF((SELECT HEX(AES_ENCRYPT(pyNickname, pyNickname)) FROM User WHERE tex_nickname = pyNickname) = @password, 1, 0);
     SET @result = (SELECT CONCAT(@nicknameResult, " ", @passwordResult, " " ,@rolResult, " ", @newPasswordResult));
     RETURN @result;
+
+    END $$
+
+
+    CREATE FUNCTION fn_updatePassword(pyOldNickname TEXT, pyNewNickname TEXT) RETURNS TEXT
+    BEGIN
+    
+    SET @oldPassword = (
+            SELECT
+                AES_DECRYPT(UNHEX(tex_password), pyOldNickname)
+            FROM
+                User
+            WHERE
+                tex_nickname = pyOldNickname
+        );
+
+    UPDATE
+        User
+    SET
+        tex_password = HEX(AES_ENCRYPT(@oldPassword, pyNewNickname))
+    WHERE
+        tex_nickname = pyOldNickname;
+
+    RETURN "";
 
     END $$
 

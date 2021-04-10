@@ -2,7 +2,7 @@
 
 """
     @author: kenneth.cruz@unah.hn
-    @version: 0.1.4
+    @version: 0.1.6
     @date: 2021/04/08
 """
 
@@ -109,7 +109,7 @@ class ToolConnection:
                     ;
                 """.format( idUsername )
 
-        #Estado de la partida:  1 nuevo, 2 pausado, 3 finalizado, 4 derrota 
+        #Estado de la partida:  1 nuevo, 2 pausado, 3 finalizado, 4 derrota, 5 continuar
         self.db.insert(
                 table="State", 
                 fields=[
@@ -174,11 +174,10 @@ class ToolConnection:
 
     """
         Se escribe un nuevo tablero dentro del archivo .sudoku
-        @data = [(id, tex_board)]
+        @idBoard es una bandera que indica a la función sí se debe elegir un Board al azar
     """
-    def processFile(self, filename: str) -> int: 
+    def processFile(self, filename: str, idBoard=0) -> int: 
         
-        idBoard = 0
         query = "SELECT id, tex_board FROM SudokuBoard"
         
         #Obtiene la información de todos los boards (tableros iniciales) cargados en la entidad SudokuBoard
@@ -188,14 +187,24 @@ class ToolConnection:
         #Borra la información contenida en el documento
         boardFile.truncate()
 
+        board = None
+
         if sudokuBoard:     
             
-            index = randint(0, len(sudokuBoard)-1)
+            #tablero al azar
+            if not idBoard: 
+            
+                index = randint(0, len(sudokuBoard)-1)
 
-            #Se selecciona un board al azar
-            board = sudokuBoard[index][1]
+                #Se selecciona un board al azar
+                board = sudokuBoard[index][1]
 
-            idBoard = sudokuBoard[index][0]
+                idBoard = sudokuBoard[index][0]
+
+            else: 
+                #Se selecciona un board al azar
+                #Se debe mejorar este escript, dado que no es adecuado identificar el índice por medio del índice de un elemento que está en la bd
+                board = sudokuBoard[idBoard][1]
 
             #Escribe el nuevo tablero en el documento .sudoku
             boardFile.write( board )

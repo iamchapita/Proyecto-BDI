@@ -186,12 +186,17 @@ class SudokuUserList(Frame):
             return
 
         else:
+            
+            #result = self.db.select("CALL fn_updatePassword('{}','{}');".format(self.currentItem[0], self.usernameEdited.get()))
+            self.db.executeFunction("fn_updatePassword", [self.currentItem[0], self.usernameEdited.get()])
+
             self.db.update(
                 "User",
                 ["tex_nickname"],
                 ["'{}'".format(self.usernameEdited.get())],
                 "tex_nickname = '{}'".format(self.currentItem[0])
                 )
+
             self.usernameEdited.delete("0", "end")
             self.__clearDataView()
             self.__loadDataView()

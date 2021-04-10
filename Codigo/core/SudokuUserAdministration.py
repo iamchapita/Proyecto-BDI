@@ -51,38 +51,24 @@ class SudokuUserAdministration(Frame):
         self.child.resizable(False, False)
         self.center = ScreenCenter()
         self.center.center(self.child, self.width, self.height)
+        
         label1= Label(self.child, text='Administrar usuarios', font=("Lato",20))
         label1.configure(background = "#171717", fg="white")
         label1.grid(row=1,column=1,sticky = "nsew", pady = 80, padx=70)
 
-        Button(
-            self.child, text='Crear usuario',
-            bg="#6ea8d9", font=("Lato", 17),
-            command=self.__goCreateUser
-            ).grid(row=3, column=1, sticky="nsew", pady=5, padx=80, ipadx=37)
+        self.createUserButton = Button(self.child, text='Crear usuario', command=self.__goCreateUser)
+        self.createUserButton.configure(bg="#6ea8d9", font=("Lato", 17))
+        self.createUserButton.focus_set()
+        self.createUserButton.grid(row=3, column=1, sticky="nsew", pady=5, padx=80, ipadx=37)
             
-        Button(
-            self.child, text='Lista de Usuarios',
-            bg="#6ea8d9", font=("Lato", 17),
-            command=self.__listUsers
-            ).grid(row=4,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=18)
-        """ Button(
-            self.child, text='Editar usuario',
-            bg="#6ea8d9", font=("Lato", 17),
-            command=self.__goEditUser
-            ).grid(row=3,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=18)
-        Button(
-            self.child, text='Eliminar usuario',
-            bg="#6ea8d9", font=("Lato", 17),
-            command=self.__goDeleteUser
-            ).grid(row=4,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=11)
-        """
-        Button(
-            self.child, text='Atrás',
-            image=self.img, bg="#171717",
-            borderwidth=0, highlightthickness=0,
-            command=self.__goBack
-            ).grid(row=0,column=1,sticky = "nsew", pady=10)
+        self.listUsersButton = Button(self.child, text='Lista de Usuarios', command=self.__listUsers)
+        self.listUsersButton.configure(bg="#6ea8d9", font=("Lato", 17))
+        self.listUsersButton.grid(row=4,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=18)
+        
+        self.backButton = Button(self.child, text='Atrás', command=self.__goBack)
+        self.backButton.configure(image=self.img, bg="#171717", borderwidth=0, highlightthickness=0)
+        self.backButton.grid(row=0, column=1, sticky="nsew", pady=10)
+        
         labelBrand = Label(self.child, image=self.brand, borderwidth=0)
         labelBrand.grid(row=6, column=1, pady=135)
     

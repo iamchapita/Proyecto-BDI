@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import ttk
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
-from core.DialogClose import DialogClose
 from core.SudokuByeUI import SudokuBye
 from core.EngineSQL.MySQLToolConnection import ToolConnection
 

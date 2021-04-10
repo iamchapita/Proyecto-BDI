@@ -5,7 +5,6 @@ from core.ScreenCenter import ScreenCenter
 from core.SudokuAdministratorCreateUser import *
 from core.SudokuAdministratorDeleteUser import *
 from core.SudokuUserList import *
-from core.DialogClose import DialogClose
 from core.SudokuByeUI import SudokuBye
 from core.EngineSQL.MySQLToolConnection import ToolConnection
 

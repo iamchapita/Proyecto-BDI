@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter.ttk import Treeview
 from core.ScreenCenter import ScreenCenter
-from core.DialogClose import DialogClose
 from core.EngineSQL.MySQLEngine import *
 from core.EngineSQL.ConfigConnection import *
 from core.EngineSQL.MySQLToolConnection import ToolConnection

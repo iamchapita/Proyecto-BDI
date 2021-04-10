@@ -1,7 +1,6 @@
 from tkinter import *
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
-from core.DialogClose import DialogClose
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.EngineSQL.MySQLToolConnection import ToolConnection

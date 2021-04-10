@@ -6,7 +6,6 @@ from core.SudokuUserAdministration import *
 from core.ScreenCenter import ScreenCenter
 from core.SudokuGame import SudokuGame
 from core.SudokuBoardUI import SudokuBoardUI
-from core.DialogClose import DialogClose
 from core.SudokuByeUI import SudokuBye
 from core.EngineSQL.MySQLToolConnection import ToolConnection
 

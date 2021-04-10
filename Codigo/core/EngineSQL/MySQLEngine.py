@@ -55,11 +55,11 @@ class MySQLEngine:
         self.link.execute(query)
         return self.link.fetchall()
     
-    def getUserStatus(self, username, password):
+    def getUserStatus(self, username: str, password) -> list:
         query = "SELECT fn_compareData('{}', '{}');".format(username, password)
         self.link.execute(query)
         return self.link.fetchone()
-
+    
     def update(self, table, fields, values, condition = None):
         
         query = "UPDATE {} SET ".format(table)
@@ -77,6 +77,8 @@ class MySQLEngine:
         else:
             raise Exception("fields and values should has same len()")
         
+        print( "UPDATE: {}".format(query) )
+
         self.link.execute(query)
         self.mydb.commit()
 

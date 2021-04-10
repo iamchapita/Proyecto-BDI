@@ -202,9 +202,14 @@ class ToolConnection:
                 idBoard = sudokuBoard[index][0]
 
             else: 
-                #Se selecciona un board al azar
-                #Se debe mejorar este escript, dado que no es adecuado identificar el índice por medio del índice de un elemento que está en la bd
-                board = sudokuBoard[idBoard][1]
+                
+                #Obtiene el tablero guardado en la bd, para el juego que está en el estado 'pausa'
+                
+                for i in range( len(sudokuBoard) ): 
+
+                    if idBoard in sudokuBoard[i]:
+
+                        board = sudokuBoard[i][1]
 
             #Escribe el nuevo tablero en el documento .sudoku
             boardFile.write( board )

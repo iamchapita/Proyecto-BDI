@@ -37,6 +37,7 @@ class SudokuBoardUI(Frame):
         self.idUsername = None
         self.idBoard = None #Numero del board seleccionado
         self.getUsernameLogin()
+        #self.evaluateBoardStatus() #Evalua el estado del último tablero jugado
         self.__initUI()
 
     def __initUI(self):
@@ -215,21 +216,33 @@ class SudokuBoardUI(Frame):
         Última partida jugada
         Obtiene el estado de esa partida ('pausado', 'finalizado', 'derrota')
     """
-    def getLastGamePlayed(self): 
+    def getLastGamePlayed(self) -> list: 
         
         query = """
                 SELECT 
-                    id_user_fk AS id, 
-                    blo_file AS stack,
-                    tim_time AS time, 
-                    cod_nameState AS state
+                    Board.stack AS stack,
+                    Board.time AS time,
+                    State.cod_state AS state
                 FROM 
-                    Game 
-                WHERE 
-                    id_user_fk=%s
+                    State
+                INNER JOIN 
+                (
+                    SELECT 
+                        id,
+                        id_user_fk AS user, 
+                        blo_file AS stack,
+                        tim_time AS time
+                    FROM 
+                        Game 
+                    WHERE 
+                        id_user_fk=%s
+                    ORDER BY 
+                        id DESC
+                    LIMIT 1
+                ) AS Board ON State.id_game_fk = Board.id
                 ORDER BY 
-                    id DESC
-                LIMIT 1
+                    State.tim_date DESC
+                LIMIT 1;
                 """
         
         transaction = self.db.select(query=query, data=(self.idUsername, ))
@@ -352,6 +365,38 @@ class SudokuBoardUI(Frame):
         """
         
         self.__drawCursor()
+
+    
+    """
+        Evalua sí el estado del tablero es 'continuar'. 
+        De ser así carga las jugadas de la base de datos al tablero por medio de la pila (stack)
+
+        @transaction: [(stack, time, state)]
+    """
+    def evaluateBoardStatus(self) -> None:
+        
+        transaction = self.getLastGamePlayed()[0]
+
+        if transaction: 
+            
+            blo_file, self.timeNow, state = transaction
+
+            #Evalua sí el tablero cumple con la condición al haber presionado el botón 'Continuar juego' 
+            if state == 'continuar':
+                
+                self.stack = eval( self.encryptDecrypt.decrypt(encryptData=blo_file, password=self.username) )
+
+                for json in self.stack: 
+
+                    #Esta cosita pinta los numeritos en el puzzle
+                    self.game.puzzle[ json['row'] ][ json['col'] ] = json['val']
+            else: 
+
+                print("El estado de este tablero no cumple con la condición de estar en 'pausa'")
+        
+        else: 
+            print( "Este usuario no ha iniciado ningún tablero" )
+
     
     def __keyPressed(self, event):
         

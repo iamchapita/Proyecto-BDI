@@ -36,7 +36,7 @@ class SudokuBoardUI(Frame):
         self.idUsername = None
         self.idBoard = None #Numero del board seleccionado
         self.getUsernameLogin()
-        #self.evaluateBoardStatus() #Evalua el estado del último tablero jugado
+        self.evaluateBoardStatus() #Evalua el estado del último tablero jugado
         self.__initUI()
 
     def __initUI(self):
@@ -245,7 +245,6 @@ class SudokuBoardUI(Frame):
                 """
         
         transaction = self.db.select(query=query, data=(self.idUsername, ))
-        self.db.closeConnection()
 
         return transaction
 
@@ -379,6 +378,8 @@ class SudokuBoardUI(Frame):
         if transaction: 
             
             blo_file, self.timeNow, state = transaction
+
+            print( "Ultimo juego jugado: {}".format( transaction ) )
 
             #Evalua sí el tablero cumple con la condición al haber presionado el botón 'Continuar juego' 
             if state == 'continuar':

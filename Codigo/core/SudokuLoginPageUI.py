@@ -7,7 +7,6 @@ from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.ScreenCenter import ScreenCenter
-from core.DialogClose import DialogClose
 from core.Tooltip import Tooltip
 from core.SudokuByeUI import SudokuBye
 import re

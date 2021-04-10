@@ -1,7 +1,6 @@
 from tkinter import *
 from core.SudokuMainWindowUI import SudokuMainWindowUI
 from core.ScreenCenter import ScreenCenter
-from core.DialogClose import DialogClose
 from core.Tooltip import Tooltip
 from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.ConfigConnection import ConfigConnection

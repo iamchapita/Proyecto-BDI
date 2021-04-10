@@ -103,6 +103,7 @@ class SudokuScoreboardUI(Frame):
     """
     def loadText(self):
         #Las mejores 10 puntuaciones de todos los juegos jugados por un usuario (siendo estas 'finalizadas')
+        #Esta consulta se realiza de está forma debido a la naturaleza del data view
         query = """
                     SELECT 
                         Result.time AS time,

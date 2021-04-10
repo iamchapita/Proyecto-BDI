@@ -28,9 +28,6 @@ class MySQLEngine:
 
         except mysql.connector.Error as e:
             print("Problemas de conexón: {}".format(e))                
-        else:
-            self.mydb.close()
-
     
     #Realiza inserción  de datos en la base de datos; los pasando como parámetros el nombre de la base de datos
     # los campos en un arreglo al igual que los valores de la tupla 
@@ -59,6 +56,25 @@ class MySQLEngine:
         query = "SELECT fn_compareData('{}', '{}');".format(username, password)
         self.link.execute(query)
         return self.link.fetchone()
+
+    def executeFunction(self, functionName, parameters):
+
+        query = "SELECT {}".format(functionName)
+
+        if (parameters):
+            query += "("
+            for value in parameters:
+                query += "'{}', ".format(value)
+            
+            query = re.sub(r",\s$", ");", query)
+
+        else:
+            query += "();"
+
+        print(query)
+
+        self.link.execute(query)
+        return self.link.fetchone()
     
     def update(self, table, fields, values, condition = None):
         
@@ -82,12 +98,10 @@ class MySQLEngine:
         self.link.execute(query)
         self.mydb.commit()
 
-    def callproc(self, procedureName, args=()):
 
-        if (args):
-            self.link.callproc(procedureName, args)
-        else:
-            self.link.callproc(procedureName)
+    def callProcedure(self, name, args):
+        self.link.execute("CALL {}('{}','{}')".format(name, args[0], args[1]))
+
 
     #Cierra la conexión establecida a la base de datos
     def closeConnection(self):

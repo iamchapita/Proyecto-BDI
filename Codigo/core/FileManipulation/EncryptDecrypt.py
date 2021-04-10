@@ -19,20 +19,23 @@ class EncryptDecryptSudokuFile:
         self.engine = engine
 
     
-    def processQuery(self, aesOperation):
+    def processQuery(self, aesOperation: str) -> str:
         
         query = "SELECT {};".format( aesOperation )
         return query
 
     
-    def processSelect(self, result): 
+    def processSelect(self, result: list) -> str: 
         try:
             return result[0][0]
         except IndexError as e: 
             print("índice fuera de rango: {}".format(e))
 
-    
-    def encrypt(self, binarydata, password):
+    """
+        Procesa la función built-in de MySQL (AES_ENCRYPT), encriptando la información 
+        enviada vía el parámetro @binarydata
+    """    
+    def encrypt(self, binarydata: str, password: str) -> str:
         
         encrypt = "HEX(AES_ENCRYPT(%s, %s))"
         data = (binarydata, password, )
@@ -42,15 +45,15 @@ class EncryptDecryptSudokuFile:
         return self.processSelect(select)
         
         
-
-    def decrypt(self, encryptData, password):
+    """
+        Procesa la función built-in de MySQL (AES_DECRYPT), haciendo el proceso inverso a encriptar
+        dicha información enviada vía el parámetro @encrypData
+    """
+    def decrypt(self, encryptData: str, password: str) -> str:
         
         decrypt = "AES_DECRYPT(UNHEX(%s),%s)"
         data = (encryptData, password, )
         query = self.processQuery(decrypt)
-
-        print( "CONSULTA: {}".format(query) )
-
         select = self.engine.select( query, data )
-
+        
         return self.processSelect(select)

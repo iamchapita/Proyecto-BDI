@@ -80,6 +80,12 @@ class MySQLEngine:
         self.link.execute(query)
         self.mydb.commit()
 
+    def callproc(self, procedureName, args=()):
+
+        if (args):
+            self.link.callproc(procedureName, args)
+        else:
+            self.link.callproc(procedureName)
 
     #Cierra la conexión establecida a la base de datos
     def closeConnection(self):

@@ -152,6 +152,8 @@ class SudokuMainWindowUI(Frame):
                 """.format( self.idUsername )
 
         transaction = self.db.select(query=query)[0]
+
+        print( "Continuar juego: {}".format( transaction ) )
         
         if transaction: 
             state, self.idBoard = transaction

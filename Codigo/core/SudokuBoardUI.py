@@ -14,7 +14,9 @@ HEIGHT = MARGIN * 2 + SIDE * 9 +120# !Se le sumaron 120 para ampliar de forma ve
 
 class SudokuBoardUI(Frame):
     
-    def __init__(self, parent, game):
+    def __init__(self, parent, game, mainAdmin, mainUser):
+        self.mainAdmin = mainAdmin
+        self.mainUser = mainUser
         self.parent = parent
         self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.parent)
@@ -31,6 +33,7 @@ class SudokuBoardUI(Frame):
         self.minutes = 0
         self.seconds = 0
         self.username = ""
+        self.rol = ""
         self.idUsername = None
         self.idBoard = None #Numero del board seleccionado
         self.getUsernameLogin()
@@ -79,9 +82,18 @@ class SudokuBoardUI(Frame):
     def __endGame(self):
         MsgBox = messagebox.askquestion ('Finalizar partida','¿Está seguro de finalizar la partida como derrota?',icon = 'warning')
         if MsgBox == 'yes':
-
+            
             self.pauseTime()
             
+            if(self.rol==1):
+                print("Regresar al menú principal de admin")
+                self.parent.destroy()
+                self.mainAdmin.deiconify()
+            if(self.rol==0):
+                print("Regresar al menú principal de user")
+                self.parent.destroy()
+                self.mainUser.deiconify()
+
             #El juego termina y el estado del tablero cambia
             (ToolConnection()).updateGameBoard(
                             username=self.username,
@@ -91,8 +103,7 @@ class SudokuBoardUI(Frame):
                             time= self.timeNow, 
                             stack= self.stack
                 )
-
-            print("Regresar al menú principal")
+            
         else:
             pass
 
@@ -180,14 +191,15 @@ class SudokuBoardUI(Frame):
         
         tool = ToolConnection()
 
-        self.idUsername, self.username = tool.getLastLoginUser()
+        self.idUsername, self.username, self.rol = tool.getLastLoginUser()
 
         self.idBoard = tool.getIdBoard(idUsername=self.idUsername)
 
-        print( "username:{}, id: {}, idBoard: {}".format(
+        print( "username:{}, id: {}, idBoard: {}, Rol:{}".format(
                 self.username, 
                 self.idUsername, 
-                self.idBoard) 
+                self.idBoard,
+                self.rol) 
             )
 
 

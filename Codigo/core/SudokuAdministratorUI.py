@@ -71,7 +71,7 @@ class SudokuAdministratorUI(Frame):
         Button(self.parent, text = 'Salir', bg="#6ea8d9", font=ButtonStyles, command= self.__onClosing).grid(row=5,column=1,sticky = "nsew", pady = 5, padx=40)
         
         label2 = Label(self.parent, image=self.brand, borderwidth=0)
-        label2.grid(row=6,column=1,pady = 135)
+        label2.grid(row=6,column=1,pady = 155)
 
     """
     Función que abre una nueva ventada en donde se pueden administrar los
@@ -116,11 +116,11 @@ class SudokuAdministratorUI(Frame):
         #with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
         with open('core/sudoku/{}'.format(filename), 'r') as boardFile:
 
-            self.parent.destroy()
+            self.parent.withdraw()
             root = Tk()
             game = SudokuGame(boardFile)
             game.start()
-            SudokuBoardUI(root, game)
+            SudokuBoardUI(root, game, self.parent, "")
 
     """
     Función que pregunta al usuario si desea salir del juego.
@@ -148,4 +148,4 @@ class SudokuAdministratorUI(Frame):
     """
     def getUsernameLogin(self) -> None:
 
-        self.idUsername, self.username = (ToolConnection()).getLastLoginUser()
+        self.idUsername, self.username, self.rol = (ToolConnection()).getLastLoginUser()

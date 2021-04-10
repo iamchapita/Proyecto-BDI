@@ -59,19 +59,19 @@ class SudokuAdministratorCreateUser(Frame):
 
         label1= Label(self.child, text='Crear un nuevo usuario', font=("Lato",20))
         label1.configure(background = "#171717", fg="white")
-        label1.grid(row=1,column=1,sticky = "nsew", pady = 80,padx=35)
+        label1.grid(row=1,column=1,sticky = "nsew", pady = 50,padx=35)
 
         label2= Label(self.child, text='Introduzca el nombre de usuario:', font =("Lato",15))
         label2.configure(background = "#171717", fg="#6ea8d9")
         label2.grid(row=2,column=1, pady = 20,padx=35)
 
-        self.usernameEntry = Entry(self.child, font=("Lato",10),  justify=CENTER)
-        self.usernameEntry.grid(row=3,column=1, padx=35)
+        self.usernameEntry = Entry(self.child, font=("Lato",13),  justify=CENTER)
+        self.usernameEntry.grid(row=3,column=1, padx=35, ipady=6, ipadx=15)
         
         Button(self.child, text = 'Crear', command= self.__save, bg="#6ea8d9", font=("Lato",15)).grid(row=4,column=1, pady = 15,padx=35,ipadx=40)
         
         labelBrand = Label(self.child, image=self.brand, borderwidth=0)
-        labelBrand.grid(row=6,column=1, pady = 125)
+        labelBrand.grid(row=6,column=1, pady = 155)
 
     """
     Esta función verifica la existencia de un usuario en la base de datos, sí este usaurio no existe, lo crea, 

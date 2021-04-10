@@ -96,11 +96,11 @@ class SudokuMainWindowUI(Frame):
         
         #with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
         with open('core/sudoku/{}'.format(filename), 'r') as boardFile:
-            self.parent.destroy()
+            self.parent.withdraw()
             game = SudokuGame(boardFile)
             game.start()
             root = Tk()
-            SudokuBoardUI(root, game)
+            SudokuBoardUI(root, game, "", self.parent)
             root.mainloop()
             
 
@@ -148,6 +148,6 @@ class SudokuMainWindowUI(Frame):
     """        
     def getUsernameLogin(self):
 
-        self.idUsername, self.username = (ToolConnection()).getLastLoginUser()
+        self.idUsername, self.username, self.rol = (ToolConnection()).getLastLoginUser()
 
         print( "A VER id: {}, username: {}".format(self.idUsername, self.username) )

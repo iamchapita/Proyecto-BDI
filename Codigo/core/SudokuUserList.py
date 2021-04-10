@@ -159,7 +159,7 @@ class SudokuUserList(Frame):
         self.__loadDataView()
         error = ""
 
-        if (len(self.currentItem) > 0):
+        if (self.currentItem):
 
             if (self.usernameEdited.get() != "Nombre de Usuario" and self.usernameEdited.get() != ""):
                 result = self.db.select("SELECT tex_nickname FROM User;")    
@@ -256,7 +256,48 @@ class SudokuUserList(Frame):
     # Función que permite al administrador hacer el cambio de estado de un usuario.
     # Los posibles estados(Habilitado, Deshabilitaoo) le permiten a un usuario hacer uso del juego.
     def __editState(self):
-        pass
+        
+        #C Comprueba si hay un usuario seleccionado en el dataView
+        if (self.currentItem):
+            
+            # Se comprueba si el usuario ya cuenta con el estado que está precargado en el Combobox
+            if (self.currentItem[1] == self.stateCombobox.get()):
+                MsgBox = messagebox.showinfo(
+                    title='Información',
+                    message="El usuario seleccionado ya está {}.".format(self.stateCombobox.get())
+                )
+                if MsgBox == 'ok':
+                    self.currentItem = ""
+                    self.__clearDataView()
+                    self.__loadDataView()           
+                    return
+            else:
+
+                if (self.stateCombobox.get() == "Habilitado"):
+                    self.db.update("User", ["bit_state"], [1], "tex_nickname = '{}'".format(self.currentItem[0]))
+                
+                else:
+                    self.db.update("User", ["bit_state"], [0], "tex_nickname = '{}'".format(self.currentItem[0]))
+
+                MsgBox = messagebox.showinfo(
+                    title='Éxito',
+                    message="Actualización de estado completada."
+                )
+                if MsgBox == 'ok':
+                    self.currentItem = ""
+                    self.__clearDataView()
+                    self.__loadDataView()           
+                    return
+        else:
+            MsgBox = messagebox.showerror(
+                    title='Error',
+                    message="Debe seleccionar un usuario."
+                )
+            if MsgBox == 'ok':
+                self.currentItem = ""
+                self.__clearDataView()
+                self.__loadDataView()           
+                return
     
     """
     Función que permite regresar a la ventana anterior al presionar el botón.

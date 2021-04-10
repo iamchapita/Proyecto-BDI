@@ -150,10 +150,10 @@ class SudokuMainWindowUI(Frame):
                 LIMIT 1
                 """.format( self.idUsername )
 
-        transaction = self.db.select(query=query)[0]
+        #Nueva conexión a la bd
+        newConnection = MySQLEngine(self.config.getConfig())
+        transaction = newConnection.select(query=query)[0]
 
-        print( "Continuar juego: {}".format( transaction ) )
-        
         if transaction: 
             state, self.idBoard = transaction
         
@@ -169,6 +169,8 @@ class SudokuMainWindowUI(Frame):
                 tool.updateState(idUsername=self.idUsername, state=5) #5 'continuar'
                 
                 self.openSudokuBoard(filename=filename)
+
+        newConnection.closeConnection()
 
     """
     Función que permite visualizar los mejores puntajes.

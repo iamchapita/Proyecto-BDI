@@ -58,7 +58,7 @@ CREATE TABLE LogOff(
 CREATE TABLE State(
     id SERIAL PRIMARY KEY,
     id_game_fk BIGINT UNSIGNED NOT NULL COMMENT "Referencia hacia la entidad Juego",
-    cod_state ENUM("nuevo", "pausado", "finalizado", "derrota") DEFAULT "nuevo" NOT NULL 
+    cod_state ENUM("nuevo", "pausado", "finalizado", "derrota", "continuar") DEFAULT "nuevo" NOT NULL 
     COMMENT "Estados del juego, el estado finalizado significa haber concluido el juego con éxito, derrota es haber abandonado la partida",
     tim_date TIMESTAMP DEFAULT NOW() NOT NULL COMMENT "último estado en el que es almacenado el tablero en la base de datos",
 

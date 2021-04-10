@@ -107,8 +107,10 @@ class SudokuBoardUI(Frame):
         #Se ha presionado 'pausa'
         if self.pauseButton.cget('text') == "Pausa": 
 
+            #Detiene el temporizador y actualiza el tiempo transcurrida en la partida
             self.pauseTime()
-
+            #Actualiza el estado de la base de datos a 'pausa'
+            self.__processPushPause()
             #Cambia el nombre del text en el button
             self.pauseButton.configure(text="Reanudar")
 
@@ -153,17 +155,20 @@ class SudokuBoardUI(Frame):
     def __processPushPause(self): 
         
 
-        self.db.update(
-            table="Game", 
-            fields=["id_user_fk", "blo_file", "hor_time"],
-            values=[
-                        self.idUsername, 
-                        self.encryptDecrypt.encrypt(self. self.stack, self.username),  
-                        self.timeNow
-            ],
-            condition=""
-        )
+        self.pauseTime()
+        
+        #El juego termina y el estado del tablero cambia
+        (ToolConnection()).updateGameBoard(
+                        username=self.username,
+                        idUsername= self.idUsername, 
+                        idBoard= self.idBoard, #id del board que se está jugando
 
+
+                        state= 2, #pausa
+                        time= self.timeNow, 
+                        stack= self.stack
+            )
+        
 
     """
         Realiza la conexión y los procesos que implica

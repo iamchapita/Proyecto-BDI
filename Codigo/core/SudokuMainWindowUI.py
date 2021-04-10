@@ -94,7 +94,14 @@ class SudokuMainWindowUI(Frame):
                                     idBoard=self.idBoard
                     )
         
-        #with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
+        self.openSudokuBoard(filename=filename)    
+        
+    """
+        Se lee el contenido del documento .sudoku 
+        y se escribe en el Board del puzzle    
+    """    
+    def openSudokuBoard(self, filename: str) -> None:
+
         with open('core/sudoku/{}'.format(filename), 'r') as boardFile:
             self.parent.withdraw()
             game = SudokuGame(boardFile)
@@ -102,15 +109,65 @@ class SudokuMainWindowUI(Frame):
             root = Tk()
             SudokuBoardUI(root, game, "", self.parent)
             root.mainloop()
-            
+
 
     """
     Función que permite continuar un juego pausado.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
+
+        - Verificar el último tablero creado en la base de datos, que este sea igual a 'pausado'
+        - Sí el archivo es 'pausado'
+            - obtener el identificador del Board
+            - Buscar este identificador en la entidad SudokuBoard
+            - Cargarlo en el archivo.sudoku
+            - Traer la pila, desencriptarla 
+            - Cargar la pila al Tablero
     """
     def __continueGame(self):
-        pass
+
+        #Estado del último juego jugado
+        query = """
+                SELECT 
+                    State.cod_state AS state, 
+                    Board.idboard AS idboard
+                FROM 
+                    State
+                INNER JOIN 
+                    (
+                        SELECT
+                            id, 
+                            id_sudokuboard_fk AS idboard
+                        FROM 
+                            Game
+                        WHERE 
+                            id_user_fk={}
+                        ORDER BY 
+                            tim_date DESC
+                        LIMIT 1
+                    ) Board ON State.id_game_fk = Board.id
+                ORDER BY 
+                    State.tim_date DESC
+                LIMIT 1
+                """.format( self.idUsername )
+
+        transaction = self.db.select(query=query)[0]
+        
+        if transaction: 
+            state, self.idBoard = transaction
+        
+            #El estado del Board es 'pausado'
+            if state == "pausado":
+
+                tool = ToolConnection()
+                filename = "n00b.sudoku"
+
+                #Carga la información de sudokuBoard al archivo n00b.sudoku
+                tool.processFile(filename=filename, idBoard=self.idBoard)
+
+                tool.updateState(idUsername=self.idUsername, state=5) #5 'continuar'
+                
+                self.openSudokuBoard(filename=filename)
 
     """
     Función que permite visualizar los mejores puntajes.

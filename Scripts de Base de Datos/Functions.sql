@@ -15,13 +15,13 @@ DELIMITER $$
         FROM
             User
         WHERE
-            tex_nickname = pyNickname AND 
-            bit_state = 1
+            tex_nickname = pyNickname
     );
     SET @passwordResult = IF(@password = HEX(AES_ENCRYPT(pyPassword, pyNickname)), 1, 0);
     SET @rolResult = IF((SELECT bit_rol FROM User WHERE tex_nickname = pyNickname) = 1, 1, 0);
     SET @newPasswordResult = IF((SELECT HEX(AES_ENCRYPT(pyNickname, pyNickname)) FROM User WHERE tex_nickname = pyNickname) = @password, 1, 0);
-    SET @result = (SELECT CONCAT(@nicknameResult, " ", @passwordResult, " " ,@rolResult, " ", @newPasswordResult));
+    SET @userState = IF((SELECT bit_state FROM User WHERE tex_nickname = pyNickname) = 1, 1, 0);
+    SET @result = (SELECT CONCAT(@nicknameResult, " ", @passwordResult, " " ,@rolResult, " ", @newPasswordResult, " ", @userState));
     RETURN @result;
 
     END $$
@@ -52,4 +52,4 @@ DELIMITER $$
 
 DELIMITER ;
 
--- SELECT fn_compareData("iampaisa", "iampaisa");
+SELECT fn_compareData("iampaisa", "contra");

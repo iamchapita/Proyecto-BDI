@@ -27,18 +27,17 @@ class SudokuAdministratorBinnacle(Frame):
         super().__init__(self.child)
         self.pack()
         self.__initUI()
-        img = PhotoImage(file="core/images/back.png", master=self.child)
-        btnBack= Button(self.child, image=img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
-        btnBack.pack()
-        btnBack.place(x=880, y=20)
-        self.master.mainloop()
-
+    
     """
     Creación de los widgets que se veran en pantalla.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
     def __initUI(self):
+        self.img = PhotoImage(file="core/images/back.png", master=self.child)
+        self.backButton= Button(self.child, image=self.img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
+        self.backButton.pack()
+        self.backButton.place(x=880, y=20)
         self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.child)
         self.brand = PhotoImage(file="core/images/Brand.png", master=self.child)
         self.width = 900

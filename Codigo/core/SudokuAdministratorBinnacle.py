@@ -3,8 +3,9 @@ from tkinter import ttk
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter
 from core.SudokuByeUI import SudokuBye
+from core.EngineSQL.MySQLEngine import MySQLEngine
+from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.EngineSQL.MySQLToolConnection import ToolConnection
-
 
 """
 Frame que permite visualizar todos los componentes de la bitacora.
@@ -24,6 +25,10 @@ class SudokuAdministratorBinnacle(Frame):
         self.child = Tk()
         self.child.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.child)
+        
+        self.config = ConfigConnection() #Conexión al archivo de configuración
+        self.db = MySQLEngine(self.config.getConfig()) #Conexión a la base de datos
+
         self.pack()
         self.__initUI()
     
@@ -69,33 +74,41 @@ class SudokuAdministratorBinnacle(Frame):
         labelBrand.pack()
         labelBrand.place(x=280,y=485)
 
+        self.loadBinacle()
+
     
     """
-        Obtiene los 5 últimos registros o actividades de cada uno 
-        de los usuarios
+        Obtiene todas los registros o actividades de cada uno 
+        de los usuarios (login, log-out, fecha y hora, estado del tablero)
     """
     def loadBinacle(self) -> None: 
         
-        #Las mejores 10 puntuaciones de todos los juegos jugados por un usuario (siendo estas 'finalizadas')
+        #Obtiene la información de la bitácora y el nombre de cada usuario
         #Esta consulta se realiza de está forma debido a la naturaleza del data view
         query = """
                     SELECT 
-                        Result.time AS time,
-                        Result.date AS date
+                        User.tex_nickname AS name,
+                        CONCAT(Result.state, ", ", Result.date) AS data
                     FROM
                     (
-                        
-                    ) Result
+                        SELECT 
+                            user, 
+                            state, 
+                            date
+                        FROM vw_Binacle
+                    ) Result 
+                    INNER JOIN 
+                        User ON Result.user = User.id
                     ORDER BY 
-                        Result.time ASC;
-                """.format( self.idUsername )
+                        Result.date ASC;
+                """
 
         transaction = self.db.select( query=query )
 
         if transaction:
             count = len(transaction)
             for data in transaction:
-                self.dataView.insert("", 0, text="{}".format(count) , values=(self.username, data[0], data[1]))
+                self.dataView.insert("", 0, text="{}".format(count) , values=(data[0], data[1]))
                 count -=1
         else: 
             print("El jugador no tiene juegos finalizados")

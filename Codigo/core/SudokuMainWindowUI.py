@@ -152,10 +152,10 @@ class SudokuMainWindowUI(Frame):
 
         #Nueva conexión a la bd
         newConnection = MySQLEngine(self.config.getConfig())
-        transaction = newConnection.select(query=query)[0]
+        transaction = newConnection.select(query=query)
 
         if transaction: 
-            state, self.idBoard = transaction
+            state, self.idBoard = transaction[0]
         
             #El estado del Board es 'pausado'
             if state == "pausado":

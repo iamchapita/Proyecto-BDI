@@ -64,10 +64,22 @@ class SudokuAdministratorUI(Frame):
         label1.configure(background = "#171717", fg="white")
         label1.grid(row=1,column=1,sticky = "nsew", pady = 80,padx=70)
 
-        Button(self.parent, text = 'Administración usuarios', bg="#6ea8d9", font=ButtonStyles, command= self.__goUserAdministration).grid(row=2,column=1,sticky = "nsew", pady = 5, padx=40)
-        Button(self.parent, text = 'Ir al juego', bg="#6ea8d9", font=ButtonStyles, command= self.__goGame).grid(row=3,column=1,sticky = "nsew", pady = 5, padx=40)
-        Button(self.parent, text = 'Bitácora', bg="#6ea8d9", font=ButtonStyles, command= self.__goBinnacle).grid(row=4,column=1,sticky = "nsew", pady = 5, padx=40)
-        Button(self.parent, text = 'Salir', bg="#6ea8d9", font=ButtonStyles, command= self.__onClosing).grid(row=5,column=1,sticky = "nsew", pady = 5, padx=40)
+        self.manageUsersButton = Button(self.parent, text = 'Administración usuarios', command= self.__goUserAdministration)
+        self.manageUsersButton.configure(bg="#6ea8d9", font=ButtonStyles)
+        self.manageUsersButton.focus_set()
+        self.manageUsersButton.grid(row=2, column=1, sticky="nsew", pady=5, padx=40)
+        
+        self.goToGameButton = Button(self.parent, text = 'Ir al juego', command= self.__goGame)
+        self.goToGameButton.configure(bg="#6ea8d9", font=ButtonStyles)
+        self.goToGameButton.grid(row=3,column=1,sticky = "nsew", pady = 5, padx=40)
+
+        self.binacleButton = Button(self.parent, text='Bitácora', command=self.__goBinnacle)
+        self.binacleButton.grid(row=4,column=1,sticky = "nsew", pady = 5, padx=40)
+        self.binacleButton.configure(bg="#6ea8d9", font=ButtonStyles)
+
+        self.exitButton = Button(self.parent, text='Salir', command=self.__onClosing)
+        self.exitButton.grid(row=5,column=1,sticky = "nsew", pady = 5, padx=40)
+        self.exitButton.configure(bg="#6ea8d9", font=ButtonStyles)
         
         label2 = Label(self.parent, image=self.brand, borderwidth=0)
         label2.grid(row=6,column=1,pady = 155)

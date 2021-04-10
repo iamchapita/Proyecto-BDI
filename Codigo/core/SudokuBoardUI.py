@@ -94,7 +94,7 @@ class SudokuBoardUI(Frame):
                 self.parent.destroy()
                 self.mainUser.deiconify()
 
-            #El juego termina y el estado del tablero cambia
+            #El juego termina (derrota) y el estado del tablero cambia
             (ToolConnection()).updateGameBoard(
                             username=self.username,
                             idUsername= self.idUsername, 
@@ -103,6 +103,9 @@ class SudokuBoardUI(Frame):
                             time= self.timeNow, 
                             stack= self.stack
                 )
+            
+            #Cerrar conexión a la base de datos
+            self.db.closeConnection()
             
         else:
             pass

@@ -85,7 +85,7 @@ CREATE TABLE GameAction(
 )COMMENT "Relación entre un tablero y los resultados ingresados por el usuario";
 
 
-CREATE VIEW Binacle
+CREATE VIEW vw_Binacle
     AS 
     SELECT 
         User.id AS "user",
@@ -108,11 +108,12 @@ CREATE VIEW Binacle
 ;
 
 
-CREATE VIEW GetLastLoginUser
+CREATE VIEW vw_GetLastLoginUser
     AS 
     SELECT 
         login.id AS id,
-        User.tex_nickname AS name 
+        User.tex_nickname AS name,
+        User.bit_rol AS rol 
     FROM 
         User
     INNER JOIN 

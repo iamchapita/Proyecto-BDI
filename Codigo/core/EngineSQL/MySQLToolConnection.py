@@ -26,19 +26,18 @@ class ToolConnection:
     #def getUsernameLogin(self): 
     def getLastLoginUser(self)-> tuple: 
     
-        query = "SELECT * FROM GetLastLoginUser;"
+        query = "SELECT * FROM vw_GetLastLoginUser;"
 
         transaction = self.db.select(query=query)
 
         self.username = transaction[0][0]
         self.idUsername = transaction[0][1]
-
-        print(  "username: {}, id: {}".format(self.username, self.idUsername) )
-
+        self.rol = transaction[0][2]
+        print(  "username: {}, id: {}, rol:{}".format(self.username, self.idUsername, self.rol) )
         #self.db.closeConnection()
 
         #(id, name)
-        return (transaction[0][0], transaction[0][1])
+        return (transaction[0][0], transaction[0][1], transaction[0][2])
 
 
     """
@@ -128,7 +127,7 @@ class ToolConnection:
         Registra la salida de un usuario del sistema
     """
     def logout(self) -> None:
-        id, username = self.getLastLoginUser()
+        id, username, rol = self.getLastLoginUser()
 
         self.db.insert(
                         table="LogOff", 

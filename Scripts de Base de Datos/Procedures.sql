@@ -6,10 +6,11 @@ DROP PROCEDURE IF EXISTS sp_updatePassword;
 ("iampaisa", HEX(AES_ENCRYPT("contra", "iampaisa")), 1);
 */
 
-/* DELIMITER $$
+DELIMITER $$
 CREATE PROCEDURE sp_updatePassword(IN pyOldNickname TEXT, IN pyNewNickname TEXT)
 BEGIN
 
+    
     SET @oldPassword = (
         SELECT 
             AES_DECRYPT(UNHEX(tex_password), pyOldNickname) 
@@ -28,4 +29,6 @@ BEGIN
 
 END $$
 
-DELIMITER ; */
+DELIMITER ;
+
+-- Faltaba hacer commit para que funcionara :)

@@ -52,4 +52,4 @@ DELIMITER $$
 
 DELIMITER ;
 
-SELECT fn_compareData("iampaisa", "contra");
+-- SELECT fn_compareData("iampaisa", "contra");

@@ -41,14 +41,16 @@ class SudokuBoardUI(Frame):
         self.__initUI()
 
     def __initUI(self):
+        self.localwidth = 760
+        self.localheight = 545
         self.parent.title("Sudoku")
         self.parent.resizable(FALSE, FALSE)
         self.parent.configure(background = "#171717")
-        self.parent.geometry("%dx%d" %(760, 545))
+        self.parent.geometry("%dx%d" %(self.localwidth, self.localheight))
         center = ScreenCenter()
-        center.center(self.parent, 700, 510)
+        center.center(self.parent, self.localwidth, self.localheight)
         self.pack(fill=BOTH)
-        self.canvas = Canvas(self.parent, width=WIDTH, height= 540)
+        self.canvas = Canvas(self.parent, width=WIDTH, height=self.localheight)
         self.canvas.configure(background = "#171717")
         self.canvas.pack(fill=BOTH, side=TOP)
 
@@ -66,13 +68,13 @@ class SudokuBoardUI(Frame):
         self.labelTime.place(x=430,y=20)
 
         self.finishButton = Button(self.parent, text="Finalizar partida", bg="#6ea8d9", font=("Lato",15), height=2, width=13, command=self.__endGame)
-        self.finishButton.place(x=540, y=260)
+        self.finishButton.place(x=540, y=250)
         self.pauseButton = Button(self.parent, text="Pausa", bg="#6ea8d9", font=("Lato",15), height=2, width=13, command=self.__pauseGame)
         self.pauseButton.place(x=540, y=320)
         self.returnButton = Button(self.parent, text="Deshacer jugada", bg="#6ea8d9", font=("Lato",15), height=2, width=13, command=self.__undoMove)
-        self.returnButton.place(x=540, y=380)
+        self.returnButton.place(x=540, y=390)
         self.clearButton = Button(self.parent, text="Limpiar Tablero", bg="#6ea8d9", font=("Lato",15), height=2, width=13, command=self.__clearAnswers)
-        self.clearButton.place(x=540, y=440)
+        self.clearButton.place(x=540, y=460)
         
         self.__drawGrid()
         self.__drawPuzzle()

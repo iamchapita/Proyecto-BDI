@@ -187,8 +187,8 @@ class SudokuUserList(Frame):
 
         else:
             
-            #result = self.db.select("CALL fn_updatePassword('{}','{}');".format(self.currentItem[0], self.usernameEdited.get()))
-            self.db.executeFunction("fn_updatePassword", [self.currentItem[0], self.usernameEdited.get()])
+            self.db.callProc("sp_updatePassword", ["'{}'".format(self.currentItem[0]), "'{}'".format(self.usernameEdited.get())])
+            self.db.mydb.commit()
 
             self.db.update(
                 "User",

@@ -87,10 +87,19 @@ class SudokuUserList(Frame):
         self.passwordEditButton.pack()  #.grid(row=3, column=1, sticky="nsew", )
         self.passwordEditButton.place(x=575, y=470)
 
+        labelUsername= Label(self.child, text='Usuario', font=("Lato",13))
+        labelUsername.configure(background = "#171717", fg="white")
+        labelUsername.pack()
+        labelUsername.place(x=230,y=370)
+
         self.usernameEdited = Entry(self.child, font=("Lato", 10), justify=CENTER)
-        EntryPlaceholder(self.usernameEdited, "Nombre de Usuario")
         self.usernameEdited.pack()
         self.usernameEdited.place(x=170, y=400, height=30, width=178)
+
+        labelState= Label(self.child, text='Estado', font=("Lato",13))
+        labelState.configure(background = "#171717", fg="white")
+        labelState.pack()
+        labelState.place(x=430,y=370)
 
         self.stateCombobox = ttk.Combobox(self.child, state="readonly")
         self.stateCombobox["values"] = ["--Seleccione--","Habilitado", "Deshabilitado"]
@@ -98,8 +107,12 @@ class SudokuUserList(Frame):
         self.stateCombobox.place(x=375, y=400)
         self.stateCombobox.current(0)
         
+        labelPassword= Label(self.child, text='Contraseña', font=("Lato",13))
+        labelPassword.configure(background = "#171717", fg="white")
+        labelPassword.pack()
+        labelPassword.place(x=640,y=370)
+
         self.passwordEdited = Entry(self.child, font=("Lato", 10), justify=CENTER)
-        EntryPlaceholder(self.passwordEdited, "Contraseña")
         self.passwordEdited.pack()
         self.passwordEdited.place(x=575, y=400, height=30, width=217)
         
@@ -122,7 +135,23 @@ class SudokuUserList(Frame):
         self.currentItem = self.dataView.item(self.currentItem)
         if(self.currentItem["values"]):
             self.currentItem = self.currentItem["values"]
+            self.__informationUser()
             self.__loadComboboxData()
+
+    def __informationUser(self):
+        result = self.db.select("SELECT tex_nickname, tex_password FROM User WHERE tex_nickname = '{}';".format(self.currentItem[0]))
+        dataUser = result[0]
+        data = EncryptDecryptSudokuFile(self.db)
+        newResult = data.decrypt(dataUser[1], self.currentItem[0])
+
+        self.__cleanEntries()
+        self.usernameEdited.insert(1, self.currentItem[0])
+        self.passwordEdited.insert(1, newResult)
+
+    def __cleanEntries(self):
+        self.usernameEdited.delete(0, "end")
+        self.passwordEdited.delete(0, "end")
+        self.stateCombobox.current(0)
 
     # Obtiene los nombres de usuario y el estado de los mismos y los posiciona
     # en el dataView
@@ -179,6 +208,7 @@ class SudokuUserList(Frame):
 
         if (len(error) > 0):
             MsgBox = messagebox.showerror(title = 'Error', message = error)
+            self.__cleanEntries()
             if MsgBox == 'ok':
                 self.currentItem = ""
                 self.__clearDataView()
@@ -201,6 +231,7 @@ class SudokuUserList(Frame):
             self.__clearDataView()
             self.__loadDataView()
             MsgBox = messagebox.showinfo(title = 'Éxito', message = "EL nombre de usuario fue cambiado exitosamente.")
+            self.__cleanEntries()
             if MsgBox == 'ok':
                 self.currentItem = ""
                 self.__clearDataView()
@@ -230,6 +261,7 @@ class SudokuUserList(Frame):
         
         if (error):
             MsgBox = messagebox.showerror(title = 'Error', message = error)
+            self.__cleanEntries()
             if MsgBox == 'ok':
                 self.currentItem = ""
                 self.__clearDataView()
@@ -247,6 +279,7 @@ class SudokuUserList(Frame):
                 "tex_nickname = '{}'".format(self.currentItem[0])
                 )
             MsgBox = messagebox.showinfo(title = 'Operación Éxitosa', message = "Cambio de contraseña Éxitoso.")
+            self.__cleanEntries()
             if MsgBox == 'ok':
                 self.currentItem = ""
                 self.__clearDataView()
@@ -283,6 +316,7 @@ class SudokuUserList(Frame):
                     title='Éxito',
                     message="Actualización de estado completada."
                 )
+                self.__cleanEntries()
                 if MsgBox == 'ok':
                     self.currentItem = ""
                     self.__clearDataView()

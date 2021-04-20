@@ -70,7 +70,7 @@ class SudokuUserAdministration(Frame):
         self.backButton.grid(row=0, column=1, sticky="nsew", pady=10)
         
         labelBrand = Label(self.child, image=self.brand, borderwidth=0)
-        labelBrand.grid(row=6, column=1, pady=135)
+        labelBrand.grid(row=8, column=1, pady=180)
     
     """
     Función que permite abrir una ventana para crear un usuario y registrarlo

@@ -26,6 +26,7 @@ DELIMITER $$
 
     END $$
 
+    /* 
 
     CREATE FUNCTION fn_updatePassword(pyOldNickname TEXT, pyNewNickname TEXT) RETURNS TEXT
     BEGIN
@@ -48,8 +49,6 @@ DELIMITER $$
 
     RETURN "";
 
-    END $$
+    END $$ */
 
 DELIMITER ;
-
--- SELECT fn_compareData("iampaisa", "contra");

@@ -38,9 +38,6 @@ class MySQLEngine:
         self.link.execute(query)
         self.mydb.commit()
 
-        #self.link.execute(query, data)
-        #self.mydb.commit()
-
     def selectPage(self, query, page=0, count=10): 
 
         # Limpiar la query y remover el LIMIT que exista
@@ -79,6 +76,11 @@ class MySQLEngine:
 
         self.link.execute(query)
         return self.link.fetchone()
+    
+
+    def callProc(self, name, args):
+        self.link.execute("CALL {}({},{})".format(name, args[0], args[1]))
+        self.mydb.commit()
     
     # Ejecuta una instrucción SQL de Actualización
     # Recibe como parámetros:

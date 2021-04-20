@@ -55,15 +55,19 @@ class SudokuAdministratorBinnacle(Frame):
         self.child.configure(background = "#171717")
         self.child.resizable(False, False)
 
-        self.dataView = ttk.Treeview(self.child, columns=("#1","#2"))
+        self.dataView = ttk.Treeview(self.child, columns=("#1","#2", "#3"))
         self.dataView.pack()
-        self.dataView.heading("#0", text="Indice")
-        self.dataView.heading("#1", text="Usuario")
-        self.dataView.heading("#2", text="Descripción actividad")
+
+        self.dataView.heading("#0", text="Indice", anchor = CENTER)
+        self.dataView.heading("#1", text="Usuario", anchor = CENTER)
+        self.dataView.heading("#2", text="Descripción actividad", anchor = CENTER)
+        self.dataView.heading("#3", text="Fecha y Hora", anchor = CENTER)
+
         self.dataView.place(x=45, y=160)
-        self.dataView.column("#0", width=50)
-        self.dataView.column("#1", width=200)
-        self.dataView.column("#2", width=615)
+        self.dataView.column("#0", width=50, anchor = CENTER)
+        self.dataView.column("#1", width=200, anchor = CENTER)
+        self.dataView.column("#2", width=420)
+        self.dataView.column("#3", width=180, anchor = CENTER)
         
         label1= Label(self.child, text='Registro de bitácora', font=("Lato",25))
         label1.configure(background = "#171717", fg="white")
@@ -88,7 +92,8 @@ class SudokuAdministratorBinnacle(Frame):
         query = """
                     SELECT 
                         User.tex_nickname AS name,
-                        CONCAT(Result.state, ", ", Result.date) AS data
+                        Result.state AS state,
+                        Result.date AS date
                     FROM
                     (
                         SELECT 
@@ -108,7 +113,7 @@ class SudokuAdministratorBinnacle(Frame):
         if transaction:
             count = len(transaction)
             for data in transaction:
-                self.dataView.insert("", 0, text="{}".format(count) , values=(data[0], data[1]))
+                self.dataView.insert("", 0, text="{}".format(count) , values=(data[0], data[1], data[2]))
                 count -=1
         else: 
             print("El jugador no tiene juegos finalizados")

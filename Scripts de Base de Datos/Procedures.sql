@@ -2,14 +2,9 @@ USE SudokuDB;
 
 DROP PROCEDURE IF EXISTS sp_updatePassword;
 
-/* INSERT INTO User(tex_nickname, tex_password, bit_state) VALUES 
-("iampaisa", HEX(AES_ENCRYPT("contra", "iampaisa")), 1);
-*/
-
-/* DELIMITER $$
+DELIMITER $$
 CREATE PROCEDURE sp_updatePassword(IN pyOldNickname TEXT, IN pyNewNickname TEXT)
 BEGIN
-
     
     SET @oldPassword = (
         SELECT 
@@ -30,5 +25,3 @@ BEGIN
 END $$
 
 DELIMITER ;
-
--- Faltaba hacer commit para que funcionara :) */

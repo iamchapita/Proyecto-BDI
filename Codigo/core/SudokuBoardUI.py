@@ -14,7 +14,7 @@ HEIGHT = MARGIN * 2 + SIDE * 9 +120# !Se le sumaron 120 para ampliar de forma ve
 
 class SudokuBoardUI(Frame):
     
-    def __init__(self, parent, game, mainAdmin, mainUser):
+    def __init__(self, parent, game, mainAdmin, mainUser, hours=0, minutes=0, seconds=0):
         self.mainAdmin = mainAdmin
         self.mainUser = mainUser
         self.parent = parent
@@ -29,9 +29,9 @@ class SudokuBoardUI(Frame):
         self.stack = [] #{row: , col: , val: , state: } Coordenadas del ingreso de los datos a la tabla
         self.undoStack = []  #{row: , col: , val: , state: } Coordenadas de las jugadas deshechas
         self.encryptDecrypt = EncryptDecryptSudokuFile( self.db ) #Encripta y desencripta los datos del tablero
-        self.hours = 0
-        self.minutes = 0
-        self.seconds = 0
+        self.hours = int(hours)
+        self.minutes = int(minutes)
+        self.seconds = int(seconds)
         self.username = ""
         self.rol = ""
         self.idUsername = None
@@ -125,12 +125,23 @@ class SudokuBoardUI(Frame):
         if self.pauseButton.cget('text') == "Pausa": 
 
             self.game.pause = True
+            if(self.rol==1):
+
+                print("Regresar al menú principal de admin")
+                self.after(2000,self.parent.destroy)
+                self.after(1999,self.mainAdmin.deiconify)
+                
+            if(self.rol==0):
+                print("Regresar al menú principal de user")
+                self.after(2000,self.parent.destroy)
+                self.after(1999,self.mainUser.deiconify)
+            
             #Detiene el temporizador y actualiza el tiempo transcurrida en la partida
             self.pauseTime()
             #Actualiza el estado de la base de datos a 'pausa'
             self.__processPushPause()
             #Cambia el nombre del text en el button
-            self.pauseButton.configure(text="Reanudar")
+            #self.pauseButton.configure(text="Reanudar")
 
         #Se ha presionado 'Reanudar'
         else: 
@@ -355,11 +366,11 @@ class SudokuBoardUI(Frame):
         if(self.rol==1):
             print("Regresar al menú principal de admin")
             self.after(2000,self.parent.destroy)
-            self.after(1500,self.mainAdmin.deiconify)
+            self.after(1999,self.mainAdmin.deiconify)
         if(self.rol==0):
             print("Regresar al menú principal de user")
             self.after(2000,self.parent.destroy)
-            self.after(1500,self.mainUser.deiconify)
+            self.after(1999,self.mainUser.deiconify)
             
         
 

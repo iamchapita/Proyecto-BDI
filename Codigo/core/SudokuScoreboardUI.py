@@ -60,17 +60,19 @@ class SudokuScoreboardUI(Frame):
         self.child.iconphoto(True, self.logo)
         center = ScreenCenter()
         center.center(self.child, self.width, self.height)
-        self.dataView = ttk.Treeview(self.child, columns=("#1","#2","#3"))
+        self.dataView = ttk.Treeview(self.child, columns=("#1","#2","#3", "#4"))
         self.dataView.pack()
         self.dataView.heading("#0", text="Indice")
         self.dataView.heading("#1", text="Usuario")
         self.dataView.heading("#2", text="Mejor Tiempo")
-        self.dataView.heading("#3", text="Fecha y Hora")
+        self.dataView.heading("#3", text="Tablero")
+        self.dataView.heading("#4", text="Fecha y Hora")
         self.dataView.place(x=40, y=160)
-        self.dataView.column("#0", width=100)
-        self.dataView.column("#1", width=200)
-        self.dataView.column("#2", width=250)
-        self.dataView.column("#3", width=300)
+        self.dataView.column("#0", width=100, anchor = CENTER)
+        self.dataView.column("#1", width=200, anchor = CENTER)
+        self.dataView.column("#2", width=250, anchor = CENTER)
+        self.dataView.column("#3", width=90, anchor = CENTER)
+        self.dataView.column("#4", width=210, anchor = CENTER)
 
         # Muestra el titulo de la seccion
         label1= Label(self.child, text='Scoreboard', font=("Lato",25))
@@ -103,16 +105,18 @@ class SudokuScoreboardUI(Frame):
     """
     def loadText(self):
         #Las mejores 10 puntuaciones de todos los juegos jugados por un usuario (siendo estas 'finalizadas')
-        #Esta consulta se realiza de está forma debido a la naturaleza del data view
+        #Esta consulta se realiza de esta forma debido a la naturaleza del data view
         query = """
                     SELECT 
                         Result.time AS time,
+                        Result.board AS board,
                         Result.date AS date
                     FROM
                     (
                         SELECT 
                             Game.tim_time AS time,
-                            BoardState.tim_date AS date
+                            BoardState.tim_date AS date,
+                            Game.id_sudokuboard_fk AS board
                         FROM 
                             Game
                         INNER JOIN 
@@ -139,7 +143,7 @@ class SudokuScoreboardUI(Frame):
         if transaction:
             count = len(transaction)
             for data in transaction:
-                self.dataView.insert("", 0, text="{}".format(count) , values=(self.username, data[0], data[1]))
+                self.dataView.insert("", 0, text="{}".format(count) , values=(self.username, data[0], data[1], data[2]))
                 count -=1
         else: 
             print("El jugador no tiene juegos finalizados")

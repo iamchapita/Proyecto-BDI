@@ -25,7 +25,7 @@ class SudokuMainWindowUI(Frame):
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
-    def __init__(self):
+    def __init__(self, username= ""):
         self.parent = Tk()
         self.parent.protocol("WM_DELETE_WINDOW", self.__onClosing)
         self.config = ConfigConnection() #Conexión al archivo de configuración        
@@ -99,14 +99,18 @@ class SudokuMainWindowUI(Frame):
         Se lee el contenido del documento .sudoku 
         y se escribe en el Board del puzzle    
     """    
-    def openSudokuBoard(self, filename: str) -> None:
-
+    def openSudokuBoard(self, filename: str, time = []) -> None:
         with open('core/sudoku/{}'.format(filename), 'r') as boardFile:
             self.parent.withdraw()
             game = SudokuGame(boardFile)
             game.start()
             root = Tk()
-            SudokuBoardUI(root, game, "", self.parent)
+
+            if(time):
+                SudokuBoardUI(root, game, "", self.parent, time[0], time[1], time[2])
+            else:
+                SudokuBoardUI(root, game, "", self.parent)
+
             root.mainloop()
 
 
@@ -129,14 +133,16 @@ class SudokuMainWindowUI(Frame):
         query = """
                 SELECT 
                     State.cod_state AS state, 
-                    Board.idboard AS idboard
+                    Board.idboard AS idboard,
+                    Board.time AS time
                 FROM 
                     State
                 INNER JOIN 
                     (
                         SELECT
                             id, 
-                            id_sudokuboard_fk AS idboard
+                            id_sudokuboard_fk AS idboard,
+                            tim_time AS time
                         FROM 
                             Game
                         WHERE 
@@ -155,7 +161,7 @@ class SudokuMainWindowUI(Frame):
         transaction = newConnection.select(query=query)
 
         if transaction: 
-            state, self.idBoard = transaction[0]
+            state, self.idBoard, timeStored = transaction[0]
         
             #El estado del Board es 'pausado'
             if state == "pausado":
@@ -168,7 +174,12 @@ class SudokuMainWindowUI(Frame):
 
                 tool.updateState(idUsername=self.idUsername, state=5) #5 'continuar'
                 
-                self.openSudokuBoard(filename=filename)
+                timeStored = str(timeStored).split(":")
+
+                self.openSudokuBoard(filename, list(timeStored))
+            else:
+                messagebox.showinfo(message="No hay partidas en Pausa.", title="Información")
+                return
 
         newConnection.closeConnection()
 

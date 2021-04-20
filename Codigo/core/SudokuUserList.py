@@ -5,7 +5,6 @@ from core.EngineSQL.MySQLEngine import *
 from core.EngineSQL.ConfigConnection import *
 from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.FileManipulation.EncryptDecrypt import *
-from core.EntryPlaceholder import *
 import os
 import re
 
@@ -144,11 +143,11 @@ class SudokuUserList(Frame):
         data = EncryptDecryptSudokuFile(self.db)
         newResult = data.decrypt(dataUser[1], self.currentItem[0])
 
-        self.__cleanEntries()
+        self.__clearEntries()
         self.usernameEdited.insert(1, self.currentItem[0])
         self.passwordEdited.insert(1, newResult)
 
-    def __cleanEntries(self):
+    def __clearEntries(self):
         self.usernameEdited.delete(0, "end")
         self.passwordEdited.delete(0, "end")
         self.stateCombobox.current(0)
@@ -208,7 +207,7 @@ class SudokuUserList(Frame):
 
         if (len(error) > 0):
             MsgBox = messagebox.showerror(title = 'Error', message = error)
-            self.__cleanEntries()
+            self.__clearEntries()
             if MsgBox == 'ok':
                 self.currentItem = ""
                 self.__clearDataView()
@@ -227,11 +226,10 @@ class SudokuUserList(Frame):
                 "tex_nickname = '{}'".format(self.currentItem[0])
                 )
 
-            self.usernameEdited.delete("0", "end")
             self.__clearDataView()
             self.__loadDataView()
             MsgBox = messagebox.showinfo(title = 'Éxito', message = "EL nombre de usuario fue cambiado exitosamente.")
-            self.__cleanEntries()
+            self.__clearEntries()
             if MsgBox == 'ok':
                 self.currentItem = ""
                 self.__clearDataView()
@@ -261,7 +259,7 @@ class SudokuUserList(Frame):
         
         if (error):
             MsgBox = messagebox.showerror(title = 'Error', message = error)
-            self.__cleanEntries()
+            self.__clearEntries()
             if MsgBox == 'ok':
                 self.currentItem = ""
                 self.__clearDataView()
@@ -279,7 +277,7 @@ class SudokuUserList(Frame):
                 "tex_nickname = '{}'".format(self.currentItem[0])
                 )
             MsgBox = messagebox.showinfo(title = 'Operación Éxitosa', message = "Cambio de contraseña Éxitoso.")
-            self.__cleanEntries()
+            self.__clearEntries()
             if MsgBox == 'ok':
                 self.currentItem = ""
                 self.__clearDataView()
@@ -316,7 +314,7 @@ class SudokuUserList(Frame):
                     title='Éxito',
                     message="Actualización de estado completada."
                 )
-                self.__cleanEntries()
+                self.__clearEntries()
                 if MsgBox == 'ok':
                     self.currentItem = ""
                     self.__clearDataView()

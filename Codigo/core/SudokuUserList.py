@@ -168,7 +168,7 @@ class SudokuUserList(Frame):
                     if (self.usernameEdited.get() == nickname[0]):
                         error += "El nombre de usuario introducido ya está en uso."
                 
-                if (re.search(r"[a-zA-Z0-9._-]{4,}", self.usernameEdited.get()) is None):
+                if (re.fullmatch(r"[a-zA-Z]{4,30}$", self.usernameEdited.get()) is None):
                     error += "El nombre de usuario no es válido."
 
             else:
@@ -222,7 +222,7 @@ class SudokuUserList(Frame):
                 error += "El campo Contraseña está vacío."
 
             else:
-                if (re.search(r"[a-zA-Z0-9._-]{4,}", self.passwordEdited.get()) is None):
+                if (re.fullmatch(r"^(?=\w*\d*)(?=\w*[a-z]*)(?=\w*[A-Z]*)(?=\w*[a-zA-Z]*)[a-zA-Z\*\_\d]{4,32}$", self.passwordEdited.get()) is None):
                     error += "Contraseña no válida."
 
         else:

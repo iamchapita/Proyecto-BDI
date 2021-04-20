@@ -95,7 +95,7 @@ class SudokuAdministratorCreateUser(Frame):
             userExist = self.db.select("SELECT tex_nickname FROM User WHERE tex_nickname = %s", (self.usernameEntry.get(),))
             
             # Si el campo no cumple con la expresión regular
-            if (re.search(r"[a-zA-Z0-9._-]{4,}", self.usernameEntry.get()) is None):
+            if (re.fullmatch(r"[a-zA-Z]{4,30}$", self.usernameEntry.get()) is None):
                 error += "El nombre de usuario no es válido."
 
             # Si existe entonces error

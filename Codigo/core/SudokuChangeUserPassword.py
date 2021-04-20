@@ -76,7 +76,7 @@ class SudokuChangeUserPassword(Frame):
 
         if (len(password) > 0):
             
-            if (re.search(r"[a-zA-Z0-9._-]{4,}", password) is None):
+            if (re.fullmatch(r"^(?=\w*\d*)(?=\w*[a-z]*)(?=\w*[A-Z]*)(?=\w*[a-zA-Z]*)[a-zA-Z\*\_\d]{4,32}$", password) is None):
                 error += "Usuario o Contraseña no válido.\n"    
 
             elif (password == self.password):

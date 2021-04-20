@@ -95,11 +95,11 @@ class SudokuLoginPageUI(Frame):
         if (len(username) > 0 and len(password) > 0):
 
             # Comprobando si el texto del campo usuario reune los requisitos
-            if (re.search(r"[a-zA-Z0-9._-]{4,}", username) is None):
+            if (re.fullmatch(r"[a-zA-Z]{4,30}$", username) is None):
                 error += "Usuario o Contraseña no válido.\n"
 
             # Comprobando si el texto del campo contraseña reune los requisitos
-            elif (re.search(r"[a-zA-Z0-9._-]{4,}", password) is None):
+            elif (re.fullmatch(r"^(?=\w*\d*)(?=\w*[a-z]*)(?=\w*[A-Z]*)(?=\w*[a-zA-Z]*)[a-zA-Z\*\_\d]{4,32}$", password) is None):
                 error += "Usuario o Contraseña no válido.\n"
         
         # Caso 2

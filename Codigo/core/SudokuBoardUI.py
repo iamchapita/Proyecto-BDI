@@ -5,6 +5,7 @@ from core.EngineSQL.ConfigConnection import ConfigConnection
 from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
 from core.SudokuByeUI import SudokuBye
+from core.SudokuGame import SudokuGame
 
 MARGIN = 70 # ! Se le sumaron 20 y se restaron 20 en los parámetros necesarios.
 SIDE = 50
@@ -78,7 +79,7 @@ class SudokuBoardUI(Frame):
         self.canvas.bind("<Button-1>", self.__cellClicked)
         self.canvas.bind("<Key>", self.__keyPressed)
         self.__timer()
-    
+
     def __endGame(self):
         MsgBox = messagebox.askquestion ('Finalizar partida','¿Está seguro de finalizar la partida como derrota?',icon = 'warning')
         if MsgBox == 'yes':
@@ -121,6 +122,7 @@ class SudokuBoardUI(Frame):
         #Se ha presionado 'pausa'
         if self.pauseButton.cget('text') == "Pausa": 
 
+            self.game.pause = True
             #Detiene el temporizador y actualiza el tiempo transcurrida en la partida
             self.pauseTime()
             #Actualiza el estado de la base de datos a 'pausa'
@@ -132,7 +134,7 @@ class SudokuBoardUI(Frame):
         else: 
             
             self.__updateTime()
-
+            self.game.pause = False
             # Se obtiene el id del proceso after, con este id se procede a cancelar el proceso after
             self.afterId =  self.parent.after(1000, self.__timer)
             
@@ -326,6 +328,24 @@ class SudokuBoardUI(Frame):
             text="You win!", tags="victory",
             fill="white", font=("Arial", 32)
         )
+
+        self.clearButton.config(state="disabled")
+        self.pauseButton.config(state="disabled")
+        self.returnButton.config(state="disabled")
+        self.returnButton.config(state="disabled")
+        self.finishButton.config(state="disabled")
+        self.pauseTime()
+
+        if(self.rol==1):
+            print("Regresar al menú principal de admin")
+            self.after(2000,self.parent.destroy)
+            self.after(1500,self.mainAdmin.deiconify)
+        if(self.rol==0):
+            print("Regresar al menú principal de user")
+            self.after(2000,self.parent.destroy)
+            self.after(1500,self.mainUser.deiconify)
+            
+        
 
     def __cellClicked(self, event):
 

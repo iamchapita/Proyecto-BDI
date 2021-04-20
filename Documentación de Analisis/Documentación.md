@@ -3,8 +3,8 @@
     Clase: Bases de Datos I
     Sección: 0700
     Catedrático: José Manuel Inestroza Murillo
-    Alumnos:  Daniel Alessandro Arteaga Martínez - 20161000031
-              **
+    Alumnos:  Daniel Alessandro Arteaga Martínez    -   20161000031
+              Luis Alejandro Morales Zelaya         -   20161930074
               **
               **
 

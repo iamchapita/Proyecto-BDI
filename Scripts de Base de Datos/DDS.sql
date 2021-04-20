@@ -13,7 +13,7 @@ USE SudokuDB;
 CREATE TABLE User(
     id SERIAL PRIMARY KEY,
     tex_nickname VARCHAR(30) NOT NULL UNIQUE COMMENT "Nombre de ingreso para el usuario",
-    CHECK(tex_nickname NOT RLIKE "[\'\s;]" ), 
+    CHECK(tex_nickname RLIKE "[a-zA-Z]{4,30}$" ), 
     bit_rol BIT(1) DEFAULT 0 NOT NULL COMMENT "0 Usuario | 1 Administrador; Tipos de rol para acceso al sistema", 
     tex_password TEXT NOT NULL COMMENT "Contraseña",
     bit_state BIT(1) DEFAULT 1 NOT NULL COMMENT "0 deshabilitado| 1 habilitado. Dar de baja a los usuarios, de esta forma se evita eliminar a los usuarios de forma explícita de la base de datos"

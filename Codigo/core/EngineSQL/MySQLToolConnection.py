@@ -178,7 +178,7 @@ class ToolConnection:
     """
     def processFile(self, filename: str, idBoard=0) -> int: 
         
-        query = "SELECT id, tex_board FROM SudokuBoard"
+        query = "SELECT id, tex_board FROM SudokuBoard WHERE id=6"
         
         #Obtiene la información de todos los boards (tableros iniciales) cargados en la entidad SudokuBoard
         sudokuBoard = self.db.select(query=query)

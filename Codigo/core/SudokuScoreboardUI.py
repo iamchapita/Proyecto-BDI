@@ -111,31 +111,31 @@ class SudokuScoreboardUI(Frame):
                     FROM
                     (
                         SELECT 
-                            Game.tim_time AS time, 
-                            Game.tim_date AS date
+                            Game.tim_time AS time,
+                            BoardState.tim_date AS date
                         FROM 
                             Game
                         INNER JOIN 
                         (
                             SELECT 
-                                id_game_fk
+                                id_game_fk,
+                                tim_date
                             FROM 
                                 State
                             WHERE 
-                                cod_state=4 -- DERROTAS, CAMBIAR ESTE ESTADO DESPUES
+                                cod_state=3 
                         ) BoardState ON Game.id = BoardState.id_game_fk
                         WHERE 
                             Game.id_user_fk={}
                         ORDER BY 
-                            Game.tim_time DESC
+                            BoardState.tim_date DESC
                         LIMIT 10
                     ) Result
                     ORDER BY 
-                        Result.time ASC;
+                        Result.time DESC;
                 """.format( self.idUsername )
 
         transaction = self.db.select( query=query )
-
         if transaction:
             count = len(transaction)
             for data in transaction:
@@ -144,7 +144,7 @@ class SudokuScoreboardUI(Frame):
         else: 
             print("El jugador no tiene juegos finalizados")
 
-   
+
     """
     Función que permite regresar a la ventana anterior al presionar el botón.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales

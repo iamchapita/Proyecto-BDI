@@ -314,6 +314,7 @@ class SudokuBoardUI(Frame):
             )
 
     def __drawVictory(self):
+        self.pauseTime()
 
         x0 = y0 = MARGIN + SIDE * 2
         x1 = y1 = MARGIN + SIDE * 7
@@ -334,7 +335,20 @@ class SudokuBoardUI(Frame):
         self.returnButton.config(state="disabled")
         self.returnButton.config(state="disabled")
         self.finishButton.config(state="disabled")
-        self.pauseTime()
+        # print("Esta es la variable stack {}".format(self.stack))
+
+        #El juego termina (derrota) y el estado del tablero cambia
+        (ToolConnection()).updateGameBoard(
+                        username=self.username,
+                        idUsername= self.idUsername, 
+                        idBoard= self.idBoard, #id del board que se está jugando
+                        state= 3, # finalizado
+                        time= self.timeNow, 
+                        stack= self.stack
+            )
+        
+        #Cerrar conexión a la base de datos
+        self.db.closeConnection()
 
         if(self.rol==1):
             print("Regresar al menú principal de admin")

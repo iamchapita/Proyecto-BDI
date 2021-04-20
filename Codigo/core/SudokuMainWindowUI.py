@@ -140,7 +140,7 @@ class SudokuMainWindowUI(Frame):
                         FROM 
                             Game
                         WHERE 
-                            id_user_fk={}
+                            id_user_fk=2
                         ORDER BY 
                             tim_date DESC
                         LIMIT 1
@@ -169,6 +169,9 @@ class SudokuMainWindowUI(Frame):
                 tool.updateState(idUsername=self.idUsername, state=5) #5 'continuar'
                 
                 self.openSudokuBoard(filename=filename)
+            else:
+                messagebox.showinfo(message="No hay partidas en Pausa.", title="Información")
+                return
 
         newConnection.closeConnection()
 

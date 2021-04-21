@@ -238,8 +238,10 @@ class SudokuAdministratorGame(Frame):
                 self.openSudokuBoard(filename, list(timeStored))
             else:
                 messagebox.showinfo(message="No hay partidas en Pausa.", title="Información")
-                return
 
+        else:
+            messagebox.showinfo(message="No hay partidas en Pausa.", title="Información")
+            
         newConnection.closeConnection()
 
     """

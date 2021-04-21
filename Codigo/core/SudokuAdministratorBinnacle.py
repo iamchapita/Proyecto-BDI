@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
+import tkinter.font as tkFont
 from tkinter import *
 from tkinter import ttk
-import tkinter.font as tkFont
+
+from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLEngine import MySQLEngine
+from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.ScreenCenter import ScreenCenter
 from core.SudokuByeUI import SudokuBye
-from core.EngineSQL.MySQLEngine import MySQLEngine
-from core.EngineSQL.ConfigConnection import ConfigConnection
-from core.EngineSQL.MySQLToolConnection import ToolConnection
 
 """
 Frame que permite visualizar todos los componentes de la bitacora.
@@ -90,7 +91,8 @@ class SudokuAdministratorBinnacle(Frame):
         
         #Obtiene la información de la bitácora y el nombre de cada usuario
         #Esta consulta se realiza de está forma debido a la naturaleza del data view
-        query = """
+        """
+        query = 
                     SELECT 
                         User.tex_nickname AS name,
                         Result.state AS state,
@@ -107,8 +109,8 @@ class SudokuAdministratorBinnacle(Frame):
                         User ON Result.user = User.id
                     ORDER BY 
                         Result.date DESC;
-                """
-
+        """
+        
         query = """
                 SELECT 
                     tex_nickname, 
@@ -117,7 +119,7 @@ class SudokuAdministratorBinnacle(Frame):
                 FROM 
                     Binacle 
                 ORDER BY 
-                    tim_date DESC
+                    tim_date ASC
                 ;
         """
 

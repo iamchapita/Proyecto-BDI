@@ -1,54 +1,59 @@
 # -*- coding: utf-8 -*-
-
-"""
-    @author: kenneth.cruz@unah.hn
-    @version: 0.1.7
-    @date: 2021/04/08
-"""
-
 from datetime import time
 from random import randint
-from core.EngineSQL.MySQLEngine import MySQLEngine
+
 from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
 
+"""
+Clase que engloba funciones utilizadas en distintos escenarios
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
+"""
 class ToolConnection: 
 
     def __init__(self):
-        self.config = ConfigConnection() #Conexión al archivo de configuración
-        self.db = MySQLEngine(self.config.getConfig()) #Conexión a la base de datos
-        self.encryptDecrypt = EncryptDecryptSudokuFile( self.db ) #Encripta y desencripta los datos del tablero
+        # Conexión al archivo de configuración
+        self.config = ConfigConnection() 
+        # Conexión a la base de datos
+        self.db = MySQLEngine(self.config.getConfig()) 
+        # Encripta y desencripta los datos del tablero
+        self.encryptDecrypt = EncryptDecryptSudokuFile( self.db ) 
 
-
-    """ 
-        Obtiene el nombre del usuario que inició sesión
-    """
-    #def getUsernameLogin(self): 
+    # Obtiene el nombre del último usuario que inició sesión, retorna una tupla
     def getLastLoginUser(self)-> tuple: 
-    
+        
+        # Se establece la consulta
         query = "SELECT * FROM vw_GetLastLoginUser;"
 
+        # Se utiliza el método select, encapsulado en la clase MySQLEngine, para hacer la operación select
         transaction = self.db.select(query=query)
 
+        # Se comprueba si la transacción contiene resultados
         if transaction:
-        
+            
+            # Se generan variables individuales a partir del resultado de la operación select
             self.username = transaction[0][0]
             self.idUsername = transaction[0][1]
             self.rol = transaction[0][2]
 
             print(  "username: {}, id: {}, rol:{}".format(self.username, self.idUsername, self.rol) )
-            #self.db.closeConnection()
 
-            #(id, name)
-            return (transaction[0][0], transaction[0][1], transaction[0][2])
+            # Se retorna los resultados obtenidos en la operación select
+            return (self.username, self.idUsername, self.rol)
 
-
-    """
-        Crea una partida dentro del Board
-        @param: idUsername, idBoard, cod_state, time, stack
-    """
+    
+    # Inserta un registro en la tabla Game
+    # Parámetros:
+    # - username: Nombre de usuario
+    # - idUsername: id del usuario
+    # - idBoard: id del tablero
+    # - state: Estado del tablero
+    # - time: Tiempo transcurrido durante la partida
     def insertGameBoard(self, username: str, idUsername: int, idBoard: int, state=1, time="00:00:00", stack=[]) -> None:
         
+        # Se inserta en la tabla Game usando la función select de la clase MySQLEngine
         self.db.insert(
                 table="Game", 
                 fields=[
@@ -66,15 +71,11 @@ class ToolConnection:
             )
         
         self.updateState(idUsername=idUsername, state=state)
-        
-        #self.db.closeConnection()
-
-
-    """
-        Actualiza el estado y las jugadas de la partida que está jugando un usuario en el Board
-    """
+    
+    # Actualiza el estado y las jugadas de la partida que está jugando un usuario en el Board
     def updateGameBoard(self, username: str, idUsername: int, idBoard: int, state: int, time: str, stack: list) -> None:
         
+        # Se realiza la operación de update en la base de datos
         self.db.update(
                 table="Game", 
                 fields=[
@@ -93,12 +94,10 @@ class ToolConnection:
                 
         self.updateState(idUsername=idUsername, state=state)
 
-    """
-        Actualiza el estado del tablero que se encuentra en juego
-    """
+    # Actualiza el estado del tablero que se encuentra en juego
     def updateState(self, idUsername: int, state: int) -> None:
         
-        #Obtiene el id del último juego jugado (y almacenado) del usuario que inició sesión
+        # Obtiene el id del último juego jugado (y almacenado) del usuario que inició sesión
         query = """
                     SELECT 
                         id
@@ -112,7 +111,8 @@ class ToolConnection:
                     ;
                 """.format( idUsername )
 
-        #Estado de la partida:  1 nuevo, 2 pausado, 3 finalizado, 4 derrota, 5 continuar
+        # Estado de la partida:  1 nuevo, 2 pausado, 3 finalizado, 4 derrota, 5 continuar
+        # Realiza la operación de inserción en la base de datos
         self.db.insert(
                 table="State", 
                 fields=[
@@ -125,27 +125,24 @@ class ToolConnection:
                         ]
             )
         
-
-    """
-        Registra la salida de un usuario del sistema
-    """
+    # Registra la salida de un usuario del sistema
+    # Inserta en la tabla LogOff cada vez que se cierra el programa y hay un jugador con sesión iniciada
     def logout(self) -> None:
+
+        # Se obtiene la información del último usuario que inició sesión 
         id, username, rol = self.getLastLoginUser()
 
+        # Se inserta en la Base de datos esta información, en la tabla LogOff
         self.db.insert(
                         table="LogOff", 
                         fields=["id_user_fk"], 
                         values=[id]
                     )
-        
-        #self.db.closeConnection()
 
-
-    """
-        Obtiene el id del Board que está en juego
-    """
+    # Obtiene el id del Board que está en juego
     def getIdBoard(self, idUsername: str) -> int: 
         
+        # Texto de la consulta que se va a realizar a la base de datos
         query = """
                 SELECT 
                     id_sudokuboard_fk
@@ -157,13 +154,15 @@ class ToolConnection:
                     tim_date DESC
                 LIMIT 1;
                 """
+        
         id = self.db.select(query=query, data=( idUsername, ))
+
+        # Se retorna el resultado obtenido de la consulta select
         return id[0][0]
 
 
-    """
-        Formato hh:mm:ss
-    """
+    # Establece el formato de tiempo a los valores pasados por parámetro
+    # Formato hh:mm:ss
     def formatTime(self, hour: int, minute: int, second: int) -> str: 
         dt = time(
                         hour=hour, 
@@ -172,29 +171,31 @@ class ToolConnection:
                         microsecond=0
                     )
 
+        # Retorna el resultado de la operación
         return dt.isoformat(timespec="auto")
 
-
-    """
-        Se escribe un nuevo tablero dentro del archivo .sudoku
-        @idBoard es una bandera que indica a la función sí se debe elegir un Board al azar
-    """
+    # Se escribe un nuevo tablero dentro del archivo .sudoku
+    # @idBoard es una bandera que indica a la función sí se debe elegir un Board al azar
     def processFile(self, filename: str, idBoard=0) -> int: 
         
-        query = "SELECT id, tex_board FROM SudokuBoard WHERE id=6"
+        # Obtiene los tableros desde la base datos
+        query = "SELECT id, tex_board FROM SudokuBoard"
         
-        #Obtiene la información de todos los boards (tableros iniciales) cargados en la entidad SudokuBoard
+        # Obtiene la información de todos los boards (tableros iniciales) cargados en la entidad SudokuBoard
         sudokuBoard = self.db.select(query=query)
 
+        # Abre el flujo de datos sobre el archivo
         boardFile = open('core/sudoku/{}'.format(filename), 'w')
-        #Borra la información contenida en el documento
+
+        # Borra la información contenida en el documento
         boardFile.truncate()
 
         board = None
 
+        # Comprueba si la consulta devolvió resultados
         if sudokuBoard:     
             
-            #tablero al azar
+            # Tablero al azar
             if not idBoard: 
             
                 index = randint(0, len(sudokuBoard)-1)
@@ -206,28 +207,29 @@ class ToolConnection:
 
             else: 
                 
-                #Obtiene el tablero guardado en la bd, para el juego que está en el estado 'pausa'
-                
+                # Obtiene el tablero guardado en la bd, para el juego que está en el estado 'pausa'
                 for i in range( len(sudokuBoard) ): 
-
                     if idBoard in sudokuBoard[i]:
-
                         board = sudokuBoard[i][1]
 
-            #Escribe el nuevo tablero en el documento .sudoku
+            # Escribe el nuevo tablero en el documento .sudoku
             boardFile.write( board )
 
+        # Cierra el flujo de datos hacia el archivo
         boardFile.close()
 
+        # Retorna el id del Board que se va a utilizar
         return idBoard
 
-    """
-        Acción de visualizar la mejor puntuación 
-    """
+    
+    # Acción de visualizar la mejor puntuación 
+    # Registra en la base de datos(Binacle) cada vez que un usuario presione el botón para ver los mejores resultados
     def bestScore(self):
         
+        # Obtiene los datos del ultimo usuario que ingreso al programa
         id, username, rol = self.getLastLoginUser()
 
+        # Realiza la inserción en la base de datos
         self.db.insert(
                 table="Binacle", 
                 fields=[
@@ -239,10 +241,8 @@ class ToolConnection:
                             "El usuario visualizó la tabla de puntuaciones"
                         ]
             )
-
-    """
-        Inserción de registro a la base de datos
-    """
+    
+    # Inserción de registros en la tabla Binacle
     def insertBinacle(self, nickname, description): 
 
             self.db.insert(

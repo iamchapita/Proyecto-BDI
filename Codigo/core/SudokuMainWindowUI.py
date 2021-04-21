@@ -80,7 +80,61 @@ class SudokuMainWindowUI(Frame):
     @version 1.0
     """
     def __newGame(self):
+        #Estado del último juego jugado
+        query = """
+                SELECT 
+                    State.cod_state AS state, 
+                    Board.idboard AS idboard
+                FROM 
+                    State
+                INNER JOIN 
+                    (
+                        SELECT
+                            id, 
+                            id_sudokuboard_fk AS idboard,
+                            tim_time AS time
+                        FROM 
+                            Game
+                        WHERE 
+                            id_user_fk={}
+                        ORDER BY 
+                            tim_date DESC
+                        LIMIT 1
+                    ) Board ON State.id_game_fk = Board.id
+                ORDER BY 
+                    State.tim_date DESC
+                LIMIT 1
+                """.format( self.idUsername )
+
+        #Nueva conexión a la bd
+        newConnection = MySQLEngine(self.config.getConfig())
+        transaction = newConnection.select(query=query)
+
+        if transaction: 
+            state, self.idBoard= transaction[0]
         
+            #El estado del Board es 'derrota'
+            if state == "derrota":
+                MsgBox = messagebox.askquestion ('Sudoku','¿Deseas utilizar el mismo tablero de la partida finalizada como derrota?',icon = 'warning')
+                if MsgBox == 'yes':
+                    tool = ToolConnection()
+                    filename = "n00b.sudoku"
+
+                    tool.insertGameBoard(
+                                                username=self.username, 
+                                                idUsername=self.idUsername, 
+                                                idBoard=self.idBoard
+                                )
+                    
+                    self.openSudokuBoard(filename=filename) 
+                else:
+                    self.__generateNewBoard()
+            else:
+                self.__generateNewBoard()
+                
+        newConnection.closeConnection()
+
+    def __generateNewBoard(self):
         tool = ToolConnection()
         filename = "n00b.sudoku"
 
@@ -95,8 +149,8 @@ class SudokuMainWindowUI(Frame):
                                     idBoard=self.idBoard
                     )
         
-        self.openSudokuBoard(filename=filename)    
-        
+        self.openSudokuBoard(filename=filename)
+
     """
         Se lee el contenido del documento .sudoku 
         y se escribe en el Board del puzzle    

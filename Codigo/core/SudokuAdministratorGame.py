@@ -67,10 +67,11 @@ class SudokuAdministratorGame(Frame):
 
         label1= Label(self.child, text='¿Qué deseas hacer?', font=("lato", 20))
         label1.configure(background = "#171717", fg="white")
-        label1.grid(row=1,column=1,sticky = "nsew", pady = 80, padx=70)
+        label1.grid(row=1,column=1,sticky = "nsew", pady = 60, padx=70)
 
         Button(self.child, text = 'Nuevo juego', bg="#6ea8d9", font=("lato", 17), command= self.__newGame).grid(row=2,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=37)
         Button(self.child, text = 'Continuar juego', bg="#6ea8d9", font=("lato", 17), command= self.__continueGame).grid(row=3,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=18)
+        Button(self.child, text = 'Mejores puntajes', bg="#6ea8d9", font=("lato", 17), command= self.__bestScores).grid(row=4,column=1,sticky = "nsew", pady = 5, padx=80, ipadx=11)
         
         label2 = Label(self.child, image=self.brand, borderwidth=0)
         label2.grid(row=6,column=1,pady = 150)
@@ -81,7 +82,61 @@ class SudokuAdministratorGame(Frame):
     @version 1.0
     """
     def __newGame(self):
+        #Estado del último juego jugado
+        query = """
+                SELECT 
+                    State.cod_state AS state, 
+                    Board.idboard AS idboard
+                FROM 
+                    State
+                INNER JOIN 
+                    (
+                        SELECT
+                            id, 
+                            id_sudokuboard_fk AS idboard,
+                            tim_time AS time
+                        FROM 
+                            Game
+                        WHERE 
+                            id_user_fk={}
+                        ORDER BY 
+                            tim_date DESC
+                        LIMIT 1
+                    ) Board ON State.id_game_fk = Board.id
+                ORDER BY 
+                    State.tim_date DESC
+                LIMIT 1
+                """.format( self.idUsername )
+
+        #Nueva conexión a la bd
+        newConnection = MySQLEngine(self.config.getConfig())
+        transaction = newConnection.select(query=query)
+
+        if transaction: 
+            state, self.idBoard= transaction[0]
         
+            #El estado del Board es 'derrota'
+            if state == "derrota":
+                MsgBox = messagebox.askquestion ('Sudoku','¿Deseas utilizar el mismo tablero de la partida finalizada como derrota?',icon = 'warning')
+                if MsgBox == 'yes':
+                    tool = ToolConnection()
+                    filename = "n00b.sudoku"
+
+                    tool.insertGameBoard(
+                                                username=self.username, 
+                                                idUsername=self.idUsername, 
+                                                idBoard=self.idBoard
+                                )
+                    
+                    self.openSudokuBoard(filename=filename) 
+                else:
+                    self.__generateNewBoard()
+            else:
+                self.__generateNewBoard()
+                
+        newConnection.closeConnection()
+
+    def __generateNewBoard(self):
         tool = ToolConnection()
         filename = "n00b.sudoku"
 
@@ -115,7 +170,6 @@ class SudokuAdministratorGame(Frame):
                 SudokuBoardUI(root, game, self.child,  "")
 
             root.mainloop()
-
 
     """
     Función que permite continuar un juego pausado.
@@ -185,6 +239,15 @@ class SudokuAdministratorGame(Frame):
                 return
 
         newConnection.closeConnection()
+
+    """
+    Función que permite visualizar los mejores puntajes.
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+    @version 1.0
+    """
+    def __bestScores(self):
+        self.child.withdraw()
+        SudokuScoreboardUI(parent=self.child)
 
     """
     Función que pregunta al usuario si desea salir del juego.

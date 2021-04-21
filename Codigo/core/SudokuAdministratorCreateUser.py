@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import re
 from tkinter import *
@@ -95,7 +96,7 @@ class SudokuAdministratorCreateUser(Frame):
             userExist = self.db.select("SELECT tex_nickname FROM User WHERE tex_nickname = %s", (self.usernameEntry.get(),))
             
             # Si el campo no cumple con la expresión regular
-            if (re.fullmatch(r"[a-zA-Z]{4,30}$", self.usernameEntry.get()) is None):
+            if (re.fullmatch(r"(?=.*[a-zA-Z])[a-zA-Z\d]{4,30}$", self.usernameEntry.get()) is None):
                 error += "El nombre de usuario no es válido."
 
             # Si existe entonces error

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from tkinter import *
 from core.SudokuMainWindowUI import SudokuMainWindowUI
 from core.ScreenCenter import ScreenCenter

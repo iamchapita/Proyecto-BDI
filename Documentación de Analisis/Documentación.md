@@ -5,8 +5,8 @@
     Catedrático: José Manuel Inestroza Murillo
     Alumnos:  Daniel Alessandro Arteaga Martínez    -   20161000031
               Luis Alejandro Morales Zelaya         -   20161930074
-              **
-              **
+              Gabriela Emperatriz Hernández Cortés  -   20161003982
+              Kenneth Leonel Cruz Ordoñez           -   20141010391
 
 # **Proyecto Final - Documentación (Análisis e Investigación)**
 

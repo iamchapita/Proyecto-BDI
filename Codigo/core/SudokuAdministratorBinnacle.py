@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from tkinter import *
 from tkinter import ttk
 import tkinter.font as tkFont
@@ -105,7 +106,7 @@ class SudokuAdministratorBinnacle(Frame):
                     INNER JOIN 
                         User ON Result.user = User.id
                     ORDER BY 
-                        Result.date ASC;
+                        Result.date DESC;
                 """
 
         transaction = self.db.select( query=query )

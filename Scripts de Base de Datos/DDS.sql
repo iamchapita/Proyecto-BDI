@@ -83,3 +83,12 @@ CREATE TABLE GameAction(
     FOREIGN KEY (id_action_fk) REFERENCES Action(id),
     FOREIGN KEY (id_game_fk) REFERENCES Game(id)
 )COMMENT "Relación entre un tablero y los resultados ingresados por el usuario";
+
+
+CREATE TABLE Binacle(
+    id SERIAL PRIMARY KEY, 
+    tex_nickname TINYTEXT NOT NULL COMMENT "Descripción del nombre del usuario", 
+    tex_description TEXT NOT NULL COMMENT "Descripción de la acción que realiza un usuario en el sistema",
+    tim_date TIMESTAMP NOT NULL DEFAULT NOW() COMMENT "Tiempo exacto en el que se realizó la acción"
+    
+)COMMENT = "Almacena acciones realizadas por los usuarios";

@@ -133,6 +133,8 @@ class SudokuAdministratorGame(Frame):
                     self.__generateNewBoard()
             else:
                 self.__generateNewBoard()
+        else:
+                self.__generateNewBoard()
                 
         newConnection.closeConnection()
 

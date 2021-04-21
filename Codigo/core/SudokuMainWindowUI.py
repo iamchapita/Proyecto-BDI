@@ -191,6 +191,10 @@ class SudokuMainWindowUI(Frame):
     @version 1.0
     """
     def __bestScores(self):
+        
+        #Un usuario visualiza la tabla de puntuaciones
+        (ToolConnection()).bestScore()
+        
         self.parent.withdraw()
         SudokuScoreboardUI(parent=self.parent)
 

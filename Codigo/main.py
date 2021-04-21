@@ -1,4 +1,5 @@
-import argparse
+# -*- coding: utf-8 -*-
+
 from tkinter import *
 from core.SudokuSplashScreenUI import SudokuSplashScreenUI
 

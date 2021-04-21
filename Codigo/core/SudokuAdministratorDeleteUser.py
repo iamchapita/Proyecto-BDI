@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from tkinter import *
 import tkinter.font as tkFont
 from core.ScreenCenter import ScreenCenter

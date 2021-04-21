@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from tkinter import *
 from tkinter.ttk import Treeview
 from core.ScreenCenter import ScreenCenter

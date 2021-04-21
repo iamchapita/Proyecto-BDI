@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from tkinter import *
 from core.ScreenCenter import ScreenCenter
 from core.EngineSQL.MySQLEngine import MySQLEngine

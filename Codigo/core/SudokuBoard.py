@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from core.SudokuError import SudokuError
 
 class SudokuBoard(object):
 

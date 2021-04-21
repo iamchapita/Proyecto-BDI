@@ -9,7 +9,7 @@ from core.SudokuGame import SudokuGame
 from core.SudokuBoardUI import SudokuBoardUI
 from core.SudokuByeUI import SudokuBye
 from core.EngineSQL.MySQLToolConnection import ToolConnection
-
+from core.SudokuAdministratorGame import SudokuAdministratorGame
 
 """
 Frame que permite visualizar las opciones de un usuario que tiene como
@@ -70,7 +70,7 @@ class SudokuAdministratorUI(Frame):
         self.manageUsersButton.focus_set()
         self.manageUsersButton.grid(row=2, column=1, sticky="nsew", pady=5, padx=40)
         
-        self.goToGameButton = Button(self.parent, text = 'Ir al juego', command= self.__goGame)
+        self.goToGameButton = Button(self.parent, text = 'Jugar', command= self.__goMainGame)
         self.goToGameButton.configure(bg="#6ea8d9", font=ButtonStyles)
         self.goToGameButton.grid(row=3,column=1,sticky = "nsew", pady = 5, padx=40)
 
@@ -109,30 +109,9 @@ class SudokuAdministratorUI(Frame):
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
     @version 1.0
     """
-    def __goGame(self):
-                
-        tool = ToolConnection()
-        filename = "n00b.sudoku"
-
-        #Carga la información de sudokuBoard al archivo n00b.sudoku
-        self.idBoard = tool.processFile(filename=filename)
-
-        #Carga la información de tablero 'nuevo' a la base de datos
-        #self.__createNewGame()
-        tool.insertGameBoard(
-                                    username=self.username, 
-                                    idUsername=self.idUsername, 
-                                    idBoard=self.idBoard
-                    )
-
-        #with open('core/sudoku/n00b.sudoku', 'r') as boardFile:
-        with open('core/sudoku/{}'.format(filename), 'r') as boardFile:
-
-            self.parent.withdraw()
-            root = Tk()
-            game = SudokuGame(boardFile)
-            game.start()
-            SudokuBoardUI(root, game, self.parent, "")
+    def __goMainGame(self):
+        self.parent.withdraw()
+        SudokuAdministratorGame(parent = self.parent)
 
     """
     Función que pregunta al usuario si desea salir del juego.

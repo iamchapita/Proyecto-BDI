@@ -121,13 +121,12 @@ class SudokuBoardUI(Frame):
         se guarda el estado del tablero en la base de datos la base de datos
     """
     def __pauseGame(self):
-        
+        self.pauseButton.config(state="disabled")
         #Se ha presionado 'pausa'
         if self.pauseButton.cget('text') == "Pausa": 
 
             self.game.pause = True
             if(self.rol==1):
-
                 print("Regresar al menú principal de admin")
                 self.after(2000,self.parent.destroy)
                 self.after(1999,self.mainAdmin.deiconify)

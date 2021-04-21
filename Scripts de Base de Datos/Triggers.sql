@@ -1,6 +1,6 @@
 /*
     @author kenneth.cruz@unah.hn
-    @version 0.1.0
+    @version 0.1.1
     @date 2021/04/20
 */
 
@@ -16,17 +16,13 @@ CREATE TABLE Binacle(
 )COMMENT = "Almacena acciones realizadas por los usuarios";
 
 
-DROP TRIGGER IF EXISTS tg_createBoard;
+DROP FUNCTION IF EXISTS fn_getNickname;
 
-DELIMITER $$ 
+DELIMITER $$
 
-    CREATE TRIGGER tg_createBoard 
-        AFTER INSERT
-        ON State FOR EACH ROW
-    BEGIN  
-        INSERT INTO Binacle(tex_nickname, tex_description) VALUES
-            (
-                (
+    CREATE FUNCTION fn_getNickName(id BIGINT UNSIGNED) RETURNS VARCHAR(40)
+    BEGIN 
+        RETURN (
                     SELECT  
                         User.tex_nickname AS nickname
                     FROM
@@ -34,17 +30,40 @@ DELIMITER $$
                     INNER JOIN 
                         Game ON User.id = Game.id_user_fk
                     WHERE 
-                        Game.id = new.id_game_fk
-                ), 
+                        Game.id = id
+                )
+            ;
+    END $$
+
+DELIMITER ;
+
+--
+-- Al realizar cualquier acción sobre el tablero. 
+--
+
+DROP TRIGGER IF EXISTS tg_createBoard;
+
+DELIMITER $$ 
+    
+    SET @var = "el usuario # ha ";
+
+    CREATE TRIGGER tg_createBoard 
+        AFTER INSERT
+        ON State FOR EACH ROW
+    BEGIN  
+        INSERT INTO Binacle(tex_nickname, tex_description) VALUES
+            (
+                fn_getNickName(new.id)
+                , 
 
                 (
                     SELECT 
                         CASE
-                            WHEN  new.cod_state = "nuevo" THEN  "ha creado un nuevo tablero"
-                            WHEN  new.cod_state = "pausado" THEN "ha pausado el juego"
-                            WHEN  new.cod_state = "finalizado" THEN "ha concluido con éxito el juego"
-                            WHEN  new.cod_state = "derrota" THEN "ha perdido la partida"
-                            WHEN  new.cod_state = "continuar" THEN "ha iniciado un juego en pausa"
+                            WHEN  new.cod_state = "nuevo" THEN  CONCAT(@var, "creado un nuevo tablero")
+                            WHEN  new.cod_state = "pausado" THEN CONCAT(@var, "pausado el juego")
+                            WHEN  new.cod_state = "finalizado" THEN CONCAT(@var, "concluido con éxito el juego")
+                            WHEN  new.cod_state = "derrota" THEN CONCAT(@var, "perdido la partida")
+                            WHEN  new.cod_state = "continuar" THEN CONCAT(@var, "iniciado un juego en pausa")
                         END 
                 )
             )
@@ -52,3 +71,51 @@ DELIMITER $$
     END $$
 
 DELIMITER ; 
+
+
+--
+-- Inicio de sesión
+--
+
+DROP TRIGGER IF EXISTS tg_login; 
+
+DELIMITER $$ 
+
+    CREATE TRIGGER tg_login
+        AFTER INSERT 
+        ON Login FOR EACH ROW
+    BEGIN 
+        INSERT INTO Binacle(tex_nickname, tex_description) VALUES
+            (
+                fn_getNickName(new.id), 
+                "el usuario # inició sesión"
+            )
+        ;
+    END $$
+
+DELIMITER ;
+
+
+
+--
+-- Cierre de sesión
+--
+
+DROP TRIGGER IF EXISTS tg_login; 
+
+DELIMITER $$ 
+
+    CREATE TRIGGER tg_login
+        AFTER INSERT 
+        ON LogOff FOR EACH ROW
+    BEGIN 
+        INSERT INTO Binacle(tex_nickname, tex_description) VALUES
+            (
+                fn_getNickName(new.id), 
+                "el usuario # cerro sesión"
+            )
+        ;
+    END $$
+
+DELIMITER ;
+

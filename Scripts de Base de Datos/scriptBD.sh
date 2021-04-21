@@ -11,3 +11,5 @@ mysql -t -v -u admin -padmin < Views.sql
 mysql -t -v -u admin -padmin < Functions.sql
 # Creación de Procedimientos Almacenados
 mysql -t -v -u admin -padmin < Procedures.sql
+# Creación de Triggers
+mysql -t -v -u admin -padmin < Triggers.sql

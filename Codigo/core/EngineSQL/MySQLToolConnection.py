@@ -226,7 +226,7 @@ class ToolConnection:
         
         username, idUsername, rol = self.getLastLoginUser()
 
-         self.db.insert(
+        self.db.insert(
                 table="Binacle", 
                 fields=[
                             "tex_nickname",

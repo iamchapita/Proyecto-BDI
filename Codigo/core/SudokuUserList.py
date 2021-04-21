@@ -196,7 +196,7 @@ class SudokuUserList(Frame):
                     if (self.usernameEdited.get() == nickname[0]):
                         error += "El nombre de usuario introducido ya está en uso."
                 
-                if (re.fullmatch(r"[a-zA-Z]{4,30}$", self.usernameEdited.get()) is None):
+                if (re.fullmatch(r"(?=.*[a-zA-Z])[a-zA-Z\d]{4,30}$", self.usernameEdited.get()) is None):
                     error += "El nombre de usuario no es válido."
 
             else:

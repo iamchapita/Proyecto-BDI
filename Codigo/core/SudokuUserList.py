@@ -354,8 +354,8 @@ class SudokuUserList(Frame):
 
             #Inserción de actualización de usuario
             (ToolConnection()).insertBinacle(
-                    nickname=self.usernameEdited.get(), 
-                    description="el nombre del usuario # ha sido actualizado"
+                    nickname="admin", 
+                    description="El nombre de usuario de {} ha sido actualizado".format(self.currentItem[0])
                 )
 
             # Se muestra un mensaje de operación exitosa.
@@ -434,8 +434,8 @@ class SudokuUserList(Frame):
             
             #Inserción de actualización de contraseña
             (ToolConnection()).insertBinacle(
-                    nickname=self.usernameEdited.get(), 
-                    description="la contraseña del usuario # ha sido actualizado"
+                    nickname="admin", 
+                    description="La contraseña del usuario {} ha sido actualizada".format(self.currentItem[0])
                 )
 
             # Se mustra un messageBox de éxito.
@@ -484,8 +484,8 @@ class SudokuUserList(Frame):
 
                     #Recuperación de estado de usuario
                     (ToolConnection()).insertBinacle(
-                                    nickname=self.usernameEdited.get(), 
-                                    description="el usuario # ha sido recuperado"
+                                    nickname="admin", 
+                                    description="El acceso del usuario {} ha sido habilitado".format(self.currentItem[0])
                                 )
                                 
                 else:
@@ -493,8 +493,8 @@ class SudokuUserList(Frame):
                     
                     #Eliminación de usuario del sistema
                     (ToolConnection()).insertBinacle(
-                                   nickname=self.usernameEdited.get(), 
-                                    description="el usuario # ha sido de baja del sistema"
+                                    nickname="admin", 
+                                    description="El acceso del usuario {} ha sido deshabilitado".format(self.currentItem[0])
                                 )
 
                 # Se muestra un meesagebox de éxtio.

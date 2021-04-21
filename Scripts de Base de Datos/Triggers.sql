@@ -6,37 +6,6 @@
 
 USE SudokuDB; 
 
-DROP TABLE IF EXISTS Binacle;
-CREATE TABLE Binacle(
-    id SERIAL PRIMARY KEY, 
-    tex_nickname TINYTEXT NOT NULL COMMENT "Descripción del nombre del usuario", 
-    tex_description TEXT NOT NULL COMMENT "Descripción de la acción que realiza un usuario en el sistema",
-    tim_date TIMESTAMP NOT NULL DEFAULT NOW() COMMENT "Tiempo exacto en el que se realizó la acción"
-    
-)COMMENT = "Almacena acciones realizadas por los usuarios";
-
-
-DROP FUNCTION IF EXISTS fn_getNickname;
-
-DELIMITER $$
-
-    CREATE FUNCTION fn_getNickName(id BIGINT UNSIGNED) RETURNS VARCHAR(40)
-    BEGIN 
-        RETURN (
-                    SELECT  
-                        User.tex_nickname AS nickname
-                    FROM
-                        User
-                    INNER JOIN 
-                        Game ON User.id = Game.id_user_fk
-                    WHERE 
-                        Game.id = id
-                )
-            ;
-    END $$
-
-DELIMITER ;
-
 --
 -- Al realizar cualquier acción sobre el tablero. 
 --
@@ -101,11 +70,11 @@ DELIMITER ;
 -- Cierre de sesión
 --
 
-DROP TRIGGER IF EXISTS tg_login; 
+DROP TRIGGER IF EXISTS tg_logOff; 
 
 DELIMITER $$ 
 
-    CREATE TRIGGER tg_login
+    CREATE TRIGGER tg_logOff
         AFTER INSERT 
         ON LogOff FOR EACH ROW
     BEGIN 

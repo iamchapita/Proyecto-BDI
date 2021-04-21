@@ -35,6 +35,7 @@
   - [**Elementos Conceptuales**](#elementos-conceptuales)
     - [**Tkinter**](#tkinter)
     - [**MySQL Connector**](#mysql-connector)
+  - [**Código Fuente de Sudoku Game**](#Código-Fuente-de-Sudoku-Game)
   - [**Actividades**](#actividades)
     - [**Actividad #1**](#Actividad-#1)
     - [**Actividad #2**](#Actividad-#2)
@@ -202,6 +203,18 @@ Connector/Python no es compatible con los antiguos métodos de autenticación de
 
 -----
 
+## **Código Fuente de Sudoku Game**
+
+-----
+
+- La creación del código se puede encontrar en la página [Sudoku Game with Tkinter](http://newcoder.io/gui/part-1/) el cual esta dividido en cuatro partes.
+- En la página anteriormente mencionada se planea la creación de un juego de Sudoku usando Python y Tkinter. 
+- Primero se comienza a describir la lógica del juego en donde se menciona que se tiene que verificar si todas las lineas horizontales y columnas verticales contienen los digitos del 1 al 9.
+- Se tiene que tomar en cuenta los tableros que el jugador desea jugar.
+- Usar un GUI (Graphic User Interface). Es donde entra el uso de la libreria de Tkinter.
+
+-----
+
 ## **Actividades**
 
 -----
@@ -242,7 +255,7 @@ Se creo un repositorio en GitHub para facilitar el trabajo y evitar problemas a 
 
 -----
 
-- [1]: Todas las reuniones síncronas del equipo de trabajo se llevaron a cabo en Discord la cual es una aplicación freeware de diálogo y texto. Estas reuniones se realizaban a partir de las 4pm cuando los miembros del equipo ya habian terminados sus jornada academica para así contar con a disposición de tiempo necesaria para poder cumplir con los deberes del proyecto.
+- [1]: Todas las reuniones síncronas del equipo de trabajo se llevaron a cabo en Discord/Google Meet. Estas reuniones se realizaban a partir de las 1pm/9pm (dependiendo de la disponibilidad de los integrantes) para poder cumplir con los deberes del proyecto.
 
   - ![ServerDiscord](https://drive.google.com/uc?export=view&id=1hG9Ydwo63XZoqSyQg1DjbC-BSxDOJ-jN "ServerDiscord")
 

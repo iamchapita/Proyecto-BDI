@@ -2,7 +2,7 @@
 
 """
     @author: kenneth.cruz@unah.hn
-    @version: 0.1.6
+    @version: 0.1.7
     @date: 2021/04/08
 """
 
@@ -37,7 +37,8 @@ class ToolConnection:
         #self.db.closeConnection()
 
         #(id, name)
-        return (transaction[0][0], transaction[0][1], transaction[0][2])
+        #return (transaction[0][0], transaction[0][1], transaction[0][2])
+        return (self.username, self.idUsername, self.rol)
 
 
     """
@@ -217,3 +218,22 @@ class ToolConnection:
         boardFile.close()
 
         return idBoard
+
+    """
+        Acción de visualizar la mejor puntuación 
+    """
+    def bestScore(self):
+        
+        username, idUsername, rol = self.getLastLoginUser()
+
+         self.db.insert(
+                table="Binacle", 
+                fields=[
+                            "tex_nickname",
+                            "tex_description" 
+                        ], 
+                values=[
+                            username, 
+                            "el usuario # ha visualizado la tabla de puntuaciones"
+                        ]
+            )

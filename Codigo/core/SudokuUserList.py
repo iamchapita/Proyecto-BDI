@@ -352,6 +352,12 @@ class SudokuUserList(Frame):
                 "tex_nickname = '{}'".format(self.currentItem[0])
                 )
 
+            #Inserción de actualización de usuario
+            (ToolConnection()).insertBinacle(
+                    nickname=self.usernameEdited.get(), 
+                    description="el nombre del usuario # ha sido actualizado"
+                )
+
             # Se muestra un mensaje de operación exitosa.
             MsgBox = messagebox.showinfo(title = 'Éxito', message = "EL nombre de usuario fue cambiado exitosamente.")
             # Se limpia el texto en los Entry.
@@ -425,6 +431,12 @@ class SudokuUserList(Frame):
                 ["'{}'".format(data.encrypt(self.passwordEdited.get(), self.currentItem[0]))],
                 "tex_nickname = '{}'".format(self.currentItem[0])
                 )
+            
+            #Inserción de actualización de contraseña
+            (ToolConnection()).insertBinacle(
+                    nickname=self.usernameEdited.get(), 
+                    description="la contraseña del usuario # ha sido actualizado"
+                )
 
             # Se mustra un messageBox de éxito.
             MsgBox = messagebox.showinfo(title = 'Operación Éxitosa', message = "Cambio de contraseña Éxitoso.")
@@ -469,8 +481,21 @@ class SudokuUserList(Frame):
                 # Se actualiza el estado del usuario según la opción seleccionada en el combobox.
                 if (self.stateCombobox.get() == "Habilitado"):
                     self.db.update("User", ["bit_state"], [1], "tex_nickname = '{}'".format(self.currentItem[0]))
+
+                    #Recuperación de estado de usuario
+                    (ToolConnection()).insertBinacle(
+                                    nickname=self.usernameEdited.get(), 
+                                    description="el usuario # ha sido recuperado"
+                                )
+                                
                 else:
                     self.db.update("User", ["bit_state"], [0], "tex_nickname = '{}'".format(self.currentItem[0]))
+                    
+                    #Eliminación de usuario del sistema
+                    (ToolConnection()).insertBinacle(
+                                   nickname=self.usernameEdited.get(), 
+                                    description="el usuario # ha sido de baja del sistema"
+                                )
 
                 # Se muestra un meesagebox de éxtio.
                 MsgBox = messagebox.showinfo(

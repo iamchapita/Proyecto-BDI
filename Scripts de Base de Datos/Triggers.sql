@@ -1,6 +1,6 @@
 /*
     @author kenneth.cruz@unah.hn
-    @version 0.1.1
+    @version 0.1.2
     @date 2021/04/20
 */
 
@@ -14,25 +14,23 @@ DROP TRIGGER IF EXISTS tg_createBoard;
 
 DELIMITER $$ 
     
-    SET @var = "el usuario # ha ";
-
     CREATE TRIGGER tg_createBoard 
         AFTER INSERT
         ON State FOR EACH ROW
     BEGIN  
         INSERT INTO Binacle(tex_nickname, tex_description) VALUES
             (
-                fn_getNickName(new.id)
+                fn_getNickNameByState(new.id_game_fk)
                 , 
 
                 (
                     SELECT 
                         CASE
-                            WHEN  new.cod_state = "nuevo" THEN  CONCAT(@var, "creado un nuevo tablero")
-                            WHEN  new.cod_state = "pausado" THEN CONCAT(@var, "pausado el juego")
-                            WHEN  new.cod_state = "finalizado" THEN CONCAT(@var, "concluido con éxito el juego")
-                            WHEN  new.cod_state = "derrota" THEN CONCAT(@var, "perdido la partida")
-                            WHEN  new.cod_state = "continuar" THEN CONCAT(@var, "iniciado un juego en pausa")
+                            WHEN  new.cod_state = 1 THEN  "el usuario # ha creado un nuevo tablero"
+                            WHEN  new.cod_state = 2 THEN "el usuario # ha pausado el juego"
+                            WHEN  new.cod_state = 3 THEN "el usuario # ha concluido con éxito el juego"
+                            WHEN  new.cod_state = 4 THEN "el usuario # ha perdido la partida"
+                            WHEN  new.cod_state = 5 THEN "el usuario # ha iniciado un juego en pausa"
                         END 
                 )
             )
@@ -56,7 +54,7 @@ DELIMITER $$
     BEGIN 
         INSERT INTO Binacle(tex_nickname, tex_description) VALUES
             (
-                fn_getNickName(new.id), 
+                fn_getNicknameById(new.id_user_fk), 
                 "el usuario # inició sesión"
             )
         ;
@@ -80,7 +78,7 @@ DELIMITER $$
     BEGIN 
         INSERT INTO Binacle(tex_nickname, tex_description) VALUES
             (
-                fn_getNickName(new.id), 
+                fn_getNicknameById(new.id_user_fk), 
                 "el usuario # cerro sesión"
             )
         ;
@@ -88,3 +86,25 @@ DELIMITER $$
 
 DELIMITER ;
 
+--
+-- Eliminación/Recuperación de usuario (Cambio de estado)
+--
+
+DROP TRIGGER IF EXISTS tg_createUser; 
+
+DELIMITER $$ 
+
+    CREATE TRIGGER tg_createUser
+        AFTER INSERT 
+        ON User FOR EACH ROW
+    BEGIN 
+        INSERT INTO Binacle(tex_nickname, tex_description) VALUES
+            (
+                new.tex_nickname, 
+                "el usuario # ha sido creado"
+                
+            )
+        ;
+    END $$
+
+DELIMITER ;

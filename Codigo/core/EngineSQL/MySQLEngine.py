@@ -35,6 +35,8 @@ class MySQLEngine:
 
         query = "INSERT INTO {} ({}) VALUES ({});".format( table, ", ".join(fields), self.prepareQuery(values) )
 
+        print( query )
+
         self.link.execute(query)
         self.mydb.commit()
 
@@ -120,16 +122,19 @@ class MySQLEngine:
     def prepareQuery(self, values):
         
         data = ""
+        
+        print( values )
 
         for value in values: 
 
             #Evita colocar comillas simples a los tipo de dato entero
             if type(value) == int:  
-                data += "{} ".format(value)
+                data += "{}, ".format(value)
             else: 
-                data += "'{}' ".format(value)
-
-        data = data.replace(" ", ",")
-        data = re.sub(r",$", "", data)
-
+                data += "'{}', ".format(value)
+        
+        print( data )
+        data = re.sub(r",\s+?$", "", data)
+        print( data )
+        
         return data

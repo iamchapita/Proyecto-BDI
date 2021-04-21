@@ -65,11 +65,11 @@ DELIMITER ;
 -- Obtiene el nombre de un usuario por medio de su identificador
 --
 
-DROP FUNCTION IF EXISTS fn_getNickname;
+DROP FUNCTION IF EXISTS fn_getNickNameByState;
 
 DELIMITER $$
 
-    CREATE FUNCTION fn_getNickName(id BIGINT UNSIGNED) RETURNS VARCHAR(40)
+    CREATE FUNCTION fn_getNickNameByState(id_game_fk BIGINT UNSIGNED) RETURNS VARCHAR(40)
     BEGIN 
         RETURN (
                     SELECT  
@@ -79,7 +79,33 @@ DELIMITER $$
                     INNER JOIN 
                         Game ON User.id = Game.id_user_fk
                     WHERE 
-                        Game.id = id
+                        Game.id = id_game_fk
+                )
+            ;
+    END $$
+
+DELIMITER ;
+
+
+
+
+--
+-- Obtiene el nombre de un usuario por medio de su identificador
+--
+
+DROP FUNCTION IF EXISTS fn_getNicknameById;
+
+DELIMITER $$
+
+    CREATE FUNCTION fn_getNicknameById(id_user_fk BIGINT UNSIGNED) RETURNS VARCHAR(40)
+    BEGIN 
+        RETURN (
+                    SELECT  
+                        tex_nickname AS nickname
+                    FROM
+                        User
+                    WHERE 
+                        id = id_user_fk
                 )
             ;
     END $$

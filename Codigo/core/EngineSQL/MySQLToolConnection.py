@@ -30,15 +30,17 @@ class ToolConnection:
 
         transaction = self.db.select(query=query)
 
-        self.username = transaction[0][0]
-        self.idUsername = transaction[0][1]
-        self.rol = transaction[0][2]
-        print(  "username: {}, id: {}, rol:{}".format(self.username, self.idUsername, self.rol) )
-        #self.db.closeConnection()
+        if transaction:
+        
+            self.username = transaction[0][0]
+            self.idUsername = transaction[0][1]
+            self.rol = transaction[0][2]
 
-        #(id, name)
-        #return (transaction[0][0], transaction[0][1], transaction[0][2])
-        return (self.username, self.idUsername, self.rol)
+            print(  "username: {}, id: {}, rol:{}".format(self.username, self.idUsername, self.rol) )
+            #self.db.closeConnection()
+
+            #(id, name)
+            return (transaction[0][0], transaction[0][1], transaction[0][2])
 
 
     """
@@ -224,7 +226,7 @@ class ToolConnection:
     """
     def bestScore(self):
         
-        username, idUsername, rol = self.getLastLoginUser()
+        id, username, rol = self.getLastLoginUser()
 
         self.db.insert(
                 table="Binacle", 
@@ -236,4 +238,21 @@ class ToolConnection:
                             username, 
                             "el usuario # ha visualizado la tabla de puntuaciones"
                         ]
+            )
+
+    """
+        Inserción de registro a la base de datos
+    """
+    def insertBinacle(self, nickname, description): 
+
+            self.db.insert(
+                "Binacle", 
+                [
+                    "tex_nickname", 
+                    "tex_description"
+                ], 
+                [
+                    nickname, 
+                    description
+                ]
             )

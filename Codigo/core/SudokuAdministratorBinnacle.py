@@ -109,6 +109,18 @@ class SudokuAdministratorBinnacle(Frame):
                         Result.date DESC;
                 """
 
+        query = """
+                SELECT 
+                    tex_nickname, 
+                    tex_description, 
+                    tim_date
+                FROM 
+                    Binacle 
+                ORDER BY 
+                    tim_date DESC
+                ;
+        """
+
         transaction = self.db.select( query=query )
 
         if transaction:

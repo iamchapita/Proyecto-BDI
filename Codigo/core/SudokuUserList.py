@@ -126,9 +126,11 @@ class SudokuUserList(Frame):
         labelBrand.place(x=280,y=550)
         self.dataView.bind("<ButtonRelease-1>", self.__getSelectedItem)
         self.__loadDataView()
-        #self.child.after()
 
-    # Obtiene el elemento seleccionado del dataView (TreeView)
+    # Se obtiene el elemento seleccionado en el treeView para despues obtener los valores de ese
+    # elemento seleccionado.
+    # Se hace el llamado a las funciones para que se cargue en los Entry 
+    # la información del usuario seleccionado en el TreeView.
     def __getSelectedItem(self, event):
         self.currentItem = self.dataView.focus()
         self.currentItem = self.dataView.item(self.currentItem)
@@ -147,16 +149,16 @@ class SudokuUserList(Frame):
         self.usernameEdited.insert(1, self.currentItem[0])
         self.passwordEdited.insert(1, newResult)
 
+    # Limpia el texto de los Entry que corrsponde con el nombre de usuario y contraseña.
     def __clearEntries(self):
         self.usernameEdited.delete(0, "end")
         self.passwordEdited.delete(0, "end")
         self.stateCombobox.current(0)
 
     # Obtiene los nombres de usuario y el estado de los mismos y los posiciona
-    # en el dataView
+    # en el dataView.
     def __loadDataView(self):
 
-        #self.dataView.delete(*self.dataView.get_children())
         result = self.db.select("SELECT tex_nickname, bit_state FROM User WHERE bit_rol = 0;")
         count  = 1
         for nickname, state in result:
@@ -183,6 +185,7 @@ class SudokuUserList(Frame):
     # y con el nombre del usuario seleccionado en el dataView para postetiormente realizar la actualización del campo
     # tex_nickname en la tabla User de la Base de datos.
     def __editUsername(self):
+
         self.__clearDataView()
         self.__loadDataView()
         error = ""

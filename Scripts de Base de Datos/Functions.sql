@@ -1,3 +1,10 @@
+/*
+    @author alejandrom646@gmail.com, kenneth.cruz@unah.hn
+    @version 0.1.4
+    @date 2021/04/03
+*/
+
+
 USE SudokuDB;
 
 SET GLOBAL log_bin_trust_function_creators = 1;
@@ -50,5 +57,31 @@ DELIMITER $$
     RETURN "";
 
     END $$ */
+
+DELIMITER ;
+
+
+--
+-- Obtiene el nombre de un usuario por medio de su identificador
+--
+
+DROP FUNCTION IF EXISTS fn_getNickname;
+
+DELIMITER $$
+
+    CREATE FUNCTION fn_getNickName(id BIGINT UNSIGNED) RETURNS VARCHAR(40)
+    BEGIN 
+        RETURN (
+                    SELECT  
+                        User.tex_nickname AS nickname
+                    FROM
+                        User
+                    INNER JOIN 
+                        Game ON User.id = Game.id_user_fk
+                    WHERE 
+                        Game.id = id
+                )
+            ;
+    END $$
 
 DELIMITER ;

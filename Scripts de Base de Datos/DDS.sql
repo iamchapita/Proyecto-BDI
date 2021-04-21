@@ -65,7 +65,7 @@ CREATE TABLE State(
     FOREIGN KEY (id_game_fk) REFERENCES Game(id)
 )COMMENT "Estados en los que puede estar el tablero de juego para un jugador";
 
-
+/*
 CREATE TABLE Action(
     id SERIAL PRIMARY KEY,
     bit_state bit(1) DEFAULT 0 NOT NULL COMMENT "'0' rellenar respuesta | '1' Un usuario puede desear 'regresar' una (o varias) jugadas atrás",
@@ -83,7 +83,7 @@ CREATE TABLE GameAction(
     FOREIGN KEY (id_action_fk) REFERENCES Action(id),
     FOREIGN KEY (id_game_fk) REFERENCES Game(id)
 )COMMENT "Relación entre un tablero y los resultados ingresados por el usuario";
-
+*/
 
 CREATE TABLE Binacle(
     id SERIAL PRIMARY KEY, 

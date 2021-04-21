@@ -236,7 +236,7 @@ class ToolConnection:
                         ], 
                 values=[
                             username, 
-                            "el usuario # ha visualizado la tabla de puntuaciones"
+                            "El usuario visualizó la tabla de puntuaciones"
                         ]
             )
 

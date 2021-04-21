@@ -26,11 +26,11 @@ DELIMITER $$
                 (
                     SELECT 
                         CASE
-                            WHEN  new.cod_state = 1 THEN  "el usuario # ha creado un nuevo tablero"
-                            WHEN  new.cod_state = 2 THEN "el usuario # ha pausado el juego"
-                            WHEN  new.cod_state = 3 THEN "el usuario # ha concluido con éxito el juego"
-                            WHEN  new.cod_state = 4 THEN "el usuario # ha perdido la partida"
-                            WHEN  new.cod_state = 5 THEN "el usuario # ha iniciado un juego en pausa"
+                            WHEN  new.cod_state = 1 THEN  "Creó un nuevo tablero"
+                            WHEN  new.cod_state = 2 THEN "Pausó el juego"
+                            WHEN  new.cod_state = 3 THEN "Finalizó con éxito la partida"
+                            WHEN  new.cod_state = 4 THEN "Perdió la partida"
+                            WHEN  new.cod_state = 5 THEN "Continuó la partida en pausa"
                         END 
                 )
             )
@@ -55,7 +55,7 @@ DELIMITER $$
         INSERT INTO Binacle(tex_nickname, tex_description) VALUES
             (
                 fn_getNicknameById(new.id_user_fk), 
-                "el usuario # inició sesión"
+                "El usuario inició sesión"
             )
         ;
     END $$
@@ -79,7 +79,7 @@ DELIMITER $$
         INSERT INTO Binacle(tex_nickname, tex_description) VALUES
             (
                 fn_getNicknameById(new.id_user_fk), 
-                "el usuario # cerro sesión"
+                "El usuario cerró sesión"
             )
         ;
     END $$
@@ -100,8 +100,8 @@ DELIMITER $$
     BEGIN 
         INSERT INTO Binacle(tex_nickname, tex_description) VALUES
             (
-                new.tex_nickname, 
-                "el usuario # ha sido creado"
+                "admin", 
+                CONCAT("El usuario ", new.tex_nickname, " ha sido creado")
                 
             )
         ;

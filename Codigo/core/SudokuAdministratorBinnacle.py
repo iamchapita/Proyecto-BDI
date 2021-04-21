@@ -105,7 +105,7 @@ class SudokuAdministratorBinnacle(Frame):
                     INNER JOIN 
                         User ON Result.user = User.id
                     ORDER BY 
-                        Result.date ASC;
+                        Result.date DESC;
                 """
 
         transaction = self.db.select( query=query )

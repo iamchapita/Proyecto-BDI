@@ -54,6 +54,7 @@ class SudokuBoardUI(Frame):
         self.canvas = Canvas(self.parent, width=WIDTH, height=self.localheight)
         self.canvas.configure(background = "#171717")
         self.canvas.pack(fill=BOTH, side=TOP)
+        self.img = PhotoImage(file="core/images/help.png", master=self.parent)
 
         #'Nombre de usuario'
         self.labelNameUser= Label(self.parent, text=self.username, font=("Lato",13))
@@ -68,6 +69,9 @@ class SudokuBoardUI(Frame):
         self.labelTime.pack()
         self.labelTime.place(x=430,y=20)
 
+        self.helpButton= Button(self.parent, image=self.img, command = self.__help)
+        self.helpButton.place(x=670, y=20)
+        self.helpButton.configure(bg="#171717", borderwidth=0, highlightthickness=0)
         self.finishButton = Button(self.parent, text="Finalizar partida", bg="#6ea8d9", font=("Lato",15), height=2, width=13, command=self.__endGame)
         self.finishButton.place(x=540, y=250)
         self.pauseButton = Button(self.parent, text="Pausa", bg="#6ea8d9", font=("Lato",15), height=2, width=13, command=self.__pauseGame)
@@ -556,3 +560,6 @@ class SudokuBoardUI(Frame):
 
         # Se obtiene el id del proceso after, con este id se procede a cancelar el proceso after
         self.afterId =  self.parent.after(1000, self.__timer)
+
+    def __help(self):
+        messagebox.showinfo(message="Regla 1: Hay que completar las casillas vacías con un solo número del 1 al 9. \nRegla 2: En una misma fila no puede haber números repetidos. \nRegla 3: En una misma columna no puede haber números repetidos. \nRegla 4: En una misma región no puede haber números repetidos. \nRegla 5: La solución de un sudoku es única.", title="Instrucciones juego")

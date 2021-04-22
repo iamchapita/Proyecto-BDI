@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from tkinter import *
 import tkinter.font as tkFont
-from core.ScreenCenter import ScreenCenter
-from core.EngineSQL.MySQLEngine import MySQLEngine
-from core.EngineSQL.ConfigConnection import ConfigConnection
-from core.EngineSQL.MySQLToolConnection import ToolConnection
-from core.SudokuByeUI import SudokuBye
+from tkinter import *
 
+from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLEngine import MySQLEngine
+from core.EngineSQL.MySQLToolConnection import ToolConnection
+from core.ScreenCenter import ScreenCenter
+from core.SudokuByeUI import SudokuBye
 
 """
 Frame que permite visualizar los elementos cuando se elimina un usuario

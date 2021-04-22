@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
+import os
 from tkinter import *
 from tkinter import messagebox
-from core.ScreenCenter import ScreenCenter
-from core.SudokuGame import SudokuGame
-from core.SudokuBoardUI import SudokuBoardUI
-from core.SudokuScoreboardUI import SudokuScoreboardUI
-from core.EngineSQL.MySQLEngine import MySQLEngine
+
 from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.MySQLToolConnection import ToolConnection
+from core.ScreenCenter import ScreenCenter
+from core.SudokuBoardUI import SudokuBoardUI
 from core.SudokuByeUI import SudokuBye
-
-import os
-
+from core.SudokuGame import SudokuGame
+from core.SudokuScoreboardUI import SudokuScoreboardUI
 
 """
 Frame que muestra el Main Window y todos sus respectivos widgets de la aplicación

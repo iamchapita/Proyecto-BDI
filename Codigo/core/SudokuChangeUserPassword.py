@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
+import re
 from tkinter import *
-from core.SudokuMainWindowUI import SudokuMainWindowUI
-from core.ScreenCenter import ScreenCenter
-from core.Tooltip import Tooltip
-from core.EngineSQL.MySQLEngine import MySQLEngine
+
 from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLEngine import MySQLEngine
 from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
-
+from core.ScreenCenter import ScreenCenter
 from core.SudokuByeUI import SudokuBye
-import re
+from core.SudokuMainWindowUI import SudokuMainWindowUI
+from core.Tooltip import Tooltip
 
 """
 Frame que muestra el Login y todos sus respectivos widgets de la aplicación

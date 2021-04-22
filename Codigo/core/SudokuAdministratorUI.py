@@ -2,14 +2,15 @@
 import os
 from tkinter import *
 from tkinter import messagebox
-from core.SudokuAdministratorBinnacle import *
-from core.SudokuUserAdministration import *
+
+from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.ScreenCenter import ScreenCenter
-from core.SudokuGame import SudokuGame
+from core.SudokuAdministratorBinnacle import *
+from core.SudokuAdministratorGame import SudokuAdministratorGame
 from core.SudokuBoardUI import SudokuBoardUI
 from core.SudokuByeUI import SudokuBye
-from core.EngineSQL.MySQLToolConnection import ToolConnection
-from core.SudokuAdministratorGame import SudokuAdministratorGame
+from core.SudokuGame import SudokuGame
+from core.SudokuUserAdministration import *
 
 """
 Frame que permite visualizar las opciones de un usuario que tiene como

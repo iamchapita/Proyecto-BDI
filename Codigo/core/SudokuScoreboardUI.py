@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-from tkinter import *
-from tkinter import ttk
-from core.ScreenCenter import ScreenCenter
-from core.SudokuByeUI import SudokuBye
-from core.EngineSQL.MySQLEngine import MySQLEngine
-from core.EngineSQL.ConfigConnection import ConfigConnection
-from core.EngineSQL.MySQLToolConnection import ToolConnection
-from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
 import os
 import re
+from tkinter import *
+from tkinter import ttk
+
+from core.EngineSQL.ConfigConnection import ConfigConnection
+from core.EngineSQL.MySQLEngine import MySQLEngine
+from core.EngineSQL.MySQLToolConnection import ToolConnection
+from core.FileManipulation.EncryptDecrypt import EncryptDecryptSudokuFile
+from core.ScreenCenter import ScreenCenter
+from core.SudokuByeUI import SudokuBye
 
 """
 Frame que permite visualizar todos los scoreboards del juego.

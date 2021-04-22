@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from core.SudokuBoard import SudokuBoard
 
+
 class SudokuGame(object):
 
     def __init__(self, boardFile):

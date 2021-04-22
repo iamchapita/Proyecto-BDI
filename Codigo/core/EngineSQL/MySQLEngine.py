@@ -16,7 +16,6 @@ class MySQLEngine:
         # @param: config es una instancia de dict que contiene los parámetros necesarios para realizar 
         # la conexión a la base de datos
         self.mydb = mysql.connector.connect(**config)
-        print("Conexión con éxito: {}".format( self.mydb.is_connected() ))
         # Se obtiene el cursor 
         self.link = self.mydb.cursor()
     
@@ -34,16 +33,13 @@ class MySQLEngine:
             return self.link.fetchall()
 
         except mysql.connector.Error as e:
-            print("Problemas de conexón: {}".format(e))                
+            pass
     
     # Realiza la operación de insert en la base de datos
     def insert(self, table: str, fields=[], values=[]): 
 
         # Se prepara la query a realizar
         query = "INSERT INTO {} ({}) VALUES ({});".format( table, ", ".join(fields), self.prepareQuery(values) )
-
-        print( query )
-
         # Se ejecuta la query
         self.link.execute(query)
         # Se hacen permanentes los cambios en la Base de datos
@@ -73,27 +69,6 @@ class MySQLEngine:
         # Se retorna el resultado obtenido
         return self.link.fetchone()
 
-    # Sujeto a borrado
-    """ def executeFunction(self, functionName: str, parameters: list):
-
-        query = "SELECT {}".format(functionName)
-
-        if (parameters):
-            query += "("
-            for value in parameters:
-                query += "'{}', ".format(value)
-            
-            query = re.sub(r",\s$", ");", query)
-
-        else:
-            query += "();"
-
-        print(query)
-
-        self.link.execute(query)
-        return self.link.fetchone()
-    
-    """
     # Utilizada para ejecutar un Procedimiento Almacenado en la base de datos
     def callProc(self, name: str, args: list):
         # Se ejecuta el llamado del Procedimiento Almacenado
@@ -124,12 +99,6 @@ class MySQLEngine:
             query = re.sub(r"(\s)*(;)?(\s)*$", "", query)
             # Se agrega punto y coma al final de la query
             query += ";"
-
-        else:
-            raise Exception("fields and values should has same len()")
-        
-        print( "UPDATE: {}".format(query) )
-
         # Se ejecuta la query
         self.link.execute(query)
         # Se hacen permanentes los cambios en la base de datos
@@ -143,20 +112,14 @@ class MySQLEngine:
     def prepareQuery(self, values: list):
         
         data = ""
-        
-        print( values )
-
         for value in values: 
-
             #Evita colocar comillas simples a los tipo de dato entero
             if type(value) == int:  
                 data += "{}, ".format(value)
             else: 
                 data += "'{}', ".format(value)
-        
-        print( data )
+
         data = re.sub(r",\s+?$", "", data)
-        print( data )
         
         # Retorna el valor en forma de cadena
         return data

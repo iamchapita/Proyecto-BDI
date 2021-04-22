@@ -128,13 +128,13 @@ class SudokuBoardUI(Frame):
             self.game.pause = True
             if(self.rol==1):
                 print("Regresar al menú principal de admin")
-                self.after(2000,self.parent.destroy)
-                self.after(1999,self.mainAdmin.deiconify)
+                self.after(105,self.parent.destroy)
+                self.after(100,self.mainAdmin.deiconify)
                 
             if(self.rol==0):
                 print("Regresar al menú principal de user")
-                self.after(2000,self.parent.destroy)
-                self.after(1999,self.mainUser.deiconify)
+                self.after(105,self.parent.destroy)
+                self.after(100,self.mainUser.deiconify)
             
             #Detiene el temporizador y actualiza el tiempo transcurrida en la partida
             self.pauseTime()
@@ -365,12 +365,12 @@ class SudokuBoardUI(Frame):
 
         if(self.rol==1):
             print("Regresar al menú principal de admin")
-            self.after(2000,self.parent.destroy)
-            self.after(1999,self.mainAdmin.deiconify)
+            self.after(105,self.parent.destroy)
+            self.after(100,self.mainAdmin.deiconify)
         if(self.rol==0):
             print("Regresar al menú principal de user")
-            self.after(2000,self.parent.destroy)
-            self.after(1999,self.mainUser.deiconify)
+            self.after(105,self.parent.destroy)
+            self.after(100,self.mainUser.deiconify)
             
         
 

@@ -487,10 +487,15 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
 
 - User
 
-  Contiene la información general sobre los usuarios.  
+  Contiene la información general sobre los usuarios: 
+
   - El estado de un usuario puede ser activo o inactivo.   
   - El rol del usuario es administrador o usuario.
-  - El nombre del usuario es único dentro de la tabla y tiene una longitud máxima de 30 caracteres que permite letras y digitos solamente.
+  - El nombre del usuario es único dentro de la tabla y tiene una longitud máxima de 30 caracteres que permite letras y digitos solamente, el uso del tipo de dato VARCHAR va en esta dirección, dado que el uso de UNIQUE obliga que el tipo de dato sea fijo y no dinámico.
+  - Se hace uso del tipo de dato BIT dado que las decisiones a tomar en este atributo son únicamente dos elementos, en este caso la optimización se dirige hacia el almacenamiento, siendo más eficiente que el uso de una estructura de tipo ENUM.
+  - La longitud de la contraseña es depreciable.
+
+  <br>
 
   | Atributo     | Tipo de dato | Dominio | Restricción de integridad |
   |--------------|--------------|---------|---------------------------|
@@ -502,6 +507,8 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
   ##### Tabla 4.1.6
 
   <br>
+  
+  **Código**:
 
   ```SQL
   CREATE TABLE User(
@@ -519,6 +526,12 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
 
 - Login 
 
+  Tabla que almacena la información con respecto al ingreso del usuario
+    - Tiene una relación con la tabla User
+    - Uso de TIMESTAMP dado que tiene un rango entre los años de 1970 y 2038, mayor versatilidad
+  
+  <br>
+
   | Atributo   | Tipo de dato | Dominio | Restricción de integridad |
   |------------|--------------|---------|---------------------------|
   | id         | SERIAL       |         | PRIMARY KEY               |
@@ -527,6 +540,8 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
   ##### Tabla 4.1.7
 
   <br>
+
+  **Código**:
 
   ```SQL
   CREATE TABLE Login(
@@ -544,6 +559,13 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
 
 - SudokuBoard 
 
+  Contiene la información de los datos (digitos) que se cargan a los nuevos tableros que juego el usuario. 
+  Solo para aquellos *nuevos juegos* que inicia el usuario. 
+    - Internamente se maneja como una cadena con logitud exacta de 89 espacios, 81 digitos más los saltos de linea (se simboliza con el caracter '\n' son ocho en total por tablero), cada tablero es único.
+
+  <br>
+
+
   | Atributo  | Tipo de dato | Dominio | Restricción de integridad |
   |-----------|--------------|---------|---------------------------|
   | id        | SERIAL       |         | PRIMARY KEY               |
@@ -551,6 +573,8 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
   ##### Tabla 4.1.8
 
   <br>
+
+  **Código**:
 
   ```SQL
   CREATE TABLE SudokuBoard(
@@ -564,6 +588,20 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
 
 - Game
 
+  Esta entidad es esencial para la integración del juego con el usuario, mantiene una relación entre las distintas actividades y acciones que realiza 
+  el jugador, sin embargo funge como intermedio entre otras entidades necesarias para almacenar esta información.
+    - **blo_file** primero se debe descomponer el contenido de este atributo según el diseño del sistema, este atributo almacena las jugadas realizadas por el jugador en el tablero, internamente es un arreglo de diccionarios construidos en el lenguaje Python que tiene la siguiente estructura: 
+    
+      ```Python
+        [{row:x1 , col:y1 , val:n, state:0|1}, {row:x2 , col:y2 , val:n, state:0|1}, ...]
+      ```
+    de esta forma almacena cada una de las jugadas ingresadas por el usuario, se utiliza este estructura para mayor comodidad de la manipulación de los datos a nivel de Python, *row* contiene la componente x del tablero correspondiente al último digito ingresa, esto aplica para la clave *col*, la clave *val* se refiere al digito ingresado, simbolizado con **n**, este n pertenece a los naturales que van del 1 al 9; para la componente en y, la clave *state* se refiere a un estado particular entre que un digito es *ingresado* (0) o que el jugador ha *deshecho*  la jugada (1). En el apartado sobre [Encriptación](#encriptación:-funciones-Built-in) se habla a mayor profundidad sobre este atributo.
+    - El resto de atributos se han hablado con cierta profundidad en secciones anteriores, sin embargo *id_user_fk* y *id_sudokuboard_fk* son relaciones que apuntan a las entidades correspondientes descritas en la sección [Esquema conceptual](#esquema-conceptual)
+    - **tim_time** es el tiempo que ha permanecido abierto un tablero, es decir el tiempo medido en el que el usuario ha jugado.
+    - **tim_date** fecha y hora en la que este tablero fue creado
+
+  <br>
+
   | Atributo          | Tipo de dato | Dominio | Restricción de integridad |
   |-------------------|--------------|---------|---------------------------|
   | id                | SERIAL       |         | PRIMARY KEY               |
@@ -575,6 +613,8 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
   ##### Tabla 4.1.9
 
   <br>
+
+  **Código**:
 
   ```SQL
   CREATE TABLE Game(
@@ -595,6 +635,10 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
 
 - LogOff
 
+  Esta entidad internamente es igual a **Login**, sin embargo su objetivo es almacenar la información de todos los usuarios que salen del sistema.
+  
+  <br>
+  
   | Atributo   | Tipo de dato | Dominio | Restricción de integridad |
   |------------|--------------|---------|---------------------------|
   | id         | SERIAL       |         | PRIMARY KEY               |
@@ -603,6 +647,8 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
   ##### Tabla 4.2.1
 
   <br>
+
+  **Código**:
 
   ```SQL
   CREATE TABLE LogOff(
@@ -619,15 +665,35 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
 
 - State
 
+  Entidad que almacena el **estado** y el tiempo del juego con respecto a los movimientos o acciones que realiza un jugador. 
+  Estas acciones se encuentran asociadas a un único juego
+    - Se utiliza el atributo multivalor *cod__state* con un tipo de dato ENUM, establecemos cinco valores: 
+      - **nuevo**   
+        En el momento de crear un nuevo tablero (este tablero es único mientras la jugada no ha finalizado)
+      - **pausado**   
+        Cambia a este estado en el momento de presionar el botón pausa, significa que el usuario no puede realizar más acciones en el tablero
+      - **finalizado**   
+        Significa que el usuario ha completado de forma satisfactoria el tablero, sin equivocación alguna en cada casilla
+      - **derrota**   
+        El usuario ha decidido no continuar con el tablero actual 
+      - **continuar**  
+        Juego que mantiene un estado pausa, y que es llamado nuevamente al juego, esta transición se le conoce como *continuar*
+      - **tim_date** fecha y hora en la que el usuario cambia el estado del tablero 
+
+
+  <br>
+
   | Atributo   | Tipo de dato | Dominio                                                  | Restricción de integridad |
   |------------|--------------|----------------------------------------------------------|---------------------------|
   | id         | SERIAL       |                                                          | PRIMARY KEY               |
   | id_game_fk | BIGINT       |                                                          | FOREIGN KEY               |
   | cod_state  | ENUM         | "nuevo", "pausado", "finalizado", "derrota", "continuar" |                           |
-  | tim_date   |              |                                                          |                           |
+  | tim_date   | TIMESTAMP    |                                                          |                           |
   ##### Tabla 4.2.2
 
   <br>
+
+  **Código**:
 
   ```SQL
   CREATE TABLE State(
@@ -646,25 +712,49 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
 
 - Binacle
 
-| Atributo        | Tipo de dato | Dominio | Restricción de integridad |
-|-----------------|--------------|---------|---------------------------|
-| id              | SERIAL       |         | PRIMARY KEY               |
-| tex_nickname    | TINYTEXT     |         |                           |
-| tex_description | TEXT         |         |                           |
-| tim_date        | TIMESTAMP    |         |                           |
-##### Tabla 4.2.2
+  Esta tabla ha cambiado a lo largo del desarrollo del proyecto, sin embargo los analistas y desarrolladores pertencientes a este equipo concluyen con este modelo, en el que se almacena toda acción relacionada con el juego y el jugador. 
+  A continuación se enuncian alguna de estas acciones por parte de un usuario y un administrador: 
+  - Acciones por parte del usuario:
+    - cambios de estado en el juego
+    - ingreso al sistema 
+    - salida del sistema
+    - visualizar tabla de puntuaciones
+  - Acciones por parte del administrador 
+    - Mismas acciones del usuario
+    - Adicionalmente crear un usuario
+    - Editar nombre de usuario
+    - Editar contraseña 
+    - Cambiar estado de un usuario
+      - activo
+      - inactivo
 
-<br>
+  - **tex_nickname** nombre del usuario
+  - **tex_description** breve descripción de la acción que ha realizado en el sistema
+  - **tim_date** fecha y hora en la que un usuario o administrador realiza una acción en el juego o en el sistema
 
-```SQL
-CREATE TABLE Binacle(
-    id SERIAL PRIMARY KEY, 
-    tex_nickname TINYTEXT NOT NULL COMMENT "Descripción del nombre del usuario", 
-    tex_description TEXT NOT NULL COMMENT "Descripción de la acción que realiza un usuario en el sistema",
-    tim_date TIMESTAMP NOT NULL DEFAULT NOW() COMMENT "Tiempo exacto en el que se realizó la acción"
-    
-)COMMENT = "Almacena acciones realizadas por los usuarios";
-```
+  <br>
+
+  | Atributo        | Tipo de dato | Dominio | Restricción de integridad |
+  |-----------------|--------------|---------|---------------------------|
+  | id              | SERIAL       |         | PRIMARY KEY               |
+  | tex_nickname    | TINYTEXT     |         |                           |
+  | tex_description | TEXT         |         |                           |
+  | tim_date        | TIMESTAMP    |         |                           |
+  ##### Tabla 4.2.2
+
+  <br>
+
+    **Código**:
+
+  ```SQL
+  CREATE TABLE Binacle(
+      id SERIAL PRIMARY KEY, 
+      tex_nickname TINYTEXT NOT NULL COMMENT "Descripción del nombre del usuario", 
+      tex_description TEXT NOT NULL COMMENT "Descripción de la acción que realiza un usuario en el sistema",
+      tim_date TIMESTAMP NOT NULL DEFAULT NOW() COMMENT "Tiempo exacto en el que se realizó la acción"
+      
+  )COMMENT = "Almacena acciones realizadas por los usuarios";
+  ```
 
 <br>
 <br>

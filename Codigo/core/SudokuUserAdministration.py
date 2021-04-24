@@ -6,7 +6,6 @@ from tkinter import ttk
 from core.EngineSQL.MySQLToolConnection import ToolConnection
 from core.ScreenCenter import ScreenCenter
 from core.SudokuAdministratorCreateUser import *
-from core.SudokuAdministratorDeleteUser import *
 from core.SudokuByeUI import SudokuBye
 from core.SudokuUserList import *
 

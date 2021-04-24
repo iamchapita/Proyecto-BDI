@@ -391,15 +391,15 @@ class SudokuBoardUI(Frame):
         # Se decide que pantalla se va a mostrar después de ganar la partida
         if(self.rol==1):
             # Se destruye la ventana actual
-            self.after(105,self.parent.destroy)
+            self.after(1500,self.parent.destroy)
             # Se muestra la ventana principal del administrador
-            self.after(100,self.mainAdmin.deiconify)
+            self.after(1499,self.mainAdmin.deiconify)
 
         if(self.rol==0):
             # Se destruye la ventana actual
-            self.after(105,self.parent.destroy)
+            self.after(1500,self.parent.destroy)
             # Se muestra la ventana principal del usuario jugador
-            self.after(100,self.mainUser.deiconify)
+            self.after(1499,self.mainUser.deiconify)
     
     # Maneja el evento de click sobre el tablero
     def __cellClicked(self, event):

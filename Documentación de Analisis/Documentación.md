@@ -15,7 +15,6 @@
 - [**Proyecto Final - Documentación (Análisis e Investigación)**](#proyecto-final---documentación-análisis-e-investigación)
   - [**Índice**](#índice)
   - [**Lluvia de Ideas**](#lluvia-de-ideas)
-    - [**Modelados ER y Diagramas ER**](#modelados-er-y-diagramas-er)
   - [**Diseño de Ventanas y sus Funciones**](#diseño-de-ventanas-y-sus-funciones)
       - [**Ventanas compartidas entre usuario normal y administrador**](#Ventanas-compartidas-entre-usuario-normal-y-administrador)
         - [*Ventana de Bienvenida*](#ventana-de-bienvenida)
@@ -32,6 +31,21 @@
         - [*Ventana de cambio de contraseña*](#Ventana-de-cambio-de-contraseña)
         - [*Ventana Menu*](#Ventana-Menu)
         - [*Ventana Scoreboard*](#Ventana-Scoreboard)
+  
+  - [**Diseño de Base de datos: *SudokuBD***](#diseño-de-base-de-datos-sudokuBD)
+    - [**Reglas de negocio**](#reglas-de-negocio)
+    - [**Esquema conceptual**](#esquema-conceptual)
+      - [*Modelo Entidad Relación*](#modelo-entidad-relación)
+      - [*Modelo relacional*](#modelo-relacional)
+    - [**Esquema Lógico**](#esquema-lógico)
+      - [*Entidades, atributos y dominio*](#entidades-atributos-y-dominio)
+      - [*Vistas*](#vistas)
+      - [*Funciones*](#funciones)
+      - [*Disparadores*](#disparadores)
+      - [*Procedimientos Almacenados*](#procedimientos-almacenados)
+    - [**Encriptación: Funciones Built-in**](#encriptación-funciones-Built-in)
+    - [**Anotaciones finales**](#anotaciones-finales)
+
   - [**Elementos Conceptuales**](#elementos-conceptuales)
     - [**Tkinter**](#tkinter)
     - [**MySQL Connector**](#mysql-connector)
@@ -51,16 +65,6 @@
 ### **Modelados ER y Diagramas ER**
 
 A continuación se presentan los diagramas y modelados para la base de datos.
-
-Diagrama UML:
-  
-  ![M&D-ER-A](https://drive.google.com/uc?export=view&id=1LcmdihAf789uWKR6vDuqI7Gudur7L7vP "Diagrama UML")
-
-Diagrama ER:
-
-  ![M&D-ER-B](https://drive.google.com/uc?export=view&id=18wtSAeSUh3Qon_7OtJJvHvpgTFBPxeHb "Diagrama ER")
-
------
 
 # **Diseño de Ventanas y sus Funciones**
 
@@ -153,6 +157,240 @@ En esta ventana se le muestra el menu al jugador donde tiene las opciones de emp
 En esta ventada se registran los 10 mejores puntajes por cualquier usuario registrado en el juego, asi mismo se muestran de forma ascendente.
 
 ![Scoreboard Screen](https://drive.google.com/uc?export=view&id=12W8JcXi60YtDOfWGlGajdW4djzZnP8n5 "Scoreboard Screen")
+
+-----
+
+# **Diseño de Base de datos: SudokuBD**
+
+La permanencia de los datos en el mundo globalizado es una necesidad en su posteridad para realizar en algún momento en el tiempo un análisis de estos, Elmasri en su libro *Fundamentals of Database System* menciona que una base de datos es un conjunto de datos convexos. 
+El objetivo de un sistema de almacen de datos es la permanencia y el procesos de dichos datos para una conversión en información. 
+Datos proviene del latin *datum* siendo este singular, el primer uso conocido es por el doctor Henry Hammond en el siglo XVII hace uso de esta palabra en un tratado religioso, sin embargo en un conexto fuera del uso de la época moderna. 
+
+En un paper de elaboración propia de la empresa IBM, indica que cerca de 2.5 exabyte (Eb) de datos se generan cada día. Toda esta ingesta cantidad de datos deben de parar en algún sitio y es aquí donde las bondades de las bases de datos se ven reflejadas.
+
+En la presente [sección](#diseño-de-Base-de-datos-SudokuBD) de esta documentación se plante una serie de respuestas al análisis y al porqué del uso y diseño de esta base de datos (Sudoku), utilizando los criterio de desarrollo, análisis e implementación del equipo de desarrollo para dar solución al problema planteado. Se explica de forma explicita apegada a la teoría y fundamentos los distintos tipos de esquemas, las distintas versiones y cambios en la estructura que dio paso a la versión final y en producción del proyecto.
+
+Dentro de los requerimientos y documentación pertenecientes a la clase de Base de Datos I (IS510) el SGMB ha utilizar es *MariaDB 10.0.3 en compatibilidad con MySQL 5.7*
+
+En primera instancia se aborda la definición del proyecto y los puntos claves que dieron paso al análisis y a la posterior elaboración del diseño lógico.
+
+## **Reglas de negocio**
+Es de suma importancia identificar las reglas de negocio al diseñar una base de datos, estas permiten a los desarrolladores comprender las relaciones entre las entidades participantes.
+
+Algunas de estas reglas se enunian a continuación: 
+
+- Inicio de una nueva partida en pausa
+
+- El usuario puede: 
+  - Crear una nueva partida
+  - Pausar juego
+  - Continuar partida (significa que el usuario puede *pausar* el juego en cualquier momento)
+  - Finalizar partida (rendirse)
+
+- Visualizar tabla de resultados
+
+- Acción del juego 
+    - Ingresar un digito al puzzle
+    - Deshacer la jugada
+
+- Todas las partidas jugadas por un usuario se marcan:
+    - éxito (ganó)
+    - derrota (perdió)
+
+- Administrador 
+  - Elimina un usuario
+  - Edita (nombre, contraseña) de un usuario
+  - Crea a un usuario
+
+Para una mayor profundidad en la especificación de las regla de negocio para este proyecto, se encuentra en el documento *Análisis.md* dentro de la carpeta *Documentación y análsis*.
+Queda claro que se debe utilizar una plataforma con GUI para la inserción de los datos, que funge como interfaz o mediador entre la base de datos y el usuario.
+## **Esquema conceptual**
+Una vez recopilados y analizados los requisitos, el siguiente paso es crear un esquema conceptual para la base de datos.
+Gracias a este enfoque los desarrolladores del equipo pueden centrarse en especificar las propiedades de los datos, sin preocuparse por detalles de almacenamiento e implementación. 
+
+Este esquema es de gran utilidad para una revisión detallada de cambios en el futuro dentro del sistema, en este caso ha sido una guía infalible para detectar redundancia e inconsistencias.
+
+### *Modelo Entidad Relación*
+
+En este apartado se ilustra el resultado del análisis realizado en el paso anterior, evocando un seguimiento en el tiempo de la evolución de los cambios según la necesidad, cambios y ajustes de optimización.  
+Se enuncian y explican las entidades y los atributos asociados a cada entidad.  
+El dominio y tipos de datos se explica en otro apartado.
+
+<br>
+
+- **Primera versión: ER**
+![Modelo ER ver_1](https://drive.google.com/uc?id=1HyN1FRGfCrC-jqtZWEYjpf5Tc0eivuRg)
+
+
+<br>
+
+Se enuncia una lista de entidades con atributos y entidades
+
+| Entidad | Atributos                                                   | Relación                                      |
+|---------|-------------------------------------------------------------|-----------------------------------------------|
+| Login   | - id  <br> - date                                           | log                                           |
+| User    | - id  <br> - nickname <br> - password <br> - rol            | - log <br> - getout <br> - play <br> - record |
+| LogOff  | - id  <br> - date                                           | - Getout                                      |
+| Game    | - id  <br> - file  <br> - nameState <br> - time <br> - date | - play <br> - push                            |
+| Action  | - id  <br> - number                                         | - push                                        |
+| Binacle | - id  <br> - date                                           | - record                                      |
+##### Tabla 4.1
+
+<br>
+
+#### **Aclaración**:   
+Dado que los cambios en cada versión de este modelo son minímos solo se hará mención de esta [aclaración](#aclaración) *una sola vez* a lo largo del documento, a partir de aquí solo los cambios o eliminaciones de los atributos o entidades se ilustraran en una tabla similar a la [anterior](#tabla-4.1), de igual forma se hará una breve explicación de los cambios. 
+
+<br>
+<br>
+<br>
+
+- **i. Explicación: entidades**  
+  - Login:  
+    El objetivo de esta entidad es identificar al usuario que ingresa al sistema.
+    Está entidad mantiene la información de acceso al sistema de un usuario. 
+  
+    <br>
+
+  - User:  
+    Esta entidad es una de las más importantes dentro del sistema dado que es donde se relacionan las demás entidades, en esta se mantiene la información del usuario, se mantiene el nombre del usuario, los análistas han determinado que el **nombre del usuario** sea único, este hecho facilita la identificación del usuario para la actualización de cualquier dato relacionado con este. Ello implica eliminación o actualización de sus acciones en el tablero.
+    
+    <br>
+
+  - LogOff:  
+    Las reglas de negocio indican que *cualquier acción* por parte del usuario en la interacción con el sistema debe verse reflejado en la persistencia de los datos; esta entidad mantiene la información de cierre de sesión. 
+    
+    <br>
+
+  - Game:  
+    Aparte de mantener los datos del usuario, es necesario mantener los datos pertenecientes a cada tablero. En este caso, los elementos pertenecientes al tablero de juego se almacenan aquí. 
+    Existe un archivo .sudoku donde se carga el tablero inicial (este ideal cambia a lo largo de las versiones).
+  
+    <br>
+
+  - Action:  
+    Está entidad almacena las componentes (x, y) junto con el número digitado por el usuario en el tablero. Dado que un usuario querrá *deshacer una jugada*.
+
+    <br>
+
+  - Binacle:  
+    Bitácora del sistema, esta entidad mantiene la información de las acciones del usuario.
+
+- **ii. Explicación: atributos**   
+  - Login(id, date)  
+    (*id*): Identificador único que asocia cada tupla.  
+    (*date*): Almacenamos la fecha y hora del momento exacto en el que el registro es insertado, es decir en el momento en el que el usuario ingresa al sistema.
+
+    <br>
+
+  - User(id, nickname, password, rol)
+    (*id*): Identificador único que asocia cada tupla.  
+    (*nickname*): Nombre del usuario (este nombre es único e irrepetible).  
+    (*password*): Contraseña del usuario para el ingreso al sistema.  
+    (*rol*): Este es un tipo multivalor, existen dos tipos de usaurios en el sistema, *administrador* y *usuario*, cada uno de estos roles realiza actividades y acciones diferentes dentro del sistema; este apartado se encuentra definido y especificado en las reglas de negocio.
+
+    <br>
+
+  - LogOff(id, date)  
+    Similar a la entidad *Login*, en este aspecto el registro corresponde a la salida del usuario del sistema.
+
+    <br>
+
+  - Game(id, file, nameState, time, date)  
+    (*id*): Identificador único que asocia cada tupla.  
+    (*file*): 
+    (*time*): Minutos jugados del tablero escogido.
+    (*date*): Fecha y hora del momento en el que un usuario crea un nuevo tablero.
+
+    <br>
+
+  - Action(id, state, number)
+    (*id*): Identificador único que asocia cada tupla.  
+    (*state*): El estado se encuentra en la dirección asociada a *(0) deshacer jugada*, *(1) continuar jugada*, esto con el motivo de conocer el resultado de cada componente del resultado digitado.  
+    (*number*): Almacena cada resultado digitado por el usuario en el tablero.
+    
+    <br>
+
+  - Binacle(id, date)  
+    En el momento de la creación del modelo **Entidad relación** la estructura e integración de la entidad *Bitácora* no era del todo claro, así que de manera volátil y poco estructurada se encontraba como una *idea* no implementada pero necesaria para la realización del proyecto. Sin embargo la forma de integración se encontrase de manera similar a las entidades *Login* y *LogOff*.
+
+<br>
+
+- **Segunda versión: ER**
+![Modelo ER ver_2](https://drive.google.com/uc?id=1fqVTp0AzY3Wj-Jagt9DALlzg3tNuLmEj)
+
+<br>
+
+
+Elevar la experiencia de usuario no es un requerimiento de las reglas de negocio sin embargo elevar esta connotación a un nivel retante y no estático da cierto dinamismo al proyecto, utilizando las bondades que ofrece el almacenamiento de las base de datos relacionales, la idea se encuentra dirigida a mantener *distintos tipos de tableros* con distintos niveles, cada tablero es único y se carga de forma automática al iniciar un nuevo juego por parte del usuario o administrador esto gracias a un archivo dentro del sistema con extensión *.sudoku*.  
+
+Se enuncia una lista de entidades con atributos y entidades. Tomando en consideración la [aclaración](#aclaración) anterior.   
+
+| Entidad     | Atributos         | Relación |
+|-------------|-------------------|----------|
+| SudokuBoard | - id <br> - board |          |
+
+
+<br>
+<br>
+<br>
+
+- **i. Explicación: entidades**  
+  - Sudoku:  
+    Contiene *la numeración inicial* de algunos números ya dispuestos en algunas de las celdas de cada tablero al iniciar una partida. Esta numeración es fija, inmutable, única y persistente.
+
+- **ii. Explicación: atributos**   
+  - Sudoku(id, board)  
+    (*id*): Identificador único que asocia cada tupla.  
+    (*board*): Númeración fija correspondiente para cada tablero.  
+
+
+
+<br>
+
+- **Tercera versión: ER**
+![Modelo ER ver_3](https://drive.google.com/uc?id=1sx4Bx6fY7fHqjjL5aj4murw66mFvIZ2B)
+
+<br>
+
+- **Cuarta versión: ER**
+![Modelo ER ver_4](https://drive.google.com/uc?id=1V-kPwtFwLTNLU9t_eQQ5yzBNz38OErMW)
+
+<br>
+
+- **Versión final: ER**
+![Modelo ER ver_5](https://drive.google.com/uc?id=12GCMW9eEoZq7eN4WdT5Xwxky4RStNay6)
+
+### *Modelo relacional*
+
+- **Primera versión: modelo relacional**  
+
+![Modelo relacional ver_1](https://drive.google.com/uc?id=1srTOzTkgJbTjUJsSvjVXiSB2ZwTy3UOE)
+
+<br>
+
+- **Segunda final: modelo relacional**  
+
+![Modelo relacional ver_2](https://drive.google.com/uc?id=1jSosP91jqyLfLsSL0GsKDDCRnESAH46p)
+
+<br>
+
+- **Versión final: modelo relacional**  
+
+![Modelo relacional ver_3](https://drive.google.com/uc?id=1beRZkQ063BGrnNi9-w7vNUvkgPYIkLuq)
+
+## **Esquema Lógico**
+### *Entidades, atributos y dominio*
+### *Vistas*
+### *Funciones*
+### *Disparadores*
+### *Procedimientos Almacenados*
+## **Encriptación: Funciones Built-in**
+## **Anotaciones finales**
+
+![](https://drive.google.com/uc?id=10avXiTMkJS7NIFQ_zou0w3yi4dqXiBqe)
+![](https://drive.google.com/uc?id=1xSBS8U8dm5oJ92eOAlD9k0v1CaoVzui6)
+![](https://drive.google.com/uc?id=124Ax2SLC-QfAtrW0sr4R_aBgtQFhSSrR)
 
 -----
 
@@ -264,3 +502,4 @@ Se creo un repositorio en GitHub para facilitar el trabajo y evitar problemas a 
 - [4] "configparser - Analizador de archivos de configuración - Documentación de Python 3.9.1", Docs.python.org , 2020. [En línea]. Disponible: https://docs.python.org/3/library/configparser.html.
 - [5] K. Lee y S. Hubbard, Estructuras de datos y algoritmos con Python. , 2ª ed. Springer, 2015.
 - [6] "MySQL :: MySQL Connector / Python Developer Guide :: 1 Introducción a MySQL Connector / Python", Dev.mysql.com , 2020. [En línea]. Disponible: https://dev.mysql.com/doc/connector-python/en/connector-python-introduction.html.
+- [7] "Not Your Type? Big Data Matchmaker On Five Data Types You Need To Explore Today", 2012. Disponible: http://www.dataversity.net/not-your-type-big-data-matchmaker-on-five-data-types-you-need-to-explore-today

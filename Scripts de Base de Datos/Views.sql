@@ -6,6 +6,7 @@
 
 USE SudokuDB; 
 
+/*
 CREATE VIEW vw_Binacle
     AS 
         SELECT 
@@ -61,7 +62,7 @@ CREATE VIEW vw_Binacle
             Binacle.date DESC
 
 ;
-
+*/
 CREATE VIEW vw_GetLastLoginUser
     AS 
     SELECT 

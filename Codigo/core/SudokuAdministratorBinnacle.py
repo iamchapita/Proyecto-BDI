@@ -16,101 +16,99 @@ Frame que permite visualizar todos los componentes de la bitacora.
 """
 class SudokuAdministratorBinnacle(Frame):
 
-    """
-    Constructor de la clase donde si incializan todos los componentes de
-    la ventana.
-    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
-    """
+    # Constructor de la clase donde si incializan todos los componentes de la ventana.
     def __init__(self, parent=None):
         self.parent = parent
+        # Se inicializa un nuevo componente de tkinter
         self.child = Tk()
+        # Se captura el evento de cierre de una ventana y se ejecuta la función __onClosing.
         self.child.protocol("WM_DELETE_WINDOW", self.__onClosing)
         super().__init__(self.child)
-        
-        self.config = ConfigConnection() #Conexión al archivo de configuración
-        self.db = MySQLEngine(self.config.getConfig()) #Conexión a la base de datos
-
+        # Conexión al archivo de configuración
+        self.config = ConfigConnection() 
+        # Conexión a la base de datos
+        self.db = MySQLEngine(self.config.getConfig()) 
+        # Se pinta la ventana
         self.pack()
+        # Se inicalizan los widgets de la ventana
         self.__initUI()
     
-    """
-    Creación de los widgets que se veran en pantalla.
-    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
-    """
+    # Creación de los widgets que se veran en pantalla.
     def __initUI(self):
+        # Se cargan las imagenes que use usarán en la ventana
         self.img = PhotoImage(file="core/images/back.png", master=self.child)
-        self.backButton= Button(self.child, image=self.img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
-        self.backButton.pack()
-        self.backButton.place(x=880, y=20)
         self.icon = PhotoImage(file="core/images/SudokuLogo.png", master=self.child)
         self.brand = PhotoImage(file="core/images/Brand.png", master=self.child)
-        self.width = 900
-        self.height = 600
 
+        # Se definen los valores de ancho y alto para la ventana
+        self.width = 960
+        self.height = 540
+
+        # Se establece el titulo de la ventana
+        self.child.title('Bitácora')
+        # Se establece las dimensiones de la venatan
+        self.child.geometry("{}x{}".format(self.width, self.height))
+        # Se establece el color de background de la ventana
+        self.child.configure(background = "#171717")
+        # Se bloquea la opción de cambiar el tamaño a la ventana
+        self.child.resizable(False, False)
+
+        # Se crean los botones
+        self.backButton= Button(self.child, image=self.img, command= self.__goBack,bg="#171717", borderwidth=0, highlightthickness=0)
+        # Se pinta el widget en la ventana
+        self.backButton.pack()
+        # Se ubica el widget utilizando coordenadas
+        self.backButton.place(x=880, y=20)
+        
+        # Se centra la ventana en pantalla
         self.center = ScreenCenter()
         self.center.center(self.child, self.width, self.height)
 
-        self.child.title('Bitácora')
-        self.child.geometry("960x540")
-        self.child.configure(background = "#171717")
-        self.child.resizable(False, False)
-
+        # Se crea un treeview para mostrar los datos de la bitácora
         self.dataView = ttk.Treeview(self.child, columns=("#1","#2", "#3"))
+        # Se pinta el treview
         self.dataView.pack()
 
+        # Se fijan los encabezados de las columnas y se establece su alineción a central
         self.dataView.heading("#0", text="Indice", anchor = CENTER)
         self.dataView.heading("#1", text="Usuario", anchor = CENTER)
         self.dataView.heading("#2", text="Descripción actividad", anchor = CENTER)
         self.dataView.heading("#3", text="Fecha y Hora", anchor = CENTER)
 
-        self.dataView.place(x=45, y=160)
+        # Se establece el número de columnas y se establece su alineción a central
         self.dataView.column("#0", width=50, anchor = CENTER)
         self.dataView.column("#1", width=200, anchor = CENTER)
         self.dataView.column("#2", width=420)
         self.dataView.column("#3", width=180, anchor = CENTER)
-        
-        label1= Label(self.child, text='Registro de bitácora', font=("Lato",25))
-        label1.configure(background = "#171717", fg="white")
-        label1.pack()
-        label1.place(x=335,y=90)
 
+        # Se establece la posición del widget en la ventana usando coordenadas
+        self.dataView.place(x=45, y=160)
+        
+        # Se definen un label para mostrar el titulo de la ventana, se define la fuente a utilizar
+        label1= Label(self.child, text='Registro de bitácora', font=("Lato",25))
+    
+        # Se establece un label como contenedor de la imagen del botón de atras
         labelBrand = Label(self.child, image=self.brand, borderwidth=0)
+        
+        # Se configura el color de background y el color de la fuente del label
+        label1.configure(background = "#171717", fg="white")
+        
+        # Se pinta los widgets
+        label1.pack()
         labelBrand.pack()
+
+        # Se establece su ubicación en la ventana usando coordenadas
+        label1.place(x=335,y=90)
         labelBrand.place(x=280,y=485)
 
+        # Se carga la información de la bitácora
         self.loadBinacle()
 
-    
-    """
-        Obtiene todas los registros o actividades de cada uno 
-        de los usuarios (login, log-out, fecha y hora, estado del tablero)
-    """
+    # Obtiene todas los registros o actividades de cada uno de los usuarios 
+    # (login, log-out, fecha y hora, estado del tablero)
     def loadBinacle(self) -> None: 
         
-        #Obtiene la información de la bitácora y el nombre de cada usuario
-        #Esta consulta se realiza de está forma debido a la naturaleza del data view
-        """
-        query = 
-                    SELECT 
-                        User.tex_nickname AS name,
-                        Result.state AS state,
-                        Result.date AS date
-                    FROM
-                    (
-                        SELECT 
-                            user, 
-                            state, 
-                            date
-                        FROM vw_Binacle
-                    ) Result 
-                    INNER JOIN 
-                        User ON Result.user = User.id
-                    ORDER BY 
-                        Result.date DESC;
-        """
-        
+        # Se prepara la query
         query = """
                 SELECT 
                     tex_nickname, 
@@ -122,41 +120,36 @@ class SudokuAdministratorBinnacle(Frame):
                     tim_date ASC
                 ;
         """
-
+        # Se efectua la query y se guarda el resultado en la variable
         transaction = self.db.select( query=query )
 
+        # Si hay resultados...
         if transaction:
+            # Se obtiene la cantidad de elementos obtenidos de la consulta
             count = len(transaction)
+            # Se recorre los resultados de la consulta
             for data in transaction:
+                # Se establece las entradas en el dataview
                 self.dataView.insert("", 0, text="{}".format(count) , values=(data[0], data[1], data[2]))
                 count -=1
-        else: 
-            print("El jugador no tiene juegos finalizados")
-    
-    
-    """
-    Función que permite regresar a la ventana anterior al presionar el botón.
-    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 1.0
-    """
+
+    # Función que permite regresar a la ventana anterior al presionar el botón.
     def __goBack(self):
         self.child.destroy()
         self.parent.deiconify()
-
-    """
-    Función que pregunta al usuario si desea salir del juego.
-    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
-    @version 3.0
-    """
+    
+    # Función que pregunta al usuario si desea salir del juego.
     def __onClosing(self):
+        # Se muestra un messagebox solicitando confirmación
         MsgBox = messagebox.askquestion ('Salir','¿Estás seguro de que quieres salir?',icon = 'warning')
         if MsgBox == 'yes':
             
             #Se ingresa a la base de datos la información del usuario que cierra sesión
             (ToolConnection()).logout()
             
+            # Se destruye la ventana actual
             self.child.destroy()
+            # Se termina la ejecución del programa 
             sys.exit()
+            # Se muestra la ventana de despedida
             SudokuBye()
-        else:
-            pass

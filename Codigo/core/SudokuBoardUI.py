@@ -16,6 +16,12 @@ WIDTH = MARGIN * 2 + SIDE * 9
 # !Se le sumaron 120 para ampliar de forma vertical la ventana
 HEIGHT = MARGIN * 2 + SIDE * 9 +120 
 
+"""
+Clase que contiene la definición de los componentes gráficos que corresponden
+al tablero de juego.
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
+"""
 class SudokuBoardUI(Frame):
     
     def __init__(self, parent, game, mainAdmin, mainUser, hours=0, minutes=0, seconds=0):

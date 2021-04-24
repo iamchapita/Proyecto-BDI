@@ -283,5 +283,3 @@ class SudokuMainWindowUI(Frame):
     def getUsernameLogin(self):
 
         self.idUsername, self.username, self.rol = (ToolConnection()).getLastLoginUser()
-
-        print( "A VER id: {}, username: {}".format(self.idUsername, self.username) )

@@ -1,20 +1,15 @@
 # -*- coding: utf-8 -*-
 
-"""
-    @author: kenneth.cruz@unah.hn
-    @version: 0.1.0
-    @date: 2021/04/01
-"""
-
-import os 
-import sys
 import base64
+import os
+import sys
 
 """
-    Manipula el flujo de bits de un arhivo .sudoku
-    Transforma un flujo de bits en un archivo .sudoku
+Manipula el flujo de bits de un arhivo .sudoku
+Transforma un flujo de bits en un archivo .sudoku
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
 """
-
 class BlobManipulation: 
     
     def __init__(self, filename): 
@@ -25,15 +20,6 @@ class BlobManipulation:
         # Nombre de los archivos .sudoku
         self.filename = filename.strip()
 
-        """
-        self.filename =  [ 
-                    file
-                    for root, dirs, files in os.walk( self.path ) 
-                    for file in files 
-                    if ".sudoku" in file
-                ] 
-        """
-        
     # .sudoku a Blob
     def convertToBinaryData(self):
         
@@ -45,12 +31,11 @@ class BlobManipulation:
             return binaryData
 
         except OSError as e: 
-            print("No se ha encontrado archivo: {}".format(e))
+            pass
 
         except:
-            print("Ni idea uwu:", sys.exc_info()[0])
+            pass
             
-    
     # Blob a .sudoku
     def convertToSudokuFile(self, binarydata): 
         

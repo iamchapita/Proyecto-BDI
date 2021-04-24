@@ -84,13 +84,11 @@ class SudokuAdministratorDeleteUser(Frame):
     def __save(self):
         # delete(self, table, tex_nickname): 
         username = self.userText.get()
-        print(username)
         
         #Sí el text no está vacío
         if username: 
 
             userExist = self.db.select("SELECT tex_nickname FROM User WHERE tex_nickname = %s AND bit_state = 1", (username, ))
-            print( userExist )
 
             #Consulta hacia la base de datos sobre el nickname del usuario
             if userExist: 
@@ -105,9 +103,6 @@ class SudokuAdministratorDeleteUser(Frame):
                         )
                     
                     self.userText.delete(0, "end") 
-
-                    print( "Se cambió el estado de {}".format(username) )
-
             else: 
                 messagebox.showerror(title="Usuario inexistente", message="El usuario no existe en la base de datos.")
 

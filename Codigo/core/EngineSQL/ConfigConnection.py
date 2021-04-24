@@ -1,26 +1,20 @@
 # -*- coding: utf-8 -*-
 
-"""
-    @author: kenneth.cruz@unah.hn
-    @author: lamorales@unah.hn
-    @version: 0.1.1
-    @date: 2021/04/01
-"""
-
 import configparser
+import os
 import re
-import os 
 
 """
-    Obtiene y parsea los datos del archivo de configuración 
-    en una estructura de tipo diccionario
+Obtiene y parsea los datos del archivo de configuración 
+en una estructura de tipo diccionario
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
 """
 class ConfigConnection: 
 
     def __init__(self): 
         try: 
             #Ruta del archivo de configuración
-            #self.path = ( "{}/config.ini".format(os.getcwd()) )
             self.path = re.sub(r"(Codigo)", "Scripts de Base de Datos/config.ini", os.getcwd())
             #Instancia del objeto configparser
             self.parser = configparser.ConfigParser()
@@ -28,7 +22,7 @@ class ConfigConnection:
             self.parser.read(self.path)
 
         except os.error as e:
-            print("El archivo no existe: {}".format( e ))
+            pass
         
     #Toma los valores del archivo de configuración; retorna un diccionario
     def getConfig(self): 

@@ -147,10 +147,7 @@ class SudokuScoreboardUI(Frame):
             for data in transaction:
                 self.dataView.insert("", 0, text="{}".format(count) , values=(self.username, data[0], data[1], data[2]))
                 count -=1
-        else: 
-            print("El jugador no tiene juegos finalizados")
-
-
+        
     """
     Función que permite regresar a la ventana anterior al presionar el botón.
     @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales

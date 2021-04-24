@@ -38,8 +38,6 @@ class ToolConnection:
             self.idUsername = transaction[0][1]
             self.rol = transaction[0][2]
 
-            print(  "username: {}, id: {}, rol:{}".format(self.username, self.idUsername, self.rol) )
-
             # Se retorna los resultados obtenidos en la operación select
             return (self.username, self.idUsername, self.rol)
 

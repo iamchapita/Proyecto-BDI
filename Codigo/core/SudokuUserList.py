@@ -19,7 +19,6 @@ de modifición por parte del usuario administrador.
 """
 class SudokuUserList(Frame):
 
-    
     #Constructor de la clase donde si incializan todos los componentes de la ventana.
     # Parámetros:
     # - Componente de ventana donde se pintaran los widgets.
@@ -44,7 +43,6 @@ class SudokuUserList(Frame):
         # Se inicializa los widgets que pertenecen a esta ventana.
         self.__initUI()
 
-    
     #Constructor de la clase donde si incializan todos los componentes (widgets) de la ventana.
     def __initUI(self):
         
@@ -533,7 +531,6 @@ class SudokuUserList(Frame):
                 self.__loadDataView()
                 return
     
-    
     # Permite regresar a la ventana anterior al presionar el botón.
     def __goBack(self):
         # Cierra la conexión de Base de datos
@@ -543,7 +540,6 @@ class SudokuUserList(Frame):
         # Muestra la ventana Anterior
         self.parent.deiconify()
 
-    
     # Función ejecutada cada vez que se intenta cerrar la ventana. 
     # Se muestra una ventana que solicita al usuario confirmación de cierre.
     def __onClosing(self):
@@ -561,5 +557,3 @@ class SudokuUserList(Frame):
             sys.exit()
             # Se muestra una ventana de despedida.
             SudokuBye()
-        else:
-            pass

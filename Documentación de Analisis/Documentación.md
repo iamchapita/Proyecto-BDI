@@ -168,9 +168,9 @@ Datos proviene del latin *datum* siendo este singular, el primer uso conocido es
 
 En un paper de elaboración propia de la empresa IBM, indica que cerca de 2.5 exabyte (Eb) de datos se generan cada día. Toda esta ingesta cantidad de datos deben de parar en algún sitio y es aquí donde las bondades de las bases de datos se ven reflejadas.
 
-En la presente [sección](#diseño-de-Base-de-datos-SudokuBD) de esta documentación se plante una serie de respuestas al análisis y al porqué del uso y diseño de esta base de datos (Sudoku), utilizando los criterio de desarrollo, análisis e implementación del equipo de desarrollo para dar solución al problema planteado. Se explica de forma explicita apegada a la teoría y fundamentos los distintos tipos de esquemas, las distintas versiones y cambios en la estructura que dio paso a la versión final y en producción del proyecto.
+En la presente [sección](#diseño-de-Base-de-datos-SudokuBD) de este documento se plantean respuestas al análisis realizado ( corresponde con las reglas de negocio), se da respuesta al porqué del uso y diseño de esta base de datos (Sudoku), utilizando los criterio de desarrollo, análisis e implementación del equipo de desarrollo para dar solución al problema planteado. Se explica de forma explicita apegada a la teoría y fundamentos los distintos tipos de esquemas, las distintas versiones y cambios en la estructura del diseño que dio paso a la versión final y en producción del proyecto.
 
-Dentro de los requerimientos y documentación pertenecientes a la clase de Base de Datos I (IS510) el SGMB ha utilizar es *MariaDB 10.0.3 en compatibilidad con MySQL 5.7*
+Dentro de los requerimientos y documentación pertenecientes a la clase de Base de Datos I (IS501) el SGMB ha utilizar es *MariaDB 10.0.3 en compatibilidad con MySQL 5.7*
 
 En primera instancia se aborda la definición del proyecto y los puntos claves que dieron paso al análisis y a la posterior elaboración del diseño lógico.
 
@@ -234,14 +234,14 @@ Se enuncia una lista de entidades con atributos y entidades
 | Game    | - id  <br> - file  <br> - nameState <br> - time <br> - date | - play <br> - push                            |
 | Action  | - id  <br> - number                                         | - push                                        |
 | Binacle | - id  <br> - date                                           | - record                                      |
-##### Tabla 4.1
+##### Tabla 4.1.1
 
+<br>
 <br>
 
 #### **Aclaración**:   
 Dado que los cambios en cada versión de este modelo son minímos solo se hará mención de esta [aclaración](#aclaración) *una sola vez* a lo largo del documento, a partir de aquí solo los cambios o eliminaciones de los atributos o entidades se ilustraran en una tabla similar a la [anterior](#tabla-4.1), de igual forma se hará una breve explicación de los cambios. 
 
-<br>
 <br>
 <br>
 
@@ -326,12 +326,14 @@ Elevar la experiencia de usuario no es un requerimiento de las reglas de negocio
 
 Se enuncia una lista de entidades con atributos y entidades. Tomando en consideración la [aclaración](#aclaración) anterior.   
 
+<br>
+
+
 | Entidad     | Atributos         | Relación |
 |-------------|-------------------|----------|
 | SudokuBoard | - id <br> - board |          |
+##### Tabla 4.1.2
 
-
-<br>
 <br>
 <br>
 
@@ -344,43 +346,329 @@ Se enuncia una lista de entidades con atributos y entidades. Tomando en consider
     (*id*): Identificador único que asocia cada tupla.  
     (*board*): Númeración fija correspondiente para cada tablero.  
 
-
-
 <br>
 
 - **Tercera versión: ER**
 ![Modelo ER ver_3](https://drive.google.com/uc?id=1sx4Bx6fY7fHqjjL5aj4murw66mFvIZ2B)
 
-<br>
-
-- **Cuarta versión: ER**
-![Modelo ER ver_4](https://drive.google.com/uc?id=1V-kPwtFwLTNLU9t_eQQ5yzBNz38OErMW)
 
 <br>
+
+Tercera modificación del modelo entidad relación, la permanencia del equipo de desarrollo y las constantes reuniones empujan las ideas a una construcción más clara del proyecto. 
+La integración de la entidad SudokuBoard con el resto de entidades es necesaria, al igual que una independencia del estado del tablero, dado que los estados de un tablero son multiples, adicionalmente a esto un usuario puede querer jugar distintos tableros (creación de nuevos juegos), a partir de aquí nace la necesidad de convertir un atributo multivalor en una entidad con sus propios atributos asociados a la entidad *Game*.  
+
+Se enuncia una lista de entidades con atributos y entidades. Tomando en consideración la [aclaración](#aclaración) que se encuentra en la descripción de esta sección.    
+
+<br>
+
+| Entidad     | Atributos                                | Relación                                   |
+|-------------|------------------------------------------|--------------------------------------------|
+| SudokuBoard | - id <br> - board                        | - Have (agrega)                            |
+| Game        | - state (elimina)                        | - Have (agrega) <br> - Have  (agrega)      |
+| State       | - id <br> - nameState <br> - date        | - Have                                     |
+##### Tabla 4.1.3
+
+<br>
+<br>
+
+- **i. Explicación: entidades**  
+  - SudokuBoard:  
+    La integración con el resto de entidades es necesaria para la recuperación de los datos contenidos en esta entidad, estos datos se encuentran relacionados con el usuario, luego de un análisis más profundo, dado que el usuario puede requerir el uso de *otro* tablero con cierta dificultad o complejidad mayor dada sus habilidades y destrezas en el juego.  
+    En resumen: se toma en cuenta los tableros que el jugador desea jugar.
+
+
+  <br>
+
+  - Game:  
+    Necesidad de eliminar el atributo multivalor *state*
+
+  <br>
+
+  - State:  
+    Esta entidad mantiene los cambio de estado, este hecho se ve reflejado por las acciones que realiza un usuario.  
+
+  <br>
+
+
+- **ii. Explicación: atributos**   
+    Se prescinde realizar explicación del resto de entidades, queda claro la eliminiación de atributos e integración de estas relaciones con el resto de componentes de la base de datos. 
+    
+  - State(id, nameState, date)  
+    (*id*): Identificador único que asocia cada tupla.  
+    (*nameState*): Contiene los estados *nuevo*, *pausado*, *finalizado*, *derrota*, *continuar*, depende la acción que el usuario realice se toma una u otro dato contenido en este atributo, estos estados son *autodescriptivos*, hemos mencionado a lo largo del documentos su importancia.  
+    *nuevo* refierase a la creación de un nuevo tablero; *finalizado* significa que el usuario ha completado con éxito un tablero, de esta forma ganando.  
+    (*date*): Fecha y hora del momento en el que un usuario realiza una acción, este se ve reflejado como un **nuevo estado**.
+
+
+<br>
+
 
 - **Versión final: ER**
 ![Modelo ER ver_5](https://drive.google.com/uc?id=12GCMW9eEoZq7eN4WdT5Xwxky4RStNay6)
 
+
+
+<br>
+
+Versión final y en permanencia del esquema conceptual perteneciente a este proyecto. Se implementa la integración de componentes que son necesarios para el funcionamiento del proyecto, de igual forma se elimina entidades que no cumplen un rol determinante, ocupando almacenamiento de forma innecesaria.  
+La explicación de **cardinalidad** para este modelo se explica en esta sección, se ha hecho de esta forma dado que las relaciones no han cambiado en demasia a lo largo del proyecto y versiones, así evitamos redundancia en las explicaciones.
+
+Se enuncia una lista de entidades con atributos y entidades. Tomando en consideración la [aclaración](#aclaración) que se encuentra en la descripción de esta sección.   
+
+<br>
+
+| Entidad          | Atributos                                        | Relación           |
+|------------------|--------------------------------------------------|--------------------|
+| User             | - state (agrega)                                 |                    |
+| Binacle          | - nickname (agrega) <br> - description (agrega)  | - Record (elimina) |
+| Action (elimina) |                                                  |                    |
+##### Tabla 4.1.4
+
+<br>
+<br>
+
+- **i. Explicación: entidades**  
+  - Binacle  
+    Semanas posteriores al análisis inicial y luego de reiteradas lecturas con respecto a las reglas de negocio se visualizó con mayor claridad la implementación de esta entidad. Es necesario almacenar acciones y estados asociados a un usuario. Sin embargo la visualización de estos datos es perteneciente a un único usuario **administrador**.  
+
+  <br>
+  
+  - Action (eliminación)   
+    El proyecto prescinde de la implementación de esta entidad, los atributos modelados estan contenidos en la entidad **Game**, para este caso evitamos la redundancia de datos gracias a la normalización.  
+
+- **ii. Explicación: atributos**   
+  - User(state)  
+    (*state*): La eliminación de usuarios no es una practica de programación deseable para este proyecto, considerando lo anterior se ha incluido este atributo, el estado del usuario dentro del sistema puede ser: **activo** **inactivo**. Evitamos fuga o agujeros de información en nuestro sistema. 
+    Dar de baja a los usuarios, de esta forma se evita eliminar a los usuarios de forma explícita de la base de datos.
+
+  <br>
+
+  - Binacle(nickname, description)  
+    (*nickname*): Almacena el nombre del usuario (junto a un conjunto de características incluidas en esta entidad) cada vez que este realiza una acción en el sistema.  
+    (*description*): Descripción de la acción que realiza un usuario, explicación detallada de la acción.
+
+- **iii. Explicación: cardinalidad**   
+
+  | Entidad     | Relación                            | Explicación                                                                                                                                 |
+  |-------------|-------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+  | Login       | - log                               | - Un usuario puede tener una única sesión iniciada                                                                                          |
+  | User        | - log <br> - Getout <br> - play     | - Un usuario ingresa múltiples veces al sistema <br> - Un usuario sale múltiples veces del sistema <br> - Un usuario juega múltiples juegos |
+  | LogOff      | - Getout                            | - Un usuario puede salirse una sola vez del sistema                                                                                         |
+  | Game        | - play <br> - Have <br> - Have <br> | - Un juego es jugado por un usuario <br> - Un juego tiene una sola disposición inicial de números <br> - Un juego tiene múltiples estados   |
+  | SudokuBoard | - Have                              | - Un Board tiene múltiples juegos                                                                                                           |
+  | State       | - Have                              | - Un juego cambia múltiples veces de estado                                                                                                 |
+  ##### Tabla 4.1.5
+
+  <br>
+
+  - La razón de cardinalidad entre las entidades **Login:User**   es: N:1
+  - La razón de cardinalidad entre las entidades **LogOff:User**  es: N:1
+  - La razón de cardinalidad entre las entidades **User:Game**    es: N:1
+  - La razón de cardinalidad entre las entidades **Game:SudokuBoard** es: N:1
+  - La razón de cardinalidad entre las entidades **Game:State**   es: 1:N
+
+<br>
+<br>
+
 ### *Modelo relacional*
 
-- **Primera versión: modelo relacional**  
-
-![Modelo relacional ver_1](https://drive.google.com/uc?id=1srTOzTkgJbTjUJsSvjVXiSB2ZwTy3UOE)
-
 <br>
-
-- **Segunda final: modelo relacional**  
-
-![Modelo relacional ver_2](https://drive.google.com/uc?id=1jSosP91jqyLfLsSL0GsKDDCRnESAH46p)
-
-<br>
-
-- **Versión final: modelo relacional**  
 
 ![Modelo relacional ver_3](https://drive.google.com/uc?id=1beRZkQ063BGrnNi9-w7vNUvkgPYIkLuq)
 
 ## **Esquema Lógico**
+
+El siguiente paso es la creación de los statements utilizando las bondadades del SGBD asignado para este proyecto.  
+En la presente sección se analizan los tipos de datos y la estructura de cada entidad, no se explaya con la explicación de cada entidad, ya que en la sección [Modelo entidad relación](#modelo-entidad-relación) se habla con cierta profundidad y claridad de estos elementos.   
+
 ### *Entidades, atributos y dominio*
+
+<br>
+
+- User
+
+  Contiene la información general sobre los usuarios.  
+  - El estado de un usuario puede ser activo o inactivo.   
+  - El rol del usuario es administrador o usuario.
+  - El nombre del usuario es único dentro de la tabla y tiene una longitud máxima de 30 caracteres que permite letras y digitos solamente.
+
+  | Atributo     | Tipo de dato | Dominio | Restricción de integridad |
+  |--------------|--------------|---------|---------------------------|
+  | id           | SERIAL       |         | PRIMARY KEY               |
+  | tex_nickname | VARCHAR      | 30      | UNIQUE, CHECK             |
+  | bit_rol      | BIT          | 1       |                           |
+  | tex_password | TEXT         |         |                           |
+  | bit_state    | BIT          | 1       |                           |
+  ##### Tabla 4.1.6
+
+  <br>
+
+  ```SQL
+  CREATE TABLE User(
+      id SERIAL PRIMARY KEY,
+      tex_nickname VARCHAR(30) NOT NULL UNIQUE COMMENT "Nombre de ingreso para el usuario",
+      CHECK(tex_nickname RLIKE "[a-zA-Z\d]{4,30}" ), 
+      bit_rol BIT(1) DEFAULT 0 NOT NULL COMMENT "0 Usuario | 1 Administrador; Tipos de rol para acceso al sistema", 
+      tex_password TEXT NOT NULL COMMENT "Contraseña",
+      bit_state BIT(1) DEFAULT 1 NOT NULL COMMENT "0 deshabilitado| 1 habilitado. Dar de baja a los usuarios, de esta forma se evita eliminar a los usuarios de forma explícita de la base de datos"
+  )COMMENT "Información general sobre el usuario";
+  ```
+
+<br>
+<br>
+
+- Login 
+
+  | Atributo   | Tipo de dato | Dominio | Restricción de integridad |
+  |------------|--------------|---------|---------------------------|
+  | id         | SERIAL       |         | PRIMARY KEY               |
+  | id_user_fk | BIGINT       |         | FOREIGN KEY               |
+  | tim_date   | TIMESTAMP    |         |                           |
+  ##### Tabla 4.1.7
+
+  <br>
+
+  ```SQL
+  CREATE TABLE Login(
+      id SERIAL PRIMARY KEY,
+      id_user_fk BIGINT UNSIGNED NOT NULL COMMENT "Referencia hacia user",
+      tim_date TIMESTAMP DEFAULT NOW() COMMENT "Hora de ingreso al sistema",
+      -- tex_nickname TINYTEXT NOT NULL COMMENT "Nombre del usuario",
+
+      FOREIGN KEY (id_user_fk) REFERENCES User(id)
+  )COMMENT "Sistema de acceso al sistema";
+  ```
+
+<br>
+<br>
+
+- SudokuBoard 
+
+  | Atributo  | Tipo de dato | Dominio | Restricción de integridad |
+  |-----------|--------------|---------|---------------------------|
+  | id        | SERIAL       |         | PRIMARY KEY               |
+  | tex_board | VARCHAR      | 89      | UNIQUE                    |
+  ##### Tabla 4.1.8
+
+  <br>
+
+  ```SQL
+  CREATE TABLE SudokuBoard(
+      id SERIAL PRIMARY KEY,
+      tex_board VARCHAR(89) NOT NULL UNIQUE COMMENT "Contiene la información inicial de un tablero, para luego ser rellenado en el Board de la aplicación de escritorio"
+  ) COMMENT "Contiene la información de los tableros que pueden ser cargados en la aplicación";
+  ```
+
+<br>
+<br>
+
+- Game
+
+  | Atributo          | Tipo de dato | Dominio | Restricción de integridad |
+  |-------------------|--------------|---------|---------------------------|
+  | id                | SERIAL       |         | PRIMARY KEY               |
+  | id_user_fk        | BIGINT       |         | FOREIGN KEY               |
+  | id_sudokuboard_fk | BIGINT       |         | FOREIGN KEY               |
+  | blo_file          | BLOB         |         |                           |
+  | tim_time          | TIME         |         |                           |
+  | tim_date          | TIMESTAMP    |         |                           |
+  ##### Tabla 4.1.9
+
+  <br>
+
+  ```SQL
+  CREATE TABLE Game(
+      id SERIAL PRIMARY KEY,
+      id_user_fk BIGINT UNSIGNED NOT NULL COMMENT "Referencia",
+      id_sudokuboard_fk BIGINT UNSIGNED NOT NULL COMMENT "Referencia hacia los archivos que contiene los tableros",
+      blo_file BLOB NOT NULL COMMENT "Archivo .sudoku que genera el programa cada vez que inicia un tablero",
+      tim_time TIME NOT NULL COMMENT "hh:mm:ss Minutos transcurridos tras iniciar una partidar o tras continuar una partida pausada",
+      tim_date TIMESTAMP DEFAULT NOW() NOT NULL COMMENT "último estado en el que es almacenado el tablero en la base de datos",
+
+      FOREIGN KEY (id_user_fk) REFERENCES User(id),
+      FOREIGN KEY (id_sudokuboard_fk) REFERENCES SudokuBoard(id)
+  )COMMENT "Tablero del juego";
+  ```
+
+<br>
+<br>
+
+- LogOff
+
+  | Atributo   | Tipo de dato | Dominio | Restricción de integridad |
+  |------------|--------------|---------|---------------------------|
+  | id         | SERIAL       |         | PRIMARY KEY               |
+  | id_user_fk | BIGINT       |         | FOREIGN KEY               |
+  | tim_date   | TIMESTAMP    |         |                           |
+  ##### Tabla 4.2.1
+
+  <br>
+
+  ```SQL
+  CREATE TABLE LogOff(
+      id SERIAL PRIMARY KEY,
+      id_user_fk BIGINT UNSIGNED NOT NULL COMMENT "Referencia hacia usuario",
+      tim_date TIMESTAMP DEFAULT NOW() NOT NULL COMMENT "Tiempo en el que cierre de sesión un usuario",
+
+      FOREIGN KEY (id_user_fk) REFERENCES User(id)
+  )COMMENT "Cierre de sesión por parte de un usuario";
+  ```
+
+<br>
+<br>
+
+- State
+
+  | Atributo   | Tipo de dato | Dominio                                                  | Restricción de integridad |
+  |------------|--------------|----------------------------------------------------------|---------------------------|
+  | id         | SERIAL       |                                                          | PRIMARY KEY               |
+  | id_game_fk | BIGINT       |                                                          | FOREIGN KEY               |
+  | cod_state  | ENUM         | "nuevo", "pausado", "finalizado", "derrota", "continuar" |                           |
+  | tim_date   |              |                                                          |                           |
+  ##### Tabla 4.2.2
+
+  <br>
+
+  ```SQL
+  CREATE TABLE State(
+      id SERIAL PRIMARY KEY,
+      id_game_fk BIGINT UNSIGNED NOT NULL COMMENT "Referencia hacia la entidad Juego",
+      cod_state ENUM("nuevo", "pausado", "finalizado", "derrota", "continuar") DEFAULT "nuevo" NOT NULL 
+      COMMENT "Estados del juego, el estado finalizado significa haber concluido el juego con éxito, derrota es haber abandonado la partida",
+      tim_date TIMESTAMP DEFAULT NOW() NOT NULL COMMENT "último estado en el que es almacenado el tablero en la base de datos",
+
+      FOREIGN KEY (id_game_fk) REFERENCES Game(id)
+  )COMMENT "Estados en los que puede estar el tablero de juego para un jugador";
+  ```
+
+<br>
+<br>
+
+- Binacle
+
+| Atributo        | Tipo de dato | Dominio | Restricción de integridad |
+|-----------------|--------------|---------|---------------------------|
+| id              | SERIAL       |         | PRIMARY KEY               |
+| tex_nickname    | TINYTEXT     |         |                           |
+| tex_description | TEXT         |         |                           |
+| tim_date        | TIMESTAMP    |         |                           |
+##### Tabla 4.2.2
+
+<br>
+
+```SQL
+CREATE TABLE Binacle(
+    id SERIAL PRIMARY KEY, 
+    tex_nickname TINYTEXT NOT NULL COMMENT "Descripción del nombre del usuario", 
+    tex_description TEXT NOT NULL COMMENT "Descripción de la acción que realiza un usuario en el sistema",
+    tim_date TIMESTAMP NOT NULL DEFAULT NOW() COMMENT "Tiempo exacto en el que se realizó la acción"
+    
+)COMMENT = "Almacena acciones realizadas por los usuarios";
+```
+
+<br>
+<br>
+
 ### *Vistas*
 ### *Funciones*
 ### *Disparadores*

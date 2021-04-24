@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-
+"""
+Se encarga de cargar el archivo de tablero a un arreglo para poner manipularlo
+@author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales
+@version 1.0
+"""
 class SudokuBoard(object):
 
     # Constructor de la clase
@@ -10,11 +14,9 @@ class SudokuBoard(object):
         """
         self.board = self.__createBoard(boardFile)
     
-    """ 
-    Se define la función que va a cargar el tablero, posiblemente los 
-    números que van en cada casilla del tablero. En la versión 
-    original se carga desde un archivo, en este caso se va a cargar desde la BD.
-    """
+    # Se define la función que va a cargar el tablero.
+    #  En la versión original se carga desde un archivo, en este 
+    # caso se va a cargar desde la BD.
     def __createBoard(self, boardFile):
         board = []
 
@@ -23,18 +25,14 @@ class SudokuBoard(object):
             # de la linea
             line = line.strip()
 
-            """ if (len(line) != 9):
-                raise SudokuError ("Error que posiblemente no se presente")
-            """
-
+            # Agrega un list vacío
             board.append([])
 
+            # Comprueba que las lineas esten compuestas solamente de números
             for char in line:
                 if (not char.isdigit()):
                     raise SudokuError("Los únicos caracteres válidos son números")
                 board[-1].append(int(char))
-
-        if (len(board) != 9):
-            raise SudokuBoard("Cada tablero de sudoku debe tener 9 lineas largo")
-
+                
+        # retorna el resultado
         return board

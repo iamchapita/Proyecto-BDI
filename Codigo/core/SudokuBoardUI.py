@@ -157,7 +157,7 @@ class SudokuBoardUI(Frame):
         else:
             pass
 
-    # Mantiene la funcionalidad de 'Pausar partida' y 'Reanudar partda'
+    # Mantiene la funcionalidad de 'Pausar partida'
     # Detiene la partida del puzzle, conlleva a que el tiempo se detiene, 
     # se guarda el estado del tablero en la base de datos la base de datos
     def __pauseGame(self):
@@ -185,8 +185,6 @@ class SudokuBoardUI(Frame):
             self.pauseTime()
             #Actualiza el estado de la base de datos a 'pausa'
             self.__processPushPause()
-            #Cambia el nombre del text en el button
-            #self.pauseButton.configure(text="Reanudar")
 
         #Se ha presionado 'Reanudar'
         else: 
@@ -350,8 +348,8 @@ class SudokuBoardUI(Frame):
 
     # Pinta un aviso de que la partida se ganó
     def __drawVictory(self):
-        # Pausa el contador de tiempo
 
+        # Pausa el contador de tiempo
         self.pauseTime()
         # Se definen la coordenadas donde se va a pintar el aviso de ganado
         x0 = y0 = MARGIN + SIDE * 2
@@ -393,15 +391,15 @@ class SudokuBoardUI(Frame):
         # Se decide que pantalla se va a mostrar después de ganar la partida
         if(self.rol==1):
             # Se destruye la ventana actual
-            self.after(105,self.parent.destroy)
+            self.after(1500,self.parent.destroy)
             # Se muestra la ventana principal del administrador
-            self.after(100,self.mainAdmin.deiconify)
+            self.after(1499,self.mainAdmin.deiconify)
 
         if(self.rol==0):
             # Se destruye la ventana actual
-            self.after(105,self.parent.destroy)
+            self.after(1500,self.parent.destroy)
             # Se muestra la ventana principal del usuario jugador
-            self.after(100,self.mainUser.deiconify)
+            self.after(1499,self.mainUser.deiconify)
     
     # Maneja el evento de click sobre el tablero
     def __cellClicked(self, event):
@@ -488,6 +486,8 @@ class SudokuBoardUI(Frame):
         self.game.start()
         # Se pinta de nuevo los valores del tablero
         self.__drawPuzzle()
+        # se borra el Stack con los valores introdudidos por el usuario
+        self.stack.clear()
 
     # Esta función retrocede un movimiento en el tablero, dejando el valor inicial cero
     def __undoMove(self):

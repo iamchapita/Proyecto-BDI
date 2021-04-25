@@ -22,7 +22,7 @@ DELIMITER $$
                 (
                     SELECT 
                         CASE
-                            WHEN  new.cod_state = 1 THEN  "Creó un nuevo tablero"
+                            WHEN  new.cod_state = 1 THEN "Creó un nuevo tablero"
                             WHEN  new.cod_state = 2 THEN "Pausó el juego"
                             WHEN  new.cod_state = 3 THEN "Finalizó con éxito la partida"
                             WHEN  new.cod_state = 4 THEN "Perdió la partida"
@@ -73,7 +73,7 @@ DELIMITER $$
 
 DELIMITER ;
 
--- Eliminación/Recuperación de usuario (Cambio de estado)
+-- Creación de un usuario
 DROP TRIGGER IF EXISTS tg_createUser; 
 
 DELIMITER $$ 

@@ -1055,6 +1055,12 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
 <br>
 
 ## **Encriptación: Funciones Built-in**
+<br>
+
+- AES_ENCRYPT()
+- AES_DECRYPT()
+- HEX()
+- UNHEX()
 ## **Anotaciones finales**
 
 ![](https://drive.google.com/uc?id=10avXiTMkJS7NIFQ_zou0w3yi4dqXiBqe)

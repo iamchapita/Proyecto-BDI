@@ -760,9 +760,300 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
 <br>
 
 ### *Vistas*
+
+<br>
+
+- vw_GetLastLoginUser
+
+  Obtiene el último usuario que ingresó al sistema.
+
+  <br>
+
+  **Código**:
+
+  ```SQL 
+  CREATE VIEW vw_GetLastLoginUser
+    AS 
+    SELECT 
+        login.id AS id,
+        User.tex_nickname AS name,
+        User.bit_rol AS rol 
+    FROM 
+        User
+    INNER JOIN 
+        (
+            SELECT 
+                id_user_fk AS id
+            FROM 
+                Login 
+            ORDER BY 
+                tim_date DESC  
+            LIMIT 1
+        ) AS login ON User.id = login.id
+        ;
+  ```
+
+<br>
+<br>
+
 ### *Funciones*
+
+<br>
+
+- fn_CompareDate
+  - Parámetros:
+    - pyNickname: texto plano que contiene el nombre de usuario que inicia sesión.
+    - pyPassword: texto plano que contiene la contraseña del usuario que inicia sesión.
+  - Retorno: 
+    - nicknameResult: 1 si el nombre de usuario está registrado en la base de datos, 0 si no lo está.
+    - passwordResult: 1 si la contraseña pasada por parámetro es igual a la contraseña almacenada en la base de datos, 0 si no lo es.
+    - rolResult: 1 si el rol del usuario es administrador, 0 si no lo es.
+    - newPasswordResult: 1 si el usuario debe realizar un cambio de contraseña, 0 si no debe hacerlo.
+    - userState: 1 si el usuario está habilitado (para ingresar), 0 si está deshabilitado.
+
+  <br>
+
+  **Código**:
+
+  ```SQL
+  DROP FUNCTION IF EXISTS fn_compareData;
+  DELIMITER $$
+    CREATE FUNCTION fn_compareData(pyNickname TEXT, pyPassword TEXT) RETURNS TEXT
+    BEGIN
+
+    SET @nicknameResult = IF(pyNickname IN (SELECT tex_nickname FROM User), 1, 0);
+    SET @password = (SELECT tex_password FROM User WHERE tex_nickname = pyNickname);
+    
+    SET @passwordResult = IF(@password = HEX(AES_ENCRYPT(pyPassword, pyNickname)), 1, 0);
+    SET @rolResult = IF((SELECT bit_rol FROM User WHERE tex_nickname = pyNickname) = 1, 1, 0);
+    SET @newPasswordResult = IF((SELECT HEX(AES_ENCRYPT(pyNickname, pyNickname)) FROM User WHERE tex_nickname = pyNickname) = @password, 1, 0);
+    SET @userState = IF((SELECT bit_state FROM User WHERE tex_nickname = pyNickname) = 1, 1, 0);
+    SET @result = (SELECT CONCAT(@nicknameResult, " ", @passwordResult, " " ,@rolResult, " ", @newPasswordResult, " ", @userState));
+
+    RETURN @result;
+
+    END $$
+  DELIMITER ;
+  ```
+
+<br>
+<br>
+
+- fn_getNickNameByState:
+  - Parámetros:
+    - id_game_fk: Entero que corresponde al id de la tabla de Game.
+  - Retorno: texto que corresponde al nombre de usuario.
+  
+  <br>
+
+  **Código**:
+  ```SQL
+  DROP FUNCTION IF EXISTS fn_getNickNameByState;
+  DELIMITER $$
+    CREATE FUNCTION fn_getNickNameByState(id_game_fk BIGINT UNSIGNED) RETURNS VARCHAR(40)
+    BEGIN 
+        RETURN (
+                    SELECT  
+                        User.tex_nickname AS nickname
+                    FROM
+                        User
+                    INNER JOIN 
+                        Game ON User.id = Game.id_user_fk
+                    WHERE 
+                        Game.id = id_game_fk
+                )
+            ;
+    END $$
+  DELIMITER ;
+  ```
+
+<br>
+<br>
+
+- fn_getNicknameById
+  - Parámetros:
+    - id_user_fk: entero que corresponde con el id del usuario.
+  - Retorno: texto con el nombre de usuario.
+
+  <br>
+
+  **Código**:
+  ```SQL
+  DROP FUNCTION IF EXISTS fn_getNicknameById;
+  DELIMITER $$
+    CREATE FUNCTION fn_getNicknameById(id_user_fk BIGINT UNSIGNED) RETURNS VARCHAR(40)
+    BEGIN 
+        RETURN (
+                    SELECT  
+                        tex_nickname AS nickname
+                    FROM
+                        User
+                    WHERE 
+                        id = id_user_fk
+                )
+            ;
+    END $$
+  DELIMITER ;
+  ```
+
+<br>
+<br>
+
 ### *Disparadores*
+
+<br>
+
+- tg_createBoard:
+
+  Se ejecuta después de realizar cualquier acción sobre el tablero (Después de una inserción en la tabla State).
+
+  **Código**:
+  ```SQL
+  DROP TRIGGER IF EXISTS tg_createBoard;
+  DELIMITER $$ 
+    CREATE TRIGGER tg_createBoard 
+        AFTER INSERT
+        ON State FOR EACH ROW
+    BEGIN  
+        INSERT INTO Binacle(tex_nickname, tex_description) VALUES
+            (
+                fn_getNickNameByState(new.id_game_fk)
+                , 
+
+                (
+                    SELECT 
+                        CASE
+                            WHEN  new.cod_state = 1 THEN  "Creó un nuevo tablero"
+                            WHEN  new.cod_state = 2 THEN "Pausó el juego"
+                            WHEN  new.cod_state = 3 THEN "Finalizó con éxito la partida"
+                            WHEN  new.cod_state = 4 THEN "Perdió la partida"
+                            WHEN  new.cod_state = 5 THEN "Continuó la partida en pausa"
+                        END 
+                )
+            )
+        ;
+    END $$
+  DELIMITER ; 
+  ```
+<br>
+<br>
+
+- tg_login:
+
+  Se ejecuta cada vez que un usuario inicia sesión (Después de una inserción en la tabla Login).
+
+  **Código**:
+  ```SQL
+  DROP TRIGGER IF EXISTS tg_login; 
+  DELIMITER $$ 
+    CREATE TRIGGER tg_login
+        AFTER INSERT 
+        ON Login FOR EACH ROW
+    BEGIN 
+        INSERT INTO Binacle(tex_nickname, tex_description) VALUES
+            (
+                fn_getNicknameById(new.id_user_fk), 
+                "El usuario inició sesión"
+            )
+        ;
+    END $$
+  DELIMITER ;
+  ```
+
+<br>
+<br>
+
+- tg_logOff
+
+  Se ejecuta cada vez que un usuario cierra sesión (Después de una inseción en la tabla LogOff).
+
+  **Código**:
+  ```SQL
+  DROP TRIGGER IF EXISTS tg_logOff; 
+  DELIMITER $$ 
+    CREATE TRIGGER tg_logOff
+        AFTER INSERT 
+        ON LogOff FOR EACH ROW
+    BEGIN 
+        INSERT INTO Binacle(tex_nickname, tex_description) VALUES
+            (
+                fn_getNicknameById(new.id_user_fk), 
+                "El usuario cerró sesión"
+            )
+        ;
+    END $$
+  DELIMITER ;
+  ```
+
+<br>
+<br>
+
+- tg_createUser
+
+  Se ejecuta cada vez que un usuario es creado (Después de inserción en la tabla User).
+
+  **Código**:
+  ```SQL
+  DROP TRIGGER IF EXISTS tg_createUser; 
+  DELIMITER $$ 
+    CREATE TRIGGER tg_createUser
+        AFTER INSERT 
+        ON User FOR EACH ROW
+    BEGIN 
+        INSERT INTO Binacle(tex_nickname, tex_description) VALUES
+            (
+                "admin", 
+                CONCAT("El usuario ", new.tex_nickname, " ha sido creado")
+                
+            )
+        ;
+    END $$
+  DELIMITER ;
+  ```
+<br>
+<br>
+
 ### *Procedimientos Almacenados*
+
+<br>
+
+- sp_updatePassword
+
+  Se utiliza el nombre de usuario para encriptar la contraseña, por ende, cada vez que se cambia el nombre de usuario se necesita cambiar el texto con el que se encripta la contraseña. El texto(plano) de la contraseña seguirá intacto, sin embargo, la contraseña se encriptará con el nuevo nombre de usuario. Se encarga de desencriptar la contraseña (con el nombre de usuario actual) y encriptarla con el nuevo nombre de usuario.
+  - Parámetros:
+    - pyOldNickname: texto que contiene el nombre de usuario actual.
+    - pyNewNickname: texto que contiene el nombre de usuario nuevo.
+
+  **Código**:
+  ```SQL
+  DROP PROCEDURE IF EXISTS sp_updatePassword;
+  DELIMITER $$
+  CREATE PROCEDURE sp_updatePassword(IN pyOldNickname TEXT, IN pyNewNickname TEXT)
+  BEGIN  
+
+    SET @oldPassword = (
+        SELECT 
+            AES_DECRYPT(UNHEX(tex_password), pyOldNickname) 
+        FROM 
+            User 
+        WHERE 
+            tex_nickname = pyOldNickname
+        );
+
+    UPDATE 
+        User 
+    SET 
+        tex_password = HEX(AES_ENCRYPT(@oldPassword, pyNewNickname)) 
+    WHERE 
+        tex_nickname = pyOldNickname;
+
+  END $$
+  DELIMITER ;
+  ```
+
+<br>
+<br>
+
 ## **Encriptación: Funciones Built-in**
 ## **Anotaciones finales**
 

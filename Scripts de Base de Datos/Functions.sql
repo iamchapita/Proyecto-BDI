@@ -49,6 +49,9 @@ DELIMITER $$
     RETURN @result;
 
     END $$
+    
+-- Se cambia el delimitador
+DELIMITER ;
 
 -- Se cambia el delimitador
 DELIMITER $$

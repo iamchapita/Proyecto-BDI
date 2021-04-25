@@ -88,6 +88,7 @@ class SudokuAdministratorCreateUser(Frame):
         self.usernameEntry = Entry(self.child, font=("Lato",13),  justify=CENTER)
         self.usernameEntry.grid(row=3,column=1, padx=35, ipady=6, ipadx=15)
         
+        # Se crea el botón con sus configuraciones
         Button(self.child, text = 'Crear', command= self.__save, bg="#6ea8d9", font=("Lato",15)).grid(row=4,column=1, pady = 15,padx=35,ipadx=40)
         
         # Se establece un label como contenedor de la imagen de la marca del juego.

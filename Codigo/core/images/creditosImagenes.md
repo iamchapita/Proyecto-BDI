@@ -1,2 +1,0 @@
-- pause.png tomado de [FreePik](https://www.freepik.com)
-- atras.png tomado de [FreePik](https://www.freepik.com)

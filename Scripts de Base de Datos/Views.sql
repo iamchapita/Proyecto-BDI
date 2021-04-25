@@ -1,7 +1,6 @@
 /*
-    @author gehernandezc@unah.hn, kenneth.cruz@unah.hn
-    @version 0.1.3
-    @date 2021/04/03
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales 
+    @version 1.0
 */
 
 USE SudokuDB; 

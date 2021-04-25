@@ -1,15 +1,11 @@
 /*
-    @author kenneth.cruz@unah.hn
-    @version 0.1.2
-    @date 2021/04/20
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales 
+    @version 1.0
 */
 
 USE SudokuDB; 
 
---
 -- Al realizar cualquier acción sobre el tablero. 
---
-
 DROP TRIGGER IF EXISTS tg_createBoard;
 
 DELIMITER $$ 
@@ -39,11 +35,7 @@ DELIMITER $$
 
 DELIMITER ; 
 
-
---
 -- Inicio de sesión
---
-
 DROP TRIGGER IF EXISTS tg_login; 
 
 DELIMITER $$ 
@@ -62,12 +54,7 @@ DELIMITER $$
 
 DELIMITER ;
 
-
-
---
 -- Cierre de sesión
---
-
 DROP TRIGGER IF EXISTS tg_logOff; 
 
 DELIMITER $$ 
@@ -86,10 +73,7 @@ DELIMITER $$
 
 DELIMITER ;
 
---
 -- Eliminación/Recuperación de usuario (Cambio de estado)
---
-
 DROP TRIGGER IF EXISTS tg_createUser; 
 
 DELIMITER $$ 

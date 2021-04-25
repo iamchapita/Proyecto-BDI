@@ -1,7 +1,6 @@
 /*
-    @author kenneth.cruz@unah.hn
-    @version 0.1.7
-    @date 2021/03/30
+    @author Daniel Arteaga, Kenneth Cruz, Gabriela Hernández, Luis Morales 
+    @version 1.0
 */
 
 DROP DATABASE IF EXISTS SudokuDB;

@@ -1057,20 +1057,27 @@ En la presente sección se analizan los tipos de datos y la estructura de cada e
 ## **Encriptación: Funciones Built-in**
 <br>
 
-- AES_ENCRYPT()/AES_DECRYPT()
+- AES_ENCRYPT()
 
-  Es una función incluida en el SGBD que utiliza el algoritmo AES para encriptar y desencriptar. 
+  Es una función incluida en el SGBD que utiliza el algoritmo AES para encriptar.
   - Parámetros:
-    - cadena a encriptar/desencriptar.
+    - cadena a encriptar.
     - cadena que se utiliza como clave.
 
   Se utiliza para encriptar tanto la contraseña de cada usuario como tambien el contenido del campo *blo_file* de la tabla Game.
+<br>
+- AES_DECRYPT()
 
+  Es una función incluida en el SGBD que utiliza el algoritmo AES para desencriptar. 
+  - Parámetros:
+    - cadena a desencriptar.
+    - cadena que se utilizó como clave para encriptar.
+<br>
 - HEX()
 
   Es una función incluida en el SGBD que se utiliza para convertir a hexadecimal la cadena pasada por parámetro.
   La función se utliza para obtener el resultado de la contraseña encriptada en hexadecimal.
-
+<br>
 - UNHEX()
 
   Es una función incluida en el SGBD que se utiliza obtener la cadena original desde un valor hexadecimal pasado por parámetro (al inverso que HEX()).
